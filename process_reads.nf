@@ -156,7 +156,7 @@ process freebayes_setup {
     """
 
 }
-/*
+
 process read_map {
     publishDir = output 
 
@@ -175,6 +175,7 @@ process read_map {
 
 // picard MarkDuplicates INPUT={sorted_bamfile} OUTPUT={rmdup_bamfile} ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv
 
+// Important to have 'USE_JDK_DEFLATER=true USE_JDK_INFLATER=true'
 process mark_dups {
     publishDir = output 
 
@@ -182,14 +183,33 @@ process mark_dups {
     file(bam) from map_ch
 
     output:
-    file("${bam.baseName}.nodup.bam") into nodup_ch 
+    file("${bam.baseName}.nodup.bam") into nodup_ch
 
     script:
     """
-    picard MarkDuplicates INPUT=${bam} OUTPUT=${bam.baseName}.nodup.bam ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv
+    picard MarkDuplicates INPUT=${bam} OUTPUT=${bam.baseName}.nodup.bam ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv USE_JDK_DEFLATER=true USE_JDK_INFLATER=true
     samtools index ${bam.baseName}.nodup.bam
     """
 }
-*/
 
-// next task is to figure out freebayes 
+process freebayes {
+    publishDir = output 
+
+    cpus 2
+
+    input:
+    file(bam) from nodup_ch
+    file(range) from chrom_range
+    path(reference) from ref
+
+    output:
+    file("${bam.baseName}.vcf") into freebayes_ch 
+
+    script:
+    """
+    freebayes-parallel ${range} ${task.cpus} -f ${reference} ${bam} > ${bam.baseName}.vcf
+    """
+}
+
+// vcf filtering + generate alignment? 
+// pangenome steps 

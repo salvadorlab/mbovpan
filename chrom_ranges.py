@@ -1,3 +1,6 @@
+# Original Code from Tod Stuber
+# Adapted by Noah Legall
+
 from Bio import SeqIO
 import sys
 
