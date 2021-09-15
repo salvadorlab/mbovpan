@@ -1,4 +1,4 @@
-//Author: Noah Austin Legall
+// Author: Noah Austin Legall
 // Note to self: do NOT run this program within the github folder
 // test outside of the github folder. we do not want to make the github too full with run information 
 
@@ -29,11 +29,13 @@ log.info """
 input = "$params.input"
 output = "$params.output"
 
+// Need to figure this out. 
+// The path is not recognized if given straight to the program, yet works fine when its in relation to the $workflow.projectDir
+// my first guess is that the files ALWAYS need a path
+ref = "$workflow.projectDir/../mbovAF212297_reference.fasta"
 
 
-// Based on the input param, where to find the data.
-// the 'seqs' folder contains a toy dataset to test/make sure the pipeline runs properly 
-reads = Channel.fromFilePairs("$input/*_{1,2}.fastq.gz").ifEmpty { error "Cannot find any reads" }.view()
+reads = Channel.fromFilePairs("$input*_{1,2}.fastq.gz").ifEmpty { error "Cannot find any reads" }.view()
 
 
 reads.into {
@@ -41,14 +43,12 @@ reads.into {
     reads_trim
 }
 
-// Split fastqc operations into 'pre_fastqc' and 'post_fastqc'
-// each process outputs information into the output directory
-// also, each process has it's own environment to run (found in 'envs' directory). This will help users across different devices be able to have all dependencies
+
+ // PART 1: Processing 
+
 process pre_fastqc {
 
     publishDir = output
-
-    conda "$workflow.projectDir/envs/fastqc.yaml"
 
     input:
     tuple sample_id, file(reads_file) from reads_fastqc
@@ -63,13 +63,9 @@ process pre_fastqc {
     """
 }
 
-// This process runs the fastp command on our fastq files. 
-// fastp is an 'all-in-one' trimming software that performs automatic adapter removal 
 process fastp {
 
     publishDir = output
-
-    conda "$workflow.projectDir/envs/fastp.yaml"
 
     input:
     tuple sample_id, file(reads_file) from reads_trim
@@ -84,16 +80,17 @@ process fastp {
 
 }
 
-// run this only after the read trimming process
-// identical to the pre_fastqc process
+fastp_ch.into {
+    fastp_reads1
+    fastp_reads2
+}
+
 process post_fastqc {
 
     publishDir = output
 
-    conda "$workflow.projectDir/envs/fastqc.yaml"
-
     input:
-    tuple file(trim1), file(trim2) from fastp_ch
+    tuple file(trim1), file(trim2) from fastp_reads1
 
     output:
     file("post_fastqc_${trim1.baseName}_logs") into fastqc_ch2
@@ -109,7 +106,6 @@ process post_fastqc {
  process multiqc {
     publishDir = output
 
-   
     input:
     file(pre) from fastqc_ch1.collect()
     file(post) from fastqc_ch2.collect()
@@ -121,7 +117,79 @@ process post_fastqc {
     """
     multiqc -n mbovpan_seq_qual ${pre} ${post}
     """
-} 
+}
 
+// PART 2: Variant Calling 
 
+process setup {
+    publishDir = output
 
+    input:
+    path(reference) from ref
+
+    output:
+    file("${reference}*")
+
+    script:
+    """
+    echo 'performing setup for variant calling'
+    samtools faidx ${reference}
+    picard CreateSequenceDictionary REFERENCE=${reference} OUTPUT=${reference}.dict 
+    bwa index ${reference} 
+    echo 'setup complete'
+    """
+}
+
+// now ready to parallelize
+process freebayes_setup {
+    publishDir = output 
+
+    input:
+    path(reference) from ref
+
+    output:
+    file("chrom_ranges.txt") into chrom_range
+
+    script:
+    """
+    python $workflow.projectDir/chrom_ranges.py  ${reference}
+    """
+
+}
+/*
+process read_map {
+    publishDir = output 
+
+    input:
+    tuple file(trim1), file (trim2) from fastp_reads2 
+    //path(reference) from ref
+
+    output:
+    file("${trim1.baseName}.bam")  into map_ch 
+
+    script:
+    """
+    bwa mem -M -R "@RG\\tID:${trim1.baseName}\\tSM:${trim1.baseName}\\tPL:ILLUMINA\\tPI:250" ${ref} ${trim1} ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName}.bam
+    """
+}
+
+// picard MarkDuplicates INPUT={sorted_bamfile} OUTPUT={rmdup_bamfile} ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv
+
+process mark_dups {
+    publishDir = output 
+
+    input:
+    file(bam) from map_ch
+
+    output:
+    file("${bam.baseName}.nodup.bam") into nodup_ch 
+
+    script:
+    """
+    picard MarkDuplicates INPUT=${bam} OUTPUT=${bam.baseName}.nodup.bam ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv
+    samtools index ${bam.baseName}.nodup.bam
+    """
+}
+*/
+
+// next task is to figure out freebayes 
