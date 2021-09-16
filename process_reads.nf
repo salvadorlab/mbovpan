@@ -35,6 +35,7 @@ output = "$params.output"
 ref = "$workflow.projectDir/../mbovAF212297_reference.fasta"
 
 
+
 reads = Channel.fromFilePairs("$input*_{1,2}.fastq.gz").ifEmpty { error "Cannot find any reads" }.view()
 
 
@@ -63,6 +64,7 @@ process pre_fastqc {
     """
 }
 
+//change this around to get rid of the weird naming
 process fastp {
 
     publishDir = output
@@ -83,6 +85,7 @@ process fastp {
 fastp_ch.into {
     fastp_reads1
     fastp_reads2
+    fastp_reads3
 }
 
 process post_fastqc {
@@ -120,7 +123,7 @@ process post_fastqc {
 }
 
 // PART 2: Variant Calling 
-
+/*
 process setup {
     publishDir = output
 
@@ -210,6 +213,48 @@ process freebayes {
     freebayes-parallel ${range} ${task.cpus} -f ${reference} ${bam} > ${bam.baseName}.vcf
     """
 }
+*/
 
 // vcf filtering + generate alignment? 
-// pangenome steps 
+// pangenome steps (might need to separately create environment for pangenome software. inclusion in main environment might lead to conflicts)
+// roary, quast OR busco
+
+// PART 3: Pangenome 
+
+process assembly {
+    publishDir = output 
+
+    cpus 3
+
+    input:
+    tuple file(trim1), file(trim2) from fastp_reads3
+
+    output:
+    file("${trim1.baseName}.scaffold.fasta") into assembly_ch
+
+    script:
+    """
+    spades.py --threads ${task.cpus} --only-assembler --careful -1 ${trim1} -2 ${trim2} -o ${trim1.baseName}
+    cd ${trim1.baseName}
+    mv scaffolds.fasta  ../${trim1.baseName}.scaffold.fasta
+    """
+}
+
+// slight problem with prokka downloaded from conda. 
+// might require the use of pre-made environment. 
+// tomorrow, take time to import this environment
+
+process annotate {
+    publishDir = output
+
+    input:
+    file(assembly) from assembly_ch
+
+    output:
+    file("${assembly.baseName}.annot.gff") into annotate_ch
+
+    script:
+    """
+    prokka  --outdir ./${assembly.baseName} --prefix ${assembly.baseName}.annot ${assembly}
+    """
+}
