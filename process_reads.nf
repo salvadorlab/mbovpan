@@ -6,9 +6,13 @@
 /*
 TODOS:
 - finish full pipeline
-- test on multiple 
+- test on multiple isolates
+- will need to make the conda environments as portable as possible
 - incorporate threading options
 - call SNPs following vSNP pipeline
+- can multiqc summarize fastx, samtools, and QUAST output?
+
+**** YOU CAN MAKE THE STATS ENV WITH CONDA *******
 
 
 */
@@ -47,6 +51,7 @@ reads.into {
 
  // PART 1: Processing 
 
+
 process pre_fastqc {
 
     publishDir = output
@@ -64,10 +69,13 @@ process pre_fastqc {
     """
 }
 
+
 //change this around to get rid of the weird naming
 process fastp {
 
     publishDir = output
+
+    cpus 4
 
     input:
     tuple sample_id, file(reads_file) from reads_trim
@@ -77,7 +85,7 @@ process fastp {
  
     script:
     """
-    fastp -q 30 --detect_adapter_for_pe -i  ${reads_file[0]} -I  ${reads_file[1]} -o  ${sample_id}.trimmed_R1.fastq -O  ${sample_id}.trimmed_R2.fastq
+    fastp -w ${task.cpus} -q 30 --detect_adapter_for_pe -i  ${reads_file[0]} -I  ${reads_file[1]} -o  ${sample_id}.trimmed_R1.fastq -O  ${sample_id}.trimmed_R2.fastq
     """
 
 }
@@ -87,6 +95,7 @@ fastp_ch.into {
     fastp_reads2
     fastp_reads3
 }
+
 
 process post_fastqc {
 
@@ -105,7 +114,7 @@ process post_fastqc {
     """
 }
 
-
+/*
  process multiqc {
     publishDir = output
 
@@ -121,9 +130,11 @@ process post_fastqc {
     multiqc -n mbovpan_seq_qual ${pre} ${post}
     """
 }
+*/
 
-// PART 2: Variant Calling 
 /*
+// PART 2: Variant Calling 
+
 process setup {
     publishDir = output
 
@@ -135,11 +146,9 @@ process setup {
 
     script:
     """
-    echo 'performing setup for variant calling'
     samtools faidx ${reference}
     picard CreateSequenceDictionary REFERENCE=${reference} OUTPUT=${reference}.dict 
     bwa index ${reference} 
-    echo 'setup complete'
     """
 }
 
@@ -191,14 +200,13 @@ process mark_dups {
     script:
     """
     picard MarkDuplicates INPUT=${bam} OUTPUT=${bam.baseName}.nodup.bam ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv USE_JDK_DEFLATER=true USE_JDK_INFLATER=true
-    samtools index ${bam.baseName}.nodup.bam
     """
 }
 
 process freebayes {
     publishDir = output 
 
-    cpus 2
+    cpus 4
 
     input:
     file(bam) from nodup_ch
@@ -210,10 +218,31 @@ process freebayes {
 
     script:
     """
+    samtools index ${bam}
     freebayes-parallel ${range} ${task.cpus} -f ${reference} ${bam} > ${bam.baseName}.vcf
     """
 }
-*/
+
+//Start with a basic QUAL > 20, later add a parameter for changing this
+process vcf_filter {
+    publishDir = output 
+
+    conda "$workflow.projectDir/envs/vcflib.yaml"
+
+    input:
+    file(vcf) from freebayes_ch
+
+    output:
+    file("${vcf.baseName}.filtered.vcf") into filter_ch
+
+    script:
+    """
+    vcffilter -f "QUAL > 20" ${vcf} > ${vcf.baseName}.filtered.vcf
+    """
+
+} */
+
+
 
 // vcf filtering + generate alignment? 
 // pangenome steps (might need to separately create environment for pangenome software. inclusion in main environment might lead to conflicts)
@@ -221,10 +250,11 @@ process freebayes {
 
 // PART 3: Pangenome 
 
+
 process assembly {
     publishDir = output 
 
-    cpus 3
+    cpus 4
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads3
@@ -240,12 +270,10 @@ process assembly {
     """
 }
 
-// slight problem with prokka downloaded from conda. 
-// might require the use of pre-made environment. 
-// tomorrow, take time to import this environment
-
 process annotate {
     publishDir = output
+
+    conda "$workflow.projectDir/envs/prokka.yaml"
 
     input:
     file(assembly) from assembly_ch
@@ -256,5 +284,25 @@ process annotate {
     script:
     """
     prokka  --outdir ./${assembly.baseName} --prefix ${assembly.baseName}.annot ${assembly}
+    cp ./${assembly.baseName}/${assembly.baseName}.annot.gff ./
+    """
+}
+
+process roary {
+    publishDir = output
+
+    conda "$workflow.projectDir/envs/roary.yaml"
+
+    cpus 6
+
+    input:
+    file(gff) from annotate_ch.collect()
+
+    output:
+    file("*") into roary_ch
+
+    script:
+    """
+    roary -p ${task.cpus} $gff
     """
 }

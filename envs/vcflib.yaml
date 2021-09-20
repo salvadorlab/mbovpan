@@ -1,0 +1,38 @@
+name: vcflib
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bc=1.07.1=h0d85af4_0
+  - bzip2=1.0.8=h0d85af4_4
+  - c-ares=1.17.2=h0d85af4_0
+  - ca-certificates=2021.5.30=h033912b_0
+  - curl=7.79.0=hb861fe1_0
+  - htslib=1.12=hc38c3fb_1
+  - krb5=1.19.2=hcfbf3a7_0
+  - libcurl=7.79.0=hf45b732_0
+  - libcxx=12.0.1=habf9029_0
+  - libdeflate=1.7=h35c211d_5
+  - libedit=3.1.20191231=h0678c8f_2
+  - libev=4.33=haf1e3a3_1
+  - libffi=3.4.2=he49afe7_1
+  - libnghttp2=1.43.0=h07e645a_0
+  - libssh2=1.10.0=h52ee1ee_0
+  - ncurses=6.2=h2e338ed_4
+  - openssl=1.1.1l=h0d85af4_0
+  - pip=21.2.4=pyhd8ed1ab_0
+  - python=3.9.7=h1248fe1_1_cpython
+  - python_abi=3.9=2_cp39
+  - readline=8.1=h05e3726_0
+  - samtools=1.4.1=0
+  - setuptools=58.0.4=py39h6e9494a_0
+  - sqlite=3.36.0=h23a322b_1
+  - tabixpp=1.1.0=h9cabb03_6
+  - tk=8.6.11=h5dbffcc_1
+  - tzdata=2021a=he74cb21_1
+  - vcflib=1.0.2=h9954cba_5
+  - wheel=0.37.0=pyhd8ed1ab_1
+  - xz=5.2.5=haf1e3a3_1
+  - zlib=1.2.11=h7795811_1010
+prefix: /Users/noahaus/opt/miniconda3/envs/vcflib
