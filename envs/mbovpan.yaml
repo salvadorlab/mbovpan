@@ -1,0 +1,17 @@
+name: mbovpan
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - fastp
+  - fastqc
+  - nextflow
+  - samtools
+  - picard
+  - bwa
+  - biopython
+  - freebayes
+  - prokka
+  - spades
+prefix: /Users/noahaus/opt/miniconda3/envs/mbovpan
