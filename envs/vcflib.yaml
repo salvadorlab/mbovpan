@@ -1,8 +1,18 @@
 name: vcflib
 channels:
+  - bioconda/label/cf201901
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - vcflib
-prefix: /Users/noahaus/opt/miniconda3/envs/vcflib
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - bzip2=1.0.8
+  - libgcc-ng=11.2.0
+  - libgomp=11.2.0
+  - libstdcxx-ng=11.2.0
+  - libzlib=1.2.11
+  - vcflib=1.0.0_rc2
+  - xz=5.2.5
+  - zlib=1.2.11
+prefix: /home/noahaus/miniconda3/envs/vcflib
