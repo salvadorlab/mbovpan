@@ -227,7 +227,7 @@ if(run_mode == "snp" || run_mode == "all"){
 // now ready to parallelize
 process freebayes_setup {
     publishDir = output 
-
+    
     output:
     file("chrom_ranges.txt") into chrom_range
 
@@ -240,7 +240,9 @@ process freebayes_setup {
 
 process read_map {
     publishDir = output 
-
+    
+    conda "$workflow.projectDir/envs/samtools.yaml"
+   
     input:
     tuple file(trim1), file (trim2) from fastp_reads2 
     //path(reference) from ref
@@ -260,6 +262,8 @@ process read_map {
 process mark_dups {
     publishDir = output 
 
+    conda "$workflow.projectDir/envs/picard.yaml"    
+
     input:
     file(bam) from map_ch
 
@@ -269,6 +273,8 @@ process mark_dups {
     script:
     """
     picard MarkDuplicates INPUT=${bam} OUTPUT=${bam.baseName}.nodup.bam ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv USE_JDK_DEFLATER=true USE_JDK_INFLATER=true
+    samtools index ${bam.baseName}.nodup.bam
+    cp ${bam.baseName}.nodup.bam.bai -t $workflow.launchDir/.
     """
 }
 
@@ -276,6 +282,8 @@ process freebayes {
     publishDir = output 
 
     cpus 4
+
+    conda "$workflow.projectDir/envs/freebayes.yaml"
 
     input:
     file(bam) from nodup_ch
@@ -287,7 +295,7 @@ process freebayes {
 
     script:
     """
-    samtools index ${bam}
+    cp $workflow.launchDir/${bam.baseName - ~/.nodup/}.nodup.bam.bai -t ./
     freebayes-parallel ${range} ${task.cpus} -f ${ref} ${bam} > ${bam.baseName - ~/.nodup/}.vcf
     """
 }
