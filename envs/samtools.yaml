@@ -1,30 +1,9 @@
-name: samtools
+name: samtools_test
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - _libgcc_mutex=0.1
-  - _openmp_mutex=4.5
-  - bwa=0.7.17
-  - bzip2=1.0.8
-  - ca-certificates=2021.5.30
-  - curl=7.71.1
-  - htslib=1.9
-  - krb5=1.17.2
-  - libcurl=7.71.1
-  - libdeflate=1.2
-  - libedit=3.1.20191231
-  - libgcc-ng=11.2.0
-  - libgomp=11.2.0
-  - libssh2=1.10.0
-  - libstdcxx-ng=11.2.0
-  - libzlib=1.2.11
-  - ncurses=6.1
-  - openssl=1.1.1l
-  - perl=5.32.1
-  - samtools=1.9
-  - tk=8.6.11
-  - xz=5.2.5
-  - zlib=1.2.11
-prefix: /home/noahaus/.conda/envs/samtools
+  - samtools
+  - bwa
+prefix: /Users/noahaus/opt/miniconda3/envs/samtools_test

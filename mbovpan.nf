@@ -26,6 +26,7 @@ Project : $workflow.projectDir
 Git info: $workflow.repository - $workflow.revision [$workflow.commitId]
 Cmd line: $workflow.commandLine
 Manifest's pipeline version: $workflow.manifest.version
+=============================
 """
 
 // Define both the input and the output         
@@ -34,6 +35,7 @@ output = "$params.output"
 mode = ""
 run_mode = ""
 reads = ""
+threads = Runtime.getRuntime().availableProcessors()
 
 //quick testing parameter. Do bioinfo on just one isolate
 single_input = "$params.single_input"
@@ -101,6 +103,10 @@ else if(params.run == "all"){
     run_mode = "all"
 }
 
+if(params.threads != null){
+    threads = params.threads
+}
+
 
 if(mode == "single"){
     reads = Channel.fromFilePairs("$input\_{1,2}.fastq.gz").ifEmpty { error "Cannot find the read files" }.view()
@@ -125,6 +131,7 @@ run type: $run_mode
 reference location: $ref
 input: $input
 output: $output
+no. of threads: $threads
 =====================================
 """
 
@@ -153,7 +160,7 @@ process fastp {
 
     publishDir = output
 
-    cpus 2
+    cpus Math.floor(threads/2)
 
     input:
     tuple sample_id, file(reads_file) from reads_trim
@@ -240,6 +247,8 @@ process freebayes_setup {
 
 process read_map {
     publishDir = output 
+
+    cpus threads
     
     conda "$workflow.projectDir/envs/samtools.yaml"
    
@@ -252,7 +261,7 @@ process read_map {
 
     script:
     """
-    bwa mem -M -R "@RG\\tID:${trim1.baseName - ~/_trimmed_R*/}\\tSM:${trim1.baseName - ~/_trimmed_R*/}\\tPL:ILLUMINA\\tPI:250" ${ref} ${trim1} ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
+    bwa mem -t ${task.cpus}-M -R "@RG\\tID:${trim1.baseName - ~/_trimmed_R*/}\\tSM:${trim1.baseName - ~/_trimmed_R*/}\\tPL:ILLUMINA\\tPI:250" ${ref} ${trim1} ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
     """
 }
 
@@ -274,14 +283,14 @@ process mark_dups {
     """
     picard MarkDuplicates INPUT=${bam} OUTPUT=${bam.baseName}.nodup.bam ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv USE_JDK_DEFLATER=true USE_JDK_INFLATER=true
     samtools index ${bam.baseName}.nodup.bam
-    cp ${bam.baseName}.nodup.bam.bai -t $workflow.launchDir/.
+    cp ${bam.baseName}.nodup.bam.bai $workflow.launchDir
     """
 }
 
 process freebayes {
     publishDir = output 
 
-    cpus 4
+    cpus Math.floor(threads/2)
 
     conda "$workflow.projectDir/envs/freebayes.yaml"
 
@@ -295,7 +304,7 @@ process freebayes {
 
     script:
     """
-    cp $workflow.launchDir/${bam.baseName - ~/.nodup/}.nodup.bam.bai -t ./
+    cp $workflow.launchDir/${bam.baseName - ~/.nodup/}.nodup.bam.bai ./
     freebayes-parallel ${range} ${task.cpus} -f ${ref} ${bam} > ${bam.baseName - ~/.nodup/}.vcf
     """
 }
@@ -330,7 +339,7 @@ if(run_mode == "pan" || run_mode == "all"){
 process assembly {
     publishDir = output 
 
-    cpus 4
+    cpus Math.floor(threads/2)
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads3
@@ -369,7 +378,7 @@ process roary {
 
     conda "$workflow.projectDir/envs/roary.yaml"
 
-    cpus 6
+    cpus Math.floor(threads/2)
 
     input:
     file(gff) from annotate_ch.collect()
