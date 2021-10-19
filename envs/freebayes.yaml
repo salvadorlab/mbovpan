@@ -5,4 +5,5 @@ channels:
   - defaults
 dependencies:
   - freebayes
+  - biopython
 prefix: /Users/noahaus/opt/miniconda3/envs/freebayes_test
