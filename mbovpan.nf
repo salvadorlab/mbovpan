@@ -235,6 +235,8 @@ if(run_mode == "snp" || run_mode == "all"){
 process freebayes_setup {
     publishDir = output 
     
+    conda "$workflow.projectDir/envs/freebayes.yaml"
+    
     output:
     file("chrom_ranges.txt") into chrom_range
 
