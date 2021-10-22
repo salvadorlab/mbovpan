@@ -1,9 +1,10 @@
-name: freebayes_test
+name: freebayes
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - freebayes
+  - freebayes=1.3.5
+  - samtools
   - biopython
-prefix: /Users/noahaus/opt/miniconda3/envs/freebayes_test
+prefix: /home/noahaus/.conda/envs/freebayes
