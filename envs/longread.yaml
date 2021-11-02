@@ -1,0 +1,10 @@
+name: longread_test
+channels:
+  - defaults
+dependencies:
+  - nanoplot
+  - filtlong
+  - minimap2
+  - sniffles
+  - seaborn==0.10.1
+prefix: /home/noahaus/.conda/envs/longread_test
