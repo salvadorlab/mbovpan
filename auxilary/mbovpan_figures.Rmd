@@ -1,0 +1,41 @@
+---
+title: "mbovpan_figures"
+author: "Noah Legall"
+date: "11/5/2021"
+output: html_document
+---
+
+setwd("mbovpan/auxilary/")
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+## Runtimes 
+
+```{r}
+rt <- read.csv("snpcalling_runtimes.csv",header = FALSE)
+head(rt)
+
+rt <- subset(rt,V1 !=500)
+
+rt %>% ggplot(aes(as.factor(V1),V2/60)) +
+  geom_violin(fill = "gray") + theme_minimal() + 
+  xlab("# of isolates") +
+  ylab("Runtime (min)") + 
+  theme(axis.title = element_text(size = 15)) 
+
+rt %>% ggplot(aes(V1,V2/60)) +
+  geom_point(fill = "gray") + theme_minimal() + 
+  xlab("# of isolates") +
+  ylab("Runtime (min)") + 
+  geom_smooth(aes(V1,V2/60),color = "black",method="lm") +
+  theme(axis.title = element_text(size = 15)) 
+```
