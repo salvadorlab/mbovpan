@@ -41,6 +41,7 @@ reads = ""
 
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
+range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
 
 // are default parameters included?
 if(input == null || output == null){
@@ -355,7 +356,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     input:
     file(bam) from nodup_ch
-    file(range) from chrom_range
+    //file(range) from chrom_range
     path(reference) from ref
 
     output:
