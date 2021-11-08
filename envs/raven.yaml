@@ -1,0 +1,8 @@
+name: raven
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - raven-assembler
+prefix: /home/noahaus/miniconda3/envs/raven

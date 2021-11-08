@@ -3,22 +3,9 @@
 // test outside of the github folder. we do not want to make the github too full with run information 
 
 /*
-long read SNV analysis:
-(1 - quality) 
-NanoPlot -t 5 --verbose -o ./ -p testing --N50 --fastq SRR6467884.fastq.gz
-
-(2 - read filtering)
-filtlong --keep_percent 90 --min_length 1000 --min_window_q 9 SRR6467884.fastq.gz > testing_long_trim.fastq
-
-(3 - read mapping)
-minimap2 -ax map-pb --MD mbovAF212297_reference.fasta testing_mapped.sam > testing_mapped.sam
-
-(4 - find structural variants)
-sniffles -m testing_long.bam -v testing_variants.vcf
-
-(5 - summarize findings )
-awk '/SVTYPE=/ {split($8,infoArr,";"); print substr(infoArr[9],8), $3, $1, substr(infoArr[3],6), $2, substr(infoArr[4],5), substr(infoArr[11],7)}' testing_variants.vcf
-
+Finish the pipeline
+Extend Figure 2 with runtime reports
+Testing in sapelo2
 */
 
 log.info """ 
@@ -280,7 +267,10 @@ else {
 
 
 // MODE 1: Variant Calling 
+bam = Channel.create()
+
 if(run_mode == "snp" || run_mode == "all"){
+    if(mode == "short"){
 
     process read_map {
     publishDir = output 
@@ -302,6 +292,38 @@ if(run_mode == "snp" || run_mode == "all"){
     """
     }
 
+    bam = map_ch
+    }
+
+    else{
+    process longread_map {
+    publishDir = output 
+
+    cpus threads
+    
+    conda "$workflow.projectDir/envs/samtools.yaml"
+   
+    input:
+    tuple file(trim1), file (trim2) from filtlong_reads2 
+    //path(reference) from ref
+
+    output:
+    file("${trim1.baseName - ~/_trimmed_R*/}.bam")  into map_ch 
+
+    script:
+    """
+    minimap2 -ax map-pb --MD ${ref} ${trim} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
+    """
+    }
+
+    bam = map_ch
+
+    }
+
+
+
+    
+
 // picard MarkDuplicates INPUT={sorted_bamfile} OUTPUT={rmdup_bamfile} ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv
 
 // Important to have 'USE_JDK_DEFLATER=true USE_JDK_INFLATER=true'
@@ -311,7 +333,7 @@ if(run_mode == "snp" || run_mode == "all"){
     conda "$workflow.projectDir/envs/picard.yaml"    
 
     input:
-    file(bam) from map_ch
+    file(bam) from bam
 
     output:
     file("${bam.baseName}.nodup.bam") into nodup_ch
@@ -365,39 +387,17 @@ if(run_mode == "snp" || run_mode == "all"){
 
     } 
 }
-else {
-    process longread_map {
-    publishDir = output 
-
-    cpus threads
-    
-    conda "$workflow.projectDir/envs/samtools.yaml"
-   
-    input:
-    tuple file(trim1), file (trim2) from filtlong_reads2 
-    //path(reference) from ref
-
-    output:
-    file("${trim1.baseName - ~/_trimmed_R*/}.bam")  into map_ch 
-
-    script:
-    """
-    minimap2 -ax map-pb --MD ${ref} ${trim} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
-    """
-    }
-
-
-    /* PICKUP HERE TOMORROW */
-}
 
 // vcf filtering + generate alignment? 
 // pangenome steps (might need to separately create environment for pangenome software. inclusion in main environment might lead to conflicts)
 // roary, quast OR busco
 
 // PART 3: Pangenome 
-
+assembly = Channel.create()
 if(run_mode == "pan" || run_mode == "all"){
-process assembly {
+    if(mode == "short"){
+    
+    process assembly {
     publishDir = output 
 
     cpus Math.floor(threads/2)
@@ -406,7 +406,7 @@ process assembly {
     tuple file(trim1), file(trim2) from fastp_reads3
 
     output:
-    file("${trim1.baseName}.scaffold.fasta") into assembly_ch
+    file("${trim1.baseName}.scaffold.fasta") into shortassembly_ch
 
     script:
     """
@@ -414,6 +414,31 @@ process assembly {
     cd ${trim1.baseName}
     mv scaffolds.fasta  ../${trim1.baseName}.scaffold.fasta
     """
+}
+assembly_ch = shortassembly_ch
+}
+else{
+    
+    process longread_assembly {
+    publishDir = output 
+
+    conda "$workflow.projectDir/envs/raven.yaml"
+
+    cpus Math.floor(threads/2)
+
+    input:
+    file(trim) from filtlong_reads3
+
+    output:
+    file("${trim1.baseName}.scaffold.fasta") into longassembly_ch
+
+    script:
+    """
+    raven --threads ${task.cpus} ${trim} > ${trim.baseName}.scaffold.fasta"
+    """
+}  
+
+assembly_ch = longassembly_ch
 }
 
 process annotate {
@@ -454,4 +479,4 @@ process roary {
 }
 }
 
-// MODE: Long-reads 
+
