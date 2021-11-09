@@ -44,12 +44,15 @@ ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
 
 // are default parameters included?
-if(input == null || output == null){
+if(params.input == null || params.output == null){
     println "necessary paramaters aren't supplied - supply values for input and/or output"
+    exit 0
 }
 
 else {
     println "necessary paramaters supplied"
+    input = params.input
+    output = params.output
 }
 
 // record the mode the program should be ran in
@@ -62,17 +65,17 @@ else {
 }
 
 // what part of the pipeline should be ran?
-if(params.run-mode == "all" ){
+if(params.run == "all" ){
     println "mbovpan will infer snps and pangenome"
     run_mode = "all"
 }
 
-else if(params.run-mode == "snp"){
+else if(params.run == "snp"){
     println "mbovpan will only infer snps"
     run_mode = "snp"
 }
 
-else if(params.run-mode == "pan"){
+else if(params.run == "pan"){
     println "mbovpan will only infer the pangenome"
     run_mode = "pan"
 }
@@ -276,7 +279,7 @@ if(run_mode == "snp" || run_mode == "all"){
     process read_map {
     publishDir = output 
 
-    cpus threads
+    cpus Math.floor(threads/2)
     
     conda "$workflow.projectDir/envs/samtools.yaml"
    
@@ -294,13 +297,13 @@ if(run_mode == "snp" || run_mode == "all"){
     }
 
     bam = map_ch
-    }
+}
 
-    else{
+else{
     process longread_map {
     publishDir = output 
 
-    cpus threads
+    cpus Math.floor(threads/2)
     
     conda "$workflow.projectDir/envs/samtools.yaml"
    
@@ -319,7 +322,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     bam = map_ch
 
-    }
+}
 
 
 
