@@ -1,9 +1,7 @@
-name: picard_test
+name: picard
 channels:
-  - conda-forge
-  - bioconda
   - defaults
 dependencies:
-  - picard
+  - picard=2.21.9
   - samtools
-prefix: /Users/noahaus/opt/miniconda3/envs/picard_test
+prefix: /home/noahaus/.conda/envs/picard
