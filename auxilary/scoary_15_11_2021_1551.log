@@ -1,0 +1,13 @@
+11/15/2021 03:51:24 PM    ==== Scoary started ====
+11/15/2021 03:51:24 PM    Command: /Users/noahaus/opt/miniconda3/envs/scoary/bin/scoary -g gene_presence_absence.csv -t traits.csv
+11/15/2021 03:51:24 PM    Reading gene presence absence file
+11/15/2021 03:51:26 PM    Creating Hamming distance matrix based on gene presence/absence
+11/15/2021 03:51:27 PM    Building UPGMA tree from distance matrix
+11/15/2021 03:51:28 PM    Reading traits file
+11/15/2021 03:51:28 PM    CRITICAL:
+Traceback (most recent call last):
+  File "/Users/noahaus/opt/miniconda3/envs/scoary/lib/python3.6/site-packages/scoary/methods.py", line 268, in main
+    strains)
+  File "/Users/noahaus/opt/miniconda3/envs/scoary/lib/python3.6/site-packages/scoary/methods.py", line 568, in Csv_to_dic
+    sys.exit("Make sure the top-left cell in the traits file "
+SystemExit: Make sure the top-left cell in the traits file is either empty or 'Name'. Do not include empty rows
