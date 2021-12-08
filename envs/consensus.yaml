@@ -1,0 +1,10 @@
+name: consensus
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bcftools
+  - vcftools
+  - perl-vcftools-vcf
+prefix: /Users/noahaus/opt/miniconda3/envs/consensus

@@ -390,6 +390,26 @@ else{
     """
 
     } 
+
+    process psuedo_assembly {
+        publishDir = output
+
+        conda "$workflow.projectDir/envs/consensus.yaml"
+
+        input:
+        file(vcf) from filter_ch 
+
+        output:
+        file("${vcf.baseName}.consensus.fasta") into fasta_ch
+
+        script:
+        """
+        bgzip -c ${vcf} 
+        bcftools index ${vcf.baseName}.vcf.gz
+        cat ${ref} | vcf-consensus ${vcf.baseName}.vcf.gz > ${vcf.baseName}.dummy.fasta
+        sed 's/LT708304.1 Mycobacterium bovis AF2122\/97 genome assembly, chromosome: Mycobacterium_bovis_AF212297/${vcf.baseName}/g' ${vcf.baseName}.dummy.fasta > ${vcf.baseName}.consensus.fasta
+        """
+    }
 }
 
 // vcf filtering + generate alignment? 
