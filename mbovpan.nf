@@ -404,10 +404,10 @@ else{
 
         script:
         """
-        bgzip -c ${vcf} 
-        bcftools index ${vcf.baseName}.vcf.gz
+        bgzip ${vcf} 
+        bcftools index ${vcf}.gz
         cat ${ref} | vcf-consensus ${vcf.baseName}.vcf.gz > ${vcf.baseName}.dummy.fasta
-        sed 's/LT708304.1 Mycobacterium bovis AF2122\/97 genome assembly, chromosome: Mycobacterium_bovis_AF212297/${vcf.baseName}/g' ${vcf.baseName}.dummy.fasta > ${vcf.baseName}.consensus.fasta
+        sed 's|LT708304.1 Mycobacterium bovis AF2122/97 genome assembly, chromosome: Mycobacterium_bovis_AF212297|${vcf.baseName}|g' ${vcf.baseName}.dummy.fasta > ${vcf.baseName}.consensus.fasta
         """
     }
 }
