@@ -96,10 +96,10 @@ else{
 
 // how we download the reads should be based on what mode we run mbovpan with
 if(mode == "longread"){
-    reads = Channel.fromPath("input*.fastq.gz").ifEmpty { error "Cannot find the read files" }
+    reads = Channel.fromPath("input*.fastq*").ifEmpty { error "Cannot find the read files" }
 }
 else{
-    reads = Channel.fromFilePairs("$input*_{1,2}.fastq.gz").ifEmpty { error "Cannot find the read files" }
+    reads = Channel.fromFilePairs("$input*_{1,2}.fastq*").ifEmpty { error "Cannot find the read files" }
 }
 
 reads.into {
