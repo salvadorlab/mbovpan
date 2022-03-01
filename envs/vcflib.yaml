@@ -1,8 +1,7 @@
 name: vcflib_test
 channels:
-  - conda-forge
-  - bioconda
   - defaults
 dependencies:
   - vcflib
-prefix: /Users/noahaus/opt/miniconda3/envs/vcflib_test
+  - bedtools
+prefix: /home/noahaus/.conda/envs/vcflib_test
