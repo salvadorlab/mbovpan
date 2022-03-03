@@ -1,6 +1,7 @@
 name: vcflib_test
 channels:
   - defaults
+  - bioconda
 dependencies:
   - vcflib
   - bedtools
