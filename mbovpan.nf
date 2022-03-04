@@ -386,7 +386,7 @@ else{
 
     script:
     """
-    vcffilter -f "QUAL > 150" ${vcf} | vcffilter -f "MQM > 55"|  bedtools intersect -a - -b $workflow.projectDir/ref/pe_ppe_regions.gff3 -v
+    vcffilter -f "QUAL > 150" ${vcf} | vcffilter -f "DP > 10" | vcffilter -f "MQM > 55" |  bedtools intersect -header -a - -b $workflow.projectDir/ref/pe_ppe_regions.gff3 -v > ${vcf.baseName}.filtered.vcf
     """
 
     } 

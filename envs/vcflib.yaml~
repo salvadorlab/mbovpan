@@ -1,0 +1,8 @@
+name: vcflib_test
+channels:
+  - defaults
+  - bioconda
+dependencies:
+  - vcflib
+  - bedtools
+prefix: /home/noahaus/.conda/envs/vcflib_test
