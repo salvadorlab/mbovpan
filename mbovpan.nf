@@ -465,13 +465,38 @@ else{
 assembly_ch = longassembly_ch
 }
 
+assembly_ch.into {
+    assembly_ch1,
+    assembly_ch2
+}
+
+process quast {
+    publishDir = output
+
+    conda "$workflow.projectDir/envs/quast.yaml"
+    
+    cpus Math.floor(threads/2)
+
+    input:
+    file(assemblies) from assembly_ch1.collect()
+    
+    output:
+    file("*") into quast_ch
+    
+    script:
+    """
+    quast -o assembly_stats ${assemblies} -r ${ref} -t ${task.cpus}
+    """
+}
+
+
 process annotate {
     publishDir = output
 
     conda "$workflow.projectDir/envs/prokka.yaml"
 
     input:
-    file(assembly) from assembly_ch
+    file(assembly) from assembly_ch2
 
     output:
     file("${assembly.baseName}.annot.gff") into annotate_ch
