@@ -251,23 +251,25 @@ else {
     }
 }
 
-/*
  process multiqc {
     publishDir = output
+    
+    conda "$workflow.projectDir/envs/multiqc.yaml"
 
     input:
-    file(pre) from fastqc_ch1.collect()
-    file(post) from fastqc_ch2.collect()
+    file(pre) from fastqc_ch1.collect().ifEmpty([])
+    file(post) from fastqc_ch2.collect().ifEmpty([])
+    file(quast) from quast_ch.collect().ifEmpty([])
 
     output:
-    file("mbovpan_seq_qual*")
+    file("mbovpan_report*")
 
     script:
     """
-    multiqc -n mbovpan_seq_qual ${pre} ${post}
+    multiqc -n mbovpan_report .
     """
 }
-*/
+
 
 
 // MODE 1: Variant Calling 
