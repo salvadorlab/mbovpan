@@ -466,7 +466,7 @@ assembly_ch = longassembly_ch
 }
 
 assembly_ch.into {
-    assembly_ch1,
+    assembly_ch1
     assembly_ch2
 }
 

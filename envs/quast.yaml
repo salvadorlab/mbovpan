@@ -1,0 +1,7 @@
+name: assembly_stats
+channels:
+  - defaults
+  - bioconda 
+dependencies:
+  - quast
+prefix: /home/noahaus/.conda/envs/assembly_stats
