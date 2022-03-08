@@ -505,7 +505,7 @@ process roary {
 
     script:
     """
-    roary -p ${task.cpus} $gff
+    roary -e --mafft -p ${task.cpus} $gff
     """
 }
 }
