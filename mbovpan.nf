@@ -509,7 +509,7 @@ process roary {
     """
 }
 
-curve_ch = roary_ch.fromPath([ "*number_of_conserved_genes.Rtab","*number_of_genes_in_pan_genome.Rtab"] )
+curve_ch = roary_ch.filter { it.toString().contains("number_of_conserved_genes.Rtab") || it.toString().contains("number_of_genes_in_pan_genome.Rtab") }
 
 process pan_curve {
     publishDir = output
