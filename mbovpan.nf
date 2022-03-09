@@ -513,6 +513,8 @@ process pan_curve {
     publishDir = output
     
     conda 'r-ggplot2'
+
+    errorStrategy 'ignore'
     
     input:
     file(input) from roary_ch.collect()
