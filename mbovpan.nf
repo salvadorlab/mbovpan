@@ -508,6 +508,26 @@ process roary {
     roary -e --mafft -p ${task.cpus} $gff
     """
 }
+
+curve_ch = roary_ch.fromPath([ "*number_of_conserved_genes.Rtab","*number_of_genes_in_pan_genome.Rtab"] )
+
+process pan_curve {
+    publishDir = output
+    
+    conda 'r-ggplot2'
+    
+    input:
+    file(input) from curve_ch
+    
+    output:
+    file("pangenome_curve.png") into output_ch
+    
+    script:
+    """
+    Rscript $workflow.projectDir/scripts/pangenome_curve.R
+    """
+}   
+
 }
 
 process multiqc {
