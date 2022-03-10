@@ -100,7 +100,7 @@ if(mode == "longread"){
     reads = Channel.fromPath("input*.fastq*").ifEmpty { error "Cannot find the read files" }
 }
 else{
-    reads = Channel.fromFilePairs("$input*_{1,2}.fastq*").ifEmpty { error "Cannot find the read files" }
+    reads = Channel.fromFilePairs("$input*R{1,2}*.fastq*").ifEmpty { error "Cannot find the read files" }
 }
 
 reads.into {

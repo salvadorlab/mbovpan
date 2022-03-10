@@ -1,0 +1,6 @@
+name: iqtree
+channels:
+  - defaults
+dependencies:
+  - iqtree
+prefix: /home/noahaus/.conda/envs/iqtree
