@@ -393,6 +393,27 @@ else{
         sed 's|LT708304.1 Mycobacterium bovis AF2122/97 genome assembly, chromosome: Mycobacterium_bovis_AF212297|${vcf.baseName}|g' ${vcf.baseName}.dummy.fasta > ${vcf.baseName}.consensus.fasta
         """
     }
+    
+    process iqtree {
+        publishDir = output
+        
+        conda "$workflow.projectDir/envs/iqtree.yaml"
+        
+        cpus threads 
+        
+        input:
+        file(aln) from fasta_ch.collect()
+        
+        output:
+        file("*") into phylo_ch 
+        
+        script:
+        """
+        cat *.fasta > mbovpan_align.fasta
+        cat $workflow.projectDir/ref/mbov_reference.fasta >> mbovpan_align.fasta
+        iqtree -s mbovpan_align.fasta -m MFP -nt ${task.cpus} -bb 1000 -pre mbovpan_align -o "LT708304.1"
+        """
+    }
 }
 
 // vcf filtering + generate alignment? 
