@@ -35,7 +35,8 @@ run_mode = "snp"
 
 // How many threads will be available to run the pipeline. 
 // Automatically uses all the cpus that are available 
-threads = Runtime.getRuntime().availableProcessors()
+// If not specified, use 50% of available resources 
+threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
 reads = ""
 
@@ -147,7 +148,7 @@ if(mode == "short"){
 
     publishDir = output
 
-    cpus Math.floor(threads/2)
+    cpus threads
 
     input:
     tuple sample_id, file(reads_file) from reads_trim
@@ -192,7 +193,7 @@ else {
 
     conda "$workflow.projectDir/envs/longread.yaml"
 
-    cpus Math.floor(threads/2)
+    cpus threads
 
     input:
     tuple sample_id, file(read_file) from reads_process
@@ -235,7 +236,7 @@ else {
 
     conda "$workflow.projectDir/envs/longread.yaml"
 
-    cpus Math.floor(threads/2)
+    cpus threads
 
     input:
     file(trim) from filtlong_reads1
@@ -261,7 +262,7 @@ if(run_mode == "snp" || run_mode == "all"){
     process read_map {
     publishDir = output 
 
-    cpus Math.floor(threads/2)
+    cpus threads
     
     conda "$workflow.projectDir/envs/samtools.yaml"
    
@@ -285,7 +286,7 @@ else{
     process longread_map {
     publishDir = output 
 
-    cpus Math.floor(threads/2)
+    cpus threads
     
     conda "$workflow.projectDir/envs/samtools.yaml"
    
@@ -335,7 +336,7 @@ else{
     process freebayes {
     publishDir = output 
 
-    cpus Math.floor(threads/2)
+    cpus threads
 
     conda "$workflow.projectDir/envs/freebayes.yaml"
 
@@ -406,7 +407,7 @@ if(run_mode == "pan" || run_mode == "all"){
     process assembly {
     publishDir = output 
 
-    cpus Math.floor(threads/2)
+    cpus threads
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads3
@@ -457,7 +458,7 @@ process quast {
 
     conda "$workflow.projectDir/envs/quast.yaml"
     
-    cpus Math.floor(threads/2)
+    cpus threads
 
     input:
     file(assemblies) from assembly_ch1.collect()
@@ -495,7 +496,7 @@ process roary {
 
     conda "$workflow.projectDir/envs/roary.yaml"
 
-    cpus Math.floor(threads/2)
+    cpus threads
 
     input:
     file(gff) from annotate_ch.collect()
