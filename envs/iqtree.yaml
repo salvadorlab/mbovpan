@@ -1,6 +1,8 @@
 name: iqtree
 channels:
   - defaults
+  - bioconda
 dependencies:
   - iqtree
+  - snp-sites
 prefix: /home/noahaus/.conda/envs/iqtree
