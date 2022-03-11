@@ -401,6 +401,8 @@ else{
         
         cpus threads 
         
+        errorStrategy 'ignore'
+        
         input:
         file(aln) from fasta_ch.collect()
         
