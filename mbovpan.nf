@@ -411,7 +411,8 @@ else{
         """
         cat *.fasta > mbovpan_align.fasta
         cat $workflow.projectDir/ref/mbov_reference.fasta >> mbovpan_align.fasta
-        iqtree -s mbovpan_align.fasta -m MFP -nt ${task.cpus} -bb 1000 -pre mbovpan_align -o "LT708304.1"
+        snp-sites -o mbovpan_align.snp_only.fasta mbovpan_align.fasta
+        iqtree -s mbovpan_align.snp_only.fasta -m MFP -nt ${task.cpus} -bb 1000 -pre mbovpan_align -o "LT708304.1"
         """
     }
 }
