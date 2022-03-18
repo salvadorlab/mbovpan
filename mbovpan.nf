@@ -503,6 +503,8 @@ process quast {
 
 process annotate {
     publishDir = output
+    
+    cpus $threads
 
     conda "$workflow.projectDir/envs/prokka.yaml"
 
@@ -514,7 +516,7 @@ process annotate {
 
     script:
     """
-    prokka  --outdir ./${assembly.baseName} --prefix ${assembly.baseName}.annot ${assembly}
+    prokka  --outdir ./${assembly.baseName} --cpus ${tasks.cpu} --prefix ${assembly.baseName}.annot ${assembly} 
     cp ./${assembly.baseName}/${assembly.baseName}.annot.gff ./
     """
 }
