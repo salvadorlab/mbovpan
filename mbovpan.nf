@@ -430,8 +430,12 @@ if(run_mode == "pan" || run_mode == "all"){
     
     process assembly {
     publishDir = output 
+    
+    errorStrategy "ignore"
 
     cpus threads
+    
+    memory "40 GB"
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads3
