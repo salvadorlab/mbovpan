@@ -506,7 +506,7 @@ process quast {
 process annotate {
     publishDir = output
     
-    cpus $threads
+    cpus threads
 
     conda "$workflow.projectDir/envs/prokka.yaml"
 
