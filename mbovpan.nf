@@ -118,7 +118,7 @@ run type: $run_mode
 reference location: $ref
 input: $input
 output: $output
-no. of threads: Runtime.getRuntime().availableProcessors()
+no. of threads: $threads
 =====================================
 """
 
