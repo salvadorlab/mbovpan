@@ -518,7 +518,7 @@ process annotate {
 
     script:
     """
-    prokka  --outdir ./${assembly.baseName} --cpus ${tasks.cpu} --prefix ${assembly.baseName}.annot ${assembly} 
+    prokka  --outdir ./${assembly.baseName} --cpus ${task.cpus} --prefix ${assembly.baseName}.annot ${assembly} 
     cp ./${assembly.baseName}/${assembly.baseName}.annot.gff ./
     """
 }
