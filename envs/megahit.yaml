@@ -1,0 +1,6 @@
+name: megahit
+channels:
+  - defaults
+dependencies:
+  - megahit
+prefix: /home/noahaus/.conda/envs/megahit
