@@ -431,11 +431,13 @@ if(run_mode == "pan" || run_mode == "all"){
     process assembly {
     publishDir = output 
     
+    conda "$workflow.projectDir/envs/megahit.yaml"
+    
     errorStrategy "ignore"
 
     cpus threads
     
-    memory "40 GB"
+    memory "20 GB"
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads3
@@ -445,9 +447,9 @@ if(run_mode == "pan" || run_mode == "all"){
 
     script:
     """
-    spades.py --threads ${task.cpus} --only-assembler --careful -1 ${trim1} -2 ${trim2} -o ${trim1.baseName}
+    megahit -t ${task.cpus} -1 ${trim1} -2 ${trim2} -o ${trim1.baseName}
     cd ${trim1.baseName}
-    mv scaffolds.fasta  ../${trim1.baseName}.scaffold.fasta
+    mv final.contigs.fa  ../${trim1.baseName}.scaffold.fasta
     """
 }
 assembly_ch = shortassembly_ch
