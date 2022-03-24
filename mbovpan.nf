@@ -40,6 +40,22 @@ threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
 reads = ""
 
+qual = 150
+
+depth = 10 
+
+mapq = 55
+
+if(params.qual != null){
+    qual = params.qual as Integer
+    }
+if(params.depth != null){
+    depth = params.depth as Integer
+    }
+if(params.mapq != null){
+    mapq = params.mapq as Integer
+    }
+
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
@@ -268,7 +284,6 @@ if(run_mode == "snp" || run_mode == "all"){
    
     input:
     tuple file(trim1), file (trim2) from fastp_reads2 
-    //path(reference) from ref
 
     output:
     file("${trim1.baseName - ~/_trimmed_R*/}.bam")  into map_ch 
@@ -369,7 +384,7 @@ else{
 
     script:
     """
-    vcffilter -f "QUAL > 150" ${vcf} | vcffilter -f "DP > 10" | vcffilter -f "MQM > 55" |  bedtools intersect -header -a - -b $workflow.projectDir/ref/pe_ppe_regions.gff3 -v > ${vcf.baseName}.filtered.vcf
+    vcffilter -f "QUAL > ${qual}" ${vcf} | vcffilter -f "DP > ${depth}" | vcffilter -f "MQM > ${mapq}" |  bedtools intersect -header -a - -b $workflow.projectDir/ref/pe_ppe_regions.gff3 -v > ${vcf.baseName}.filtered.vcf
     """
 
     } 
