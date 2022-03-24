@@ -506,6 +506,8 @@ process annotate {
     
     cpus threads
 
+    memory '2 GB'
+
     conda "$workflow.projectDir/envs/prokka.yaml"
 
     input:
