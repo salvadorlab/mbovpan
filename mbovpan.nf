@@ -73,13 +73,9 @@ else {
 }
 
 // record the mode the program should be ran in
-if(params.mode == "short" || params.mode == "long"){
-    mode = params.mode
+
     println "mbovpan will run in ${mode} read mode"
-}
-else {
-    println "mbovpan will run in default ${mode} read mode"
-}
+
 
 // what part of the pipeline should be ran?
 if(params.run == "all" ){
@@ -111,13 +107,8 @@ else{
     println "mbovpan will run using ${threads} threads by default"
 }
 
-// how we download the reads should be based on what mode we run mbovpan with
-if(mode == "longread"){
-    reads = Channel.fromPath("input*.fastq*").ifEmpty { error "Cannot find the read files" }
-}
-else{
-    reads = Channel.fromFilePairs("$input*{1,2}*.fastq*").ifEmpty { error "Cannot find the read files" }
-}
+reads = Channel.fromFilePairs("$input*{1,2}*.fastq*").ifEmpty { error "Cannot find the read files" }
+
 
 reads.into {
     reads_process
@@ -140,7 +131,6 @@ no. of threads: $threads
 
 /* AUTOMATIC QC of read data */
 
-if(mode == "short"){
     process pre_fastqc {
 
     publishDir = output
@@ -203,77 +193,11 @@ if(mode == "short"){
     """
     }
 }
-else {
-    process pre_nanostat {
-    publishDir = output
-
-    conda "$workflow.projectDir/envs/longread.yaml"
-
-    cpus threads
-
-    input:
-    tuple sample_id, file(read_file) from reads_process
-
-    output:
-    file("pre_nanoplot_${sample_id}_logs") into nanoplot_ch
-
-    script:
-    """
-    mkdir pre_nanoplot_${sample_id}_logs
-    NanoPlot -t ${tasks.cpu} --verbose -o ./pre_nanoplot_${sample_id}_logs -p ${sample_id} --N50 --fastq ${read_file}
-    """
-    }
-
-    process filtlong {
-    publishDir = output
-
-    conda "$workflow.projectDir/envs/longread.yaml"
-
-    input:
-    tuple sample_id, file(read) from reads_trim
-
-    output:
-    file("${sample_id}_trimmed.fastq") into filtlong_ch
-
-    script:
-    """
-    filtlong --keep_percent 90 --min_length 1000 --min_window_q 9 ${read} > ${sample_id}_trimmed.fastq
-    """
-    }
-
-    filtlong_ch.into {
-        filtlong_reads1
-        filtlong_reads2
-        filtlong_reads3
-    }
-
-    process post_nanostat {
-    publishDir = output
-
-    conda "$workflow.projectDir/envs/longread.yaml"
-
-    cpus threads
-
-    input:
-    file(trim) from filtlong_reads1
-
-    output:
-    file("post_nanoplot_${trim.baseName}_logs") into nanoplot_ch
-
-    script:
-    """
-    mkdir post_nanoplot_${trim.baseName}_logs
-    NanoPlot -t ${tasks.cpu} --verbose -o ./post_nanoplot_${trim.baseName}_logs -p ${trim.baseName} --N50 --fastq ${trim}
-    """
-    }
-}
-
 
 // MODE 1: Variant Calling 
 bam = Channel.create()
 
 if(run_mode == "snp" || run_mode == "all"){
-    if(mode == "short"){
 
     process read_map {
     publishDir = output 
@@ -295,36 +219,8 @@ if(run_mode == "snp" || run_mode == "all"){
     }
 
     bam = map_ch
-}
 
-else{
-    process longread_map {
-    publishDir = output 
-
-    cpus threads
-    
-    conda "$workflow.projectDir/envs/samtools.yaml"
-   
-    input:
-    tuple file(trim1), file (trim2) from filtlong_reads2 
-    //path(reference) from ref
-
-    output:
-    file("${trim1.baseName - ~/_trimmed_R*/}.bam")  into map_ch 
-
-    script:
-    """
-    minimap2 -ax map-pb --MD ${ref} ${trim} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
-    """
-    }
-
-    bam = map_ch
-
-}
-
-
-
-    
+  
 
 // picard MarkDuplicates INPUT={sorted_bamfile} OUTPUT={rmdup_bamfile} ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv
 
@@ -441,7 +337,6 @@ else{
 // PART 3: Pangenome 
 assembly = Channel.create()
 if(run_mode == "pan" || run_mode == "all"){
-    if(mode == "short"){
     
     process assembly {
     publishDir = output 
@@ -466,30 +361,6 @@ if(run_mode == "pan" || run_mode == "all"){
     """
 }
 assembly_ch = shortassembly_ch
-}
-else{
-    
-    process longread_assembly {
-    publishDir = output 
-
-    conda "$workflow.projectDir/envs/raven.yaml"
-
-    cpus Math.floor(threads/2)
-
-    input:
-    file(trim) from filtlong_reads3
-
-    output:
-    file("${trim1.baseName}.scaffold.fasta") into longassembly_ch
-
-    script:
-    """
-    raven --threads ${task.cpus} ${trim} > ${trim.baseName}.scaffold.fasta"
-    """
-}  
-
-assembly_ch = longassembly_ch
-}
 
 assembly_ch.into {
     assembly_ch1
