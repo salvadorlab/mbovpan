@@ -484,7 +484,7 @@ process multiqc {
     input:
     file(pre) from fastqc_ch1.collect().ifEmpty([])
     file(post) from fastqc_ch2.collect().ifEmpty([])
-    file(quast) from quast_ch.collect().ifEmpty([])
+    if( run_mode != "snp"){ file(quast) from quast_ch.collect().ifEmpty([]) }
 
     output:
     file("mbovpan_report*")
