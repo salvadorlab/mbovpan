@@ -305,6 +305,10 @@ if(run_mode == "snp" || run_mode == "all"){
         input:
         file(nec_files) from stats_ch
 
+        output:
+        file("${nec_files[0].baseName}.stats") into output_ch
+
+
         script:
         """
         python $workflow.projectDir/scripts/statistics.py ${nec_files[0]} ${nec_files[1]} ${nec_files[2]} ${nec_files[3]} > ${nec_files[0].baseName}.stats
