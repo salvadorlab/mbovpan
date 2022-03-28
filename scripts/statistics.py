@@ -16,14 +16,13 @@ import subprocess as sp
 #inputs
 r1 = sys.argv[1]
 r2 = sys.argv[2]
-#trim_r1 = sys.argv[3]
-#trim_r2 = sys.argv[4]
 bam = sys.argv[3]
 
 # Determine statistics revolving around SNP quality.
-#vcf = sys.argv[6]
+vcf = sys.argv[4]
 
 # FASTQ statistics
+#fastx_toolkit
 print("generating fastq statistics...")
 sample_name = re.sub(".trimmed_R1.fastq","",r1)
 r1_output = re.sub(".trimmed_R1.fastq",".R1_stats.txt",r1)
@@ -41,6 +40,7 @@ R2_ave_read_length = sp.check_output("awk '{{if(NR%4==2) {{count++; bases += len
 fastq_stats = "{},{},{},{},{},{},{}".format(sample_name,R1_size.strip(),R2_size.strip(),Q_ave_R1.strip(),Q_ave_R2.strip(),R1_ave_read_length.strip(),R2_ave_read_length.strip())
 
 # Mapping statistics
+#samtools
 print("generating mapping statistics...")
 os.system("samtools index {}".format(bam))
 ave_coverage = sp.check_output("samtools depth {} | awk '{{sum+=$3}} END {{ print sum/NR}}'".format(bam),shell=True).decode('ascii').strip()
@@ -51,6 +51,10 @@ mapping_stats = "{},{},{}".format(mapped_reads,ave_coverage,unmapped_reads)
 
 # VCF statistics 
 # rtg-tools
-
-
-print("{},{}".format(fastq_stats,mapping_stats))
+print("generating VCF statistics...")
+os.system("rtg vcfstats {} > vcf.stat.out".format(vcf))
+num_snps = sp.check_output("cat vcf.stat.out| grep \"SNPs.*:\" | sed -n \"s/^.*: \(\S*\)/\1/p\"",shell=True).decode('ascii').strip()
+num_ins = sp.check_output("cat vcf.stat.out| grep \"Insertions.*:\" | sed -n \"s/^.*: \(\S*\)/\1/p\"",shell=True).decode('ascii').strip()
+num_del = sp.check_output("cat vcf.stat.out| grep \"Deletions.*:\" | sed -n \"s/^.*: \(\S*\)/\1/p\"",shell=True).decode('ascii').strip()
+vcf_stats = "{},{},{}".format(num_snps,num_ins,num_del)
+print("{},{},{}".format(fastq_stats,mapping_stats,vcf_stats))
