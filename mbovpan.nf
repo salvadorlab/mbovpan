@@ -307,7 +307,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
         script:
         """
-        python $workflow.projectDir/scripts/statistics.py ${nec_file[0]} ${nec_file[1]} ${nec_file[2]} ${nec_file[3]} > ${nec_file[0].baseName}.stats
+        python $workflow.projectDir/scripts/statistics.py ${nec_files[0]} ${nec_files[1]} ${nec_files[2]} ${nec_files[3]} > ${nec_files[0].baseName}.stats
         """
 
     }
