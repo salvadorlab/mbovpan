@@ -173,6 +173,7 @@ no. of threads: $threads
         fastp_reads1
         fastp_reads2
         fastp_reads3
+        fastp_reads4
     }
 
 
@@ -244,6 +245,11 @@ if(run_mode == "snp" || run_mode == "all"){
     """
     }
 
+    nodup_ch.into {
+        nodup1_ch
+        nodup2_ch
+    }
+
     process freebayes {
     publishDir = output 
 
@@ -252,7 +258,7 @@ if(run_mode == "snp" || run_mode == "all"){
     conda "$workflow.projectDir/envs/freebayes.yaml"
 
     input:
-    file(bam) from nodup_ch
+    file(bam) from nodup1_ch
     //file(range) from chrom_range
     path(reference) from ref
 
@@ -285,13 +291,35 @@ if(run_mode == "snp" || run_mode == "all"){
 
     } 
 
+    filter_ch.into {
+        filter1_ch
+        filter2_ch
+    }
+
+    stats_ch = fastp_reads4.merge(nodup2_ch).merge(filter2_ch).view()
+
+    process stats {
+        publishDir = output
+
+        conda "$workflow.projectDir/envs/statistics.yaml"
+
+        input:
+        file(nec_files) from stats_ch
+
+        script:
+        """
+        python $workflow.projectDir/scripts/statistics.py ${nec_file[0]} ${nec_file[1]} ${nec_file[2]} ${nec_file[3]} > ${nec_file[0].baseName}.stats
+        """
+
+    }
+
     process psuedo_assembly {
         publishDir = output
 
         conda "$workflow.projectDir/envs/consensus.yaml"
 
         input:
-        file(vcf) from filter_ch 
+        file(vcf) from filter1_ch 
 
         output:
         file("${vcf.baseName}.consensus.fasta") into fasta_ch
