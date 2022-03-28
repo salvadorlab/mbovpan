@@ -193,7 +193,6 @@ no. of threads: $threads
     fastqc -o  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs -f fastq -q ${trim1} ${trim2}
     """
     }
-}
 
 // MODE 1: Variant Calling 
 bam = Channel.create()
