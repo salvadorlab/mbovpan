@@ -342,6 +342,8 @@ if(run_mode == "snp" || run_mode == "all"){
         conda "$workflow.projectDir/envs/iqtree.yaml"
         
         cpus threads 
+
+        memory '2 GB'
         
         //errorStrategy 'ignore'
         
