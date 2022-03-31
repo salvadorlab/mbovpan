@@ -1,0 +1,2 @@
+envs/prokka/db/hmm/HAMAP.hmm.h3p filter=lfs diff=lfs merge=lfs -text
+prokka/db/hmm/* filter=lfs diff=lfs merge=lfs -text
