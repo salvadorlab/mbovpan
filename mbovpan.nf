@@ -306,7 +306,7 @@ if(run_mode == "snp" || run_mode == "all"){
         file(nec_files) from stats_ch
 
         output:
-        file("${nec_files[0].baseName}.stats") into output_ch
+        file("${nec_files[0].baseName}.stats") into output_stat_ch
 
 
         script:
