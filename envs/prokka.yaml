@@ -1,8 +1,8 @@
 name: prokka
 channels:
-  - defaults
+  - conda-forge
   - bioconda
-  - conda-forge 
+  - defaults
 dependencies:
-  - prokka=1.14.6
-prefix: /home/noahaus/.conda/envs/prodigal
+  - prokka
+prefix: /home/noahaus/.conda/envs/prokka
