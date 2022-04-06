@@ -427,7 +427,7 @@ process annotate {
 
     //conda "$workflow.projectDir/envs/prokka.yaml"
     //conda "/scratch/noahaus/aim_1/prokka"
-    conda = 'bioconda::prokka'
+    conda = 'bioconda::prokka, bioconda::blast'
 
     input:
     file(assembly) from assembly_ch2
