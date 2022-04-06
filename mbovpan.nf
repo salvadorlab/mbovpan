@@ -426,7 +426,7 @@ process annotate {
     cpus threads
 
     //conda "$workflow.projectDir/envs/prokka.yaml"
-    conda "/scratch/noahaus/aim_1/prokka"
+    //conda "/scratch/noahaus/aim_1/prokka"
 
     input:
     file(assembly) from assembly_ch2
