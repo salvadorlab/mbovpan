@@ -285,7 +285,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     script:
     """
-    vcffilter -f "QUAL > ${qual}" ${vcf} | vcffilter -f "DP > ${depth}" | vcffilter -f "MQM > ${mapq}" |  bedtools intersect -header -a - -b $workflow.projectDir/ref/pe_ppe_regions.gff3 -v > ${vcf.baseName}.filtered.vcf
+    vcffilter -f "QUAL > ${qual}" ${vcf} | vcffilter -f "DP > ${depth}" | vcffilter -f "MQM > ${mapq}" |  vcffilter -f "TYPE = snp" | bedtools intersect -header -a - -b $workflow.projectDir/ref/pe_ppe_regions.gff3 -v > ${vcf.baseName}.filtered.vcf
     """
 
     } 
@@ -345,7 +345,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
         memory '2 GB'
         
-        //errorStrategy 'ignore'
+        errorStrategy 'ignore'
         
         input:
         file(aln) from fasta_ch.collect()
