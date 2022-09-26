@@ -347,6 +347,7 @@ if(run_mode == "snp" || run_mode == "all"){
         
         errorStrategy 'ignore'
         
+
         input:
         file(aln) from fasta_ch.collect()
         
@@ -461,6 +462,11 @@ process roary {
     """
 }
 
+fastp_ch.into {
+        roary_ch1
+        roary_ch2
+    }
+
 process pan_curve {
     publishDir = output
     
@@ -469,7 +475,7 @@ process pan_curve {
     errorStrategy 'ignore'
     
     input:
-    file(input) from roary_ch.collect()
+    file(input) from roary_ch1.collect()
     
     output:
     file("pangenome_curve.png") into output_ch
@@ -478,7 +484,33 @@ process pan_curve {
     """
     Rscript $workflow.projectDir/scripts/pangenome_curve.R
     """
-}   
+}  
+
+// This will make the tree for core gene alignment
+process iqtree {
+        publishDir = output
+        
+        conda "$workflow.projectDir/envs/iqtree.yaml"
+        
+        cpus threads 
+
+        memory '2 GB'
+        
+        errorStrategy 'ignore'
+        
+        
+        input:
+        file(input) from roary_ch2.collect()
+    
+        output:
+        file("*") into output_ch
+        
+        script:
+        """
+        iqtree -s core_gene_alignment.aln -m MFP -nt ${task.cpus} -bb 1000 -pre mbovpan_align 
+        """
+    }
+
 
 }
 
@@ -500,6 +532,7 @@ process multiqc {
     multiqc -n mbovpan_report .
     """
 }
+
 
 
 
