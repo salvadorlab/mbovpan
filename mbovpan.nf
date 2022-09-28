@@ -511,6 +511,25 @@ process iqtree {
         """
     }
 
+// Rscript to generate a heatmap of the pangenome
+process gene_prab {
+     publishDir = output
+    
+    conda 'r-ggplot2'
+
+    errorStrategy 'ignore'
+    
+    input:
+    file(input) from roary_ch1.collect()
+    
+    output:
+    file("pangenome_curve.png") into output_ch
+    
+    script:
+    """
+    Rscript $workflow.projectDir/scripts/pangenome_curve.R
+    """
+}
 
 }
 
