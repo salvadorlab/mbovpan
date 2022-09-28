@@ -1,0 +1,8 @@
+name: scoary
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - scoary
+prefix: /Users/noahaus/opt/miniconda3/envs/scoary

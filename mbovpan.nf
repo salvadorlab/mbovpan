@@ -46,6 +46,10 @@ depth = 10
 
 mapq = 55
 
+// Provide path to metadata for analysis
+// isolate name as rows with metadata as columns
+meta = ""
+
 if(params.qual != null){
     qual = params.qual as Integer
     }
@@ -55,6 +59,11 @@ if(params.depth != null){
 if(params.mapq != null){
     mapq = params.mapq as Integer
     }
+
+if(params.meta != null){
+    meta = params.meta 
+    println "metadata loaded successfully"
+}
 
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
@@ -325,18 +334,18 @@ if(run_mode == "snp" || run_mode == "all"){
         file(vcf) from filter1_ch 
 
         output:
-        file("${vcf.baseName}.consensus.fasta") into fasta_ch
+        file("${vcf.baseName - ~/.filtered/}.consensus.fasta") into fasta_ch
 
         script:
         """
         bgzip ${vcf} 
         bcftools index ${vcf}.gz
-        cat ${ref} | vcf-consensus ${vcf.baseName}.vcf.gz > ${vcf.baseName}.dummy.fasta
-        sed 's|LT708304.1 Mycobacterium bovis AF2122/97 genome assembly, chromosome: Mycobacterium_bovis_AF212297|${vcf.baseName}|g' ${vcf.baseName}.dummy.fasta > ${vcf.baseName}.consensus.fasta
+        cat ${ref} | vcf-consensus ${vcf.baseName}.vcf.gz > ${vcf.baseName - ~/.filtered/}.dummy.fasta
+        sed 's|LT708304.1 Mycobacterium bovis AF2122/97 genome assembly, chromosome: Mycobacterium_bovis_AF212297|${vcf.baseName - ~/.filtered/}}|g' ${vcf.baseName - ~/.filtered/}.dummy.fasta > ${vcf.baseName - ~/.filtered/}.consensus.fasta
         """
     }
     
-    process iqtree {
+    process iqtree_phylo {
         publishDir = output
         
         conda "$workflow.projectDir/envs/iqtree.yaml"
@@ -385,13 +394,13 @@ if(run_mode == "pan" || run_mode == "all"){
     tuple file(trim1), file(trim2) from fastp_reads3
 
     output:
-    file("${trim1.baseName}.scaffold.fasta") into shortassembly_ch
+    file("${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta") into shortassembly_ch
 
     script:
     """
     megahit -t ${task.cpus} -1 ${trim1} -2 ${trim2} -o ${trim1.baseName}
     cd ${trim1.baseName}
-    mv final.contigs.fa  ../${trim1.baseName}.scaffold.fasta
+    mv final.contigs.fa  ../${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta
     """
 }
 assembly_ch = shortassembly_ch
@@ -434,12 +443,12 @@ process annotate {
     file(assembly) from assembly_ch2
 
     output:
-    file("${assembly.baseName}.annot.gff") into annotate_ch
+    file("${assembly.baseName - ~/.scaffold/}.annot.gff") into annotate_ch
 
     script:
     """
-    prokka  --outdir ./${assembly.baseName} --cpus ${task.cpus} --prefix ${assembly.baseName}.annot ${assembly} 
-    cp ./${assembly.baseName}/${assembly.baseName}.annot.gff ./
+    prokka  --outdir ./${assembly.baseName - ~/.scaffold/} --cpus ${task.cpus} --prefix ${assembly.baseName - ~/.scaffold/}.annot ${assembly} 
+    cp ./${assembly.baseName - ~/.scaffold/}/${assembly.baseName - ~/.scaffold/}.annot.gff ./
     """
 }
 
@@ -465,6 +474,7 @@ process roary {
 fastp_ch.into {
         roary_ch1
         roary_ch2
+        roary_ch3
     }
 
 process pan_curve {
@@ -487,7 +497,7 @@ process pan_curve {
 }  
 
 // This will make the tree for core gene alignment
-process iqtree {
+process iqtree_core {
         publishDir = output
         
         conda "$workflow.projectDir/envs/iqtree.yaml"
@@ -529,6 +539,29 @@ process gene_prab {
     """
     Rscript $workflow.projectDir/scripts/pangenome_curve.R
     """
+}
+
+
+if(params.meta != null){
+process scoary {
+    publishDir = output
+    
+    conda "$workflow.projectDir/envs/scoary.yaml"
+
+    errorStrategy 'ignore'
+    
+    input:
+    file(input) from roary_ch3.collect()
+    
+    output:
+    file("*.csv") into scoary_ch
+    
+    script:
+    """
+    sed 's/.annot//g' gene_presence_absence.csv > prab.csv
+    scoary -t ${meta} -g prab.csv
+    """
+}
 }
 
 }
