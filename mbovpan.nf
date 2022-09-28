@@ -471,7 +471,7 @@ process roary {
     """
 }
 
-fastp_ch.into {
+roary_ch.into {
         roary_ch1
         roary_ch2
         roary_ch3
