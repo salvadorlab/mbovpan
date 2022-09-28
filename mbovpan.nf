@@ -488,7 +488,7 @@ process pan_curve {
     file(input) from roary_ch1.collect()
     
     output:
-    file("pangenome_curve.png") into output_ch
+    file("pangenome_curve.png") into pancurve_ch
     
     script:
     """
@@ -513,7 +513,7 @@ process iqtree_core {
         file(input) from roary_ch2.collect()
     
         output:
-        file("*") into output_ch
+        file("*") into iqtreecore_ch
         
         script:
         """
@@ -533,7 +533,7 @@ process gene_prab {
     file(input) from roary_ch1.collect()
     
     output:
-    file("pangenome_curve.png") into output_ch
+    file("pangenome_curve.png") into geneprab_ch
     
     script:
     """
