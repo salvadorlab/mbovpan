@@ -50,6 +50,8 @@ mapq = 55
 // isolate name as rows with metadata as columns
 meta = ""
 
+scoary_meta = ""
+
 if(params.qual != null){
     qual = params.qual as Integer
     }
@@ -63,6 +65,11 @@ if(params.mapq != null){
 if(params.meta != null){
     meta = params.meta 
     println "metadata loaded successfully"
+}
+
+if(params.scoary_meta != null){
+    scoary_meta = params.scoary_meta 
+    println "scoary metadata loaded successfully"
 }
 
 // record the path for the M. bovis reference genome
@@ -537,12 +544,12 @@ process gene_prab {
     
     script:
     """
-    Rscript $workflow.projectDir/scripts/pangenome_curve.R
+    Rscript $workflow.projectDir/scripts/gene_prab.R
     """
 }
 
 
-if(params.meta != null){
+if(params.scoary_meta != null){
 process scoary {
     publishDir = output
     
@@ -559,7 +566,7 @@ process scoary {
     script:
     """
     sed 's/.annot//g' gene_presence_absence.csv > prab.csv
-    scoary -t ${meta} -g prab.csv
+    scoary -t ${scoary_meta} -g prab.csv
     """
 }
 }

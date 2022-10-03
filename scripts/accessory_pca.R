@@ -27,6 +27,7 @@ scores <- prab_pca$x
 
 scores4 <- as.data.frame(scores[,1:4])
 
+# Add code to make a PCA for each pairwise comp. 
 ggplot(as.data.frame(scores4),aes(x=PC2,y=PC3),) +
   geom_point() +
   theme_minimal() + 

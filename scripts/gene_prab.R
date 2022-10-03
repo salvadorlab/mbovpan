@@ -8,6 +8,15 @@ library(ggdendro)
 library(ggtree)
 library(ggnewscale)
 
+# load in the general metadata
+#args = commandArgs(trailingOnly=TRUE)
+#isolate_dat <- read.csv(args[1])
+
+#purely for debugging purposes
+isolate_dat <- read.csv("mbovpan/auxilary/UK_meta.csv", stringsAsFactors = FALSE)
+isolate_dat$Name <- gsub("_trimmed_R1.scaffold.annot","",isolate_dat$Name)
+
+# load in the gene presence absence data, keep only accessory
 gene_pres_abs <- read.csv("../noahaus/mbovpan/auxilary/gene_presence_absence.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
@@ -35,17 +44,17 @@ accessory_matrix <- as.matrix(accessory_pa %>% select(-gene_id))
 rownames(accessory_matrix) <- gene_id
 accessory_dendro <- as.dendrogram(hclust(d = dist(accessory_transpose, method = "binary"), method = "ward.D"))
 
-dendro_plot <- ggdendrogram(data = accessory_dendro, rotate = TRUE) + 
-  theme(axis.text.y = element_blank())
-
-# Preview the plot
-print(dendro_plot)
-
 # reorder the rows 
 accessory_order <- order.dendrogram(accessory_dendro)
 accessory_pa_long$sample <- factor(x = accessory_pa_long$sample,
                                levels = rownames(accessory_transpose)[accessory_order], 
                                ordered = TRUE)
+
+ad_gg <- ggtree(accessory_dendro)
+ad_gg$data$label <- gsub(".annot","",ad_gg$data$label)
+
+ad_gg <- ad_gg %<+% isolate_dat + 
+  geom_tiplab(aes(fill = factor(Species)))
 
 t1 <- gheatmap(ggtree(accessory_dendro),accessory_transpose, offset = 0.5, colnames = FALSE) +  
   scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
@@ -53,23 +62,3 @@ t1 <- gheatmap(ggtree(accessory_dendro),accessory_transpose, offset = 0.5, colna
 
 
 
-#heatmap_plot <- accessory_pa_long %>% ggplot(aes(x = gene_id,y = sample, fill = prab)) + 
-#  geom_tile() +
-#  scale_fill_manual(values = c("white","steelblue")) +
-#  theme_minimal() + 
-#  theme(axis.text = element_blank(),
-#        axis.ticks = element_blank(),
-#        legend.position = "top")
-#grid.newpage()
-#print(heatmap_plot, 
-#      vp = viewport(x = 0.4, y = 0.5, width = 0.8, height = 1.0))
-#print(dendro_plot, 
-#      vp = viewport(x = 0.90, y = 0.465, width = 0.2, height = 1.1))
-
-# use ggplot to make the heatmap 
-#accessory_gg <- accessory_pa_long %>% ggplot(aes(x = gene_id,y = sample, fill = prab)) + 
-#  geom_tile() +
-#  scale_fill_manual(values = c("white","steelblue")) +
-#  theme_minimal() + 
-#  theme(axis.text = element_blank(),
-#        axis.ticks = element_blank())
