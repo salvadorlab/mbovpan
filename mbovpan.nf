@@ -482,6 +482,8 @@ roary_ch.into {
         roary_ch1
         roary_ch2
         roary_ch3
+        roary_ch4
+        roary_ch5
     }
 
 process pan_curve {
@@ -499,7 +501,7 @@ process pan_curve {
     
     script:
     """
-    Rscript $workflow.projectDir/scripts/pangenome_curve.R
+    Rscript $workflow.projectDir/scripts/pangenome_curve.R 
     """
 }  
 
@@ -532,19 +534,38 @@ process iqtree_core {
 process gene_prab {
      publishDir = output
     
-    conda 'r-ggplot2'
+    conda "$workflow.projectDir/envs/gene_prab.yaml"
 
     errorStrategy 'ignore'
     
     input:
-    file(input) from roary_ch1.collect()
+    file(input) from roary_ch3.collect()
     
     output:
     file("pangenome_curve.png") into geneprab_ch
     
     script:
     """
-    Rscript $workflow.projectDir/scripts/gene_prab.R
+    Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
+    """
+}
+
+process accessory_pca {
+     publishDir = output
+    
+    conda 'r-ggplot2 r-dplyr'
+
+    errorStrategy 'ignore'
+    
+    input:
+    file(input) from roary_ch4.collect()
+    
+    output:
+    file("pangenome_curve.png") into accessory_ch
+    
+    script:
+    """
+    Rscript $workflow.projectDir/scripts/accessory_pca.R ${meta}
     """
 }
 
@@ -558,7 +579,7 @@ process scoary {
     errorStrategy 'ignore'
     
     input:
-    file(input) from roary_ch3.collect()
+    file(input) from roary_ch5.collect()
     
     output:
     file("*.csv") into scoary_ch

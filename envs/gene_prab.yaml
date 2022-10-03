@@ -1,0 +1,10 @@
+name: gene_prab
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-ggdendro
+  - bioconductor-ggtree
+  - r-ggnewscale
+prefix: /Users/noahaus/opt/miniconda3/envs/gene_prab

@@ -9,15 +9,13 @@ library(ggtree)
 library(ggnewscale)
 
 # load in the general metadata
-#args = commandArgs(trailingOnly=TRUE)
-#isolate_dat <- read.csv(args[1])
+args = commandArgs(trailingOnly=TRUE)
 
-#purely for debugging purposes
-isolate_dat <- read.csv("mbovpan/auxilary/UK_meta.csv", stringsAsFactors = FALSE)
-isolate_dat$Name <- gsub("_trimmed_R1.scaffold.annot","",isolate_dat$Name)
+
+
 
 # load in the gene presence absence data, keep only accessory
-gene_pres_abs <- read.csv("../noahaus/mbovpan/auxilary/gene_presence_absence.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+gene_pres_abs <- read.csv("gene_presence_absence.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
 auxil <- gene_pres_abs %>% select(2:14)
@@ -38,6 +36,7 @@ accessory_matrix <- as.matrix(accessory_pa %>% select(-gene_id))
 
 # perform clustering 
 accessory_transpose <- t(accessory_matrix)
+rownames(accessory_transpose) <- gsub(".annot","",rownames(accessory_transpose))
 
 
 accessory_matrix <- as.matrix(accessory_pa %>% select(-gene_id))
@@ -50,15 +49,33 @@ accessory_pa_long$sample <- factor(x = accessory_pa_long$sample,
                                levels = rownames(accessory_transpose)[accessory_order], 
                                ordered = TRUE)
 
-ad_gg <- ggtree(accessory_dendro)
-ad_gg$data$label <- gsub(".annot","",ad_gg$data$label)
+pdf("gene_prab_figures.pdf")
 
-ad_gg <- ad_gg %<+% isolate_dat + 
-  geom_tiplab(aes(fill = factor(Species)))
+if(length(args[1]) != 0){
+  isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
+  for(i in 1:length(colnames(isolate_dat))){
+    if(i == "Name"){
+      next
+    }
+    else{  
+      ad_gg <- ggtree(accessory_dendro)
+      ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 
-t1 <- gheatmap(ggtree(accessory_dendro),accessory_transpose, offset = 0.5, colnames = FALSE) +  
-  scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
+      ad_gg <- ad_gg %<+% isolate_dat + 
+        geom_tippoint(aes(color = i))
 
-
-
-
+      t1 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames = FALSE) +  
+        scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
+      plot(t1)
+    }
+}
+  
+} else{
+  ad_gg <- ggtree(accessory_dendro)
+  ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
+  
+  t1 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames = FALSE) +  
+    scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
+  plot(t1) 
+}
+dev.off()
