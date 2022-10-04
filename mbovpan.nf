@@ -553,7 +553,7 @@ process gene_prab {
 process accessory_pca {
      publishDir = output
     
-    conda 'r-ggplot2 r-dplyr'
+    conda 'conda-forge::r-ggplot2 conda-forge::r-dplyr'
 
     errorStrategy 'ignore'
     
