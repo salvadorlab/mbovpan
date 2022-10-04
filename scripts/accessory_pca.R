@@ -29,7 +29,7 @@ scores4 <- as.data.frame(scores[,1:4])
 
 # Add code to make a PCA for each pairwise comp. 
 
-pdf("pca_figures.pdf")
+svg("pca_figures.svg")
 
 if(length(args[1]) != 0){
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
