@@ -536,7 +536,7 @@ process gene_prab {
     
     conda "$workflow.projectDir/envs/gene_prab.yaml"
 
-    errorStrategy 'ignore'
+    //errorStrategy 'ignore'
     
     input:
     file(input) from roary_ch3.collect()
@@ -555,7 +555,7 @@ process accessory_pca {
     
     conda 'conda-forge::r-ggplot2 conda-forge::r-dplyr'
 
-    errorStrategy 'ignore'
+    //errorStrategy 'ignore'
     
     input:
     file(input) from roary_ch4.collect()
