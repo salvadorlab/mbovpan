@@ -1,5 +1,6 @@
 library(ggplot2)
 library(dplyr)
+
 args = commandArgs(trailingOnly=TRUE)
 
 gene_pres_abs <- read.csv("gene_presence_absence.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
@@ -26,15 +27,18 @@ rownames(loadings) <- colnames(pa_transpose)
 scores <- prab_pca$x 
 
 scores4 <- as.data.frame(scores[,1:4])
+head(scores4)
 
 # Add code to make a PCA for each pairwise comp. 
 
 svg("pca_figures.svg")
 
 if(length(args[1]) != 0){
+  print(args[1])
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
   for(i in 1:length(colnames(isolate_dat))){
     if(i == "Name"){
+      print("identified Name column")
       next
     }
     else{  
