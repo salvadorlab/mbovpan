@@ -47,10 +47,11 @@ if(length(args[1]) != 0){
       for(i in 1:length(colnames(scores4))){
         for(j in 1:length(colnames(scores4))){
           if(i > j){
-          ggplot(as.data.frame(scores4),aes(x=colnames(scores4)[i],y=colnames(scores4)[j], fill = i )) +
+          a <- ggplot(as.data.frame(scores4),aes(x=colnames(scores4)[i],y=colnames(scores4)[j], fill = colnames(isolate_dat)[i] )) +
             geom_point() +
             theme_minimal() + 
             ggtitle("M. bovis pangenome (15% to 99% PRAB)")
+          plot(a)
           } else {
             next
           }
@@ -63,10 +64,11 @@ if(length(args[1]) != 0){
   for(i in 1:length(colnames(scores4))){
     for(j in 1:length(colnames(scores4))){
       if(i > j){
-      ggplot(as.data.frame(scores4),aes(x=colnames(scores4)[i],y=colnames(scores4)[j])) +
+      a <- ggplot(as.data.frame(scores4),aes(x=colnames(scores4)[i],y=colnames(scores4)[j])) +
         geom_point() +
         theme_minimal() + 
         ggtitle("M. bovis pangenome (15% to 99% PRAB)")
+      plot(a)
       } else {
         next 
       }
