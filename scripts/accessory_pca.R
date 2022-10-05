@@ -32,7 +32,7 @@ head(scores4)
 
 # Add code to make a PCA for each pairwise comp. 
 
-svg("pca_figures.svg")
+pdf("pca_figures.pdf")
 
 if(length(args[1]) != 0){
   print(args[1])
