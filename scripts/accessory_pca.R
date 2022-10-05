@@ -39,18 +39,21 @@ if(length(args[1]) != 0){
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
   print(colnames(isolate_dat))
   for(i in 1:length(colnames(isolate_dat))){
-    if(i == "Name"){
+    if(colnames(isolate_dat)[i] == "Name"){
       print("identified Name column")
       next
     }
     else{  
       for(i in 1:length(colnames(scores4))){
         for(j in 1:length(colnames(scores4))){
+          if(i > j){
           ggplot(as.data.frame(scores4),aes(x=colnames(scores4)[i],y=colnames(scores4)[j], fill = i )) +
             geom_point() +
             theme_minimal() + 
             ggtitle("M. bovis pangenome (15% to 99% PRAB)")
-          
+          } else {
+            next
+          }
         }
       }
     }
@@ -59,11 +62,14 @@ if(length(args[1]) != 0){
 } else{
   for(i in 1:length(colnames(scores4))){
     for(j in 1:length(colnames(scores4))){
+      if(i > j){
       ggplot(as.data.frame(scores4),aes(x=colnames(scores4)[i],y=colnames(scores4)[j])) +
         geom_point() +
         theme_minimal() + 
         ggtitle("M. bovis pangenome (15% to 99% PRAB)")
-      
+      } else {
+        next 
+      }
     }
   }
 }
