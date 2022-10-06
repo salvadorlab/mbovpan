@@ -38,20 +38,39 @@ if(length(args[1]) != 0){
   print(args[1])
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
   print(colnames(isolate_dat))
-  for(i in 1:length(colnames(isolate_dat))){
-    if(colnames(isolate_dat)[i] == "Name"){
+  scores4$Name <- gsub("1.annot","",rownames(scores4))
+  print(scores4$Name)
+  scores4 <- scores4 %>% left_join(isolate_dat,by = "Name")
+  print(scores4)
+  
+  test <- ggplot(scores4,aes(x=PC1,y=PC2)) +
+    geom_point(aes(colour = factor(species))) +
+    theme_minimal() + 
+    ggtitle("M. bovis pangenome (15% to 99% PRAB)")
+  
+  plot(test)
+  
+  for(k in 1:length(colnames(isolate_dat))){
+    if(colnames(isolate_dat)[k] == "Name"){
       print("identified Name column")
       next
     }
     else{  
-      for(i in 1:length(colnames(scores4))){
-        for(j in 1:length(colnames(scores4))){
+      for(i in 1:4){
+        for(j in 1:4){
           if(i > j){
-          a <- ggplot(as.data.frame(scores4),aes(x=colnames(scores4)[i],y=colnames(scores4)[j], fill = colnames(isolate_dat)[i] )) +
-            geom_point() +
+          scatterplot <- function(data_used, x.variable, y.variable, fill.variable) {
+          ggplot(data_used,aes_(x=x.variable,y=y.variable)) +
+            geom_point(aes_(color = as.factor(fill.variable) )) +
             theme_minimal() + 
-            ggtitle("M. bovis pangenome (15% to 99% PRAB)")
-          plot(a)
+            ggtitle("M. bovis pangenome (15% to 99% PRAB)") + 
+            xlab(names(scores4)[i]) +
+            ylab(names(scores4)[j]) + 
+            labs(color = colnames(isolate_dat)[k])
+          }
+          
+          plot(scatterplot(scores4, scores4[,i], scores4[,j], scores4[,colnames(isolate_dat)[k]]))
+          
           } else {
             next
           }
@@ -61,8 +80,8 @@ if(length(args[1]) != 0){
   }
   
 } else{
-  for(i in 1:length(colnames(scores4))){
-    for(j in 1:length(colnames(scores4))){
+  for(i in 1:4){
+    for(j in 1:4){
       if(i > j){
       a <- ggplot(as.data.frame(scores4),aes(x=colnames(scores4)[i],y=colnames(scores4)[j])) +
         geom_point() +
