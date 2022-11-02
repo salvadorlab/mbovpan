@@ -118,7 +118,7 @@ else {
 
 // how many threads will be utilized
 if(params.threads != null){
-    println "mbovpan will run using ${threads} threads"
+    println "mbovpan will run using ${params.threads} threads"
     threads = params.threads
 }
 else{
@@ -239,8 +239,6 @@ if(run_mode == "snp" || run_mode == "all"){
     bam = map_ch
 
   
-
-// picard MarkDuplicates INPUT={sorted_bamfile} OUTPUT={rmdup_bamfile} ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv
 
 // Important to have 'USE_JDK_DEFLATER=true USE_JDK_INFLATER=true'
     process mark_dups {
@@ -381,10 +379,6 @@ if(run_mode == "snp" || run_mode == "all"){
         """
     }
 }
-
-// vcf filtering + generate alignment? 
-// pangenome steps (might need to separately create environment for pangenome software. inclusion in main environment might lead to conflicts)
-// roary, quast OR busco
 
 // PART 3: Pangenome 
 assembly = Channel.create()
@@ -533,6 +527,7 @@ process iqtree_core {
     }
 
 // Rscript to generate a heatmap of the pangenome
+// this can be changed into the virulence gene presence absence matrix given a list from Hind
 process gene_prab {
      publishDir = output
     
