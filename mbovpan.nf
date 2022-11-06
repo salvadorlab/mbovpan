@@ -533,16 +533,18 @@ process gene_prab {
     
     conda "$workflow.projectDir/envs/gene_prab.yaml"
 
-    errorStrategy 'ignore'
+    //errorStrategy 'ignore'
     
     input:
     file(input) from roary_ch3.collect()
     
     output:
-    file("pangenome_curve.png") into geneprab_ch
+    file("mbov_virulent_prab.csv") into geneprab_ch
+    file("gene_prab_figures.pdf") into geneprab_ch
     
     script:
     """
+    python $workflow.projectDir/scripts/mbov_virulence.py
     Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
     """
 }
@@ -552,7 +554,7 @@ process accessory_pca {
     
     conda 'r conda-forge::r-ggplot2 conda-forge::r-dplyr'
 
-    //errorStrategy 'ignore'
+    errorStrategy 'ignore'
     
     input:
     file(input) from roary_ch4.collect()
