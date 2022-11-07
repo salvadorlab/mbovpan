@@ -7,4 +7,5 @@ dependencies:
   - r-ggdendro
   - bioconductor-ggtree
   - r-ggnewscale
+  - pandas
 prefix: /Users/noahaus/opt/miniconda3/envs/gene_prab
