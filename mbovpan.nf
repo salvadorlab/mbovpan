@@ -539,8 +539,8 @@ process gene_prab {
     file(input) from roary_ch3.collect()
     
     output:
-    file("mbov_virulent_prab.csv") into geneprab_ch
-    file("gene_prab_figures.pdf") into geneprab_ch
+    file("mbov_virulent_prab.csv") into geneprab_ch1
+    file("gene_prab_figures.pdf") into geneprab_ch2
     
     script:
     """
@@ -560,7 +560,7 @@ process accessory_pca {
     file(input) from roary_ch4.collect()
     
     output:
-    file("pangenome_curve.png") into accessory_ch
+    file("pca_figures.pdf") into accessory_ch
     
     script:
     """
