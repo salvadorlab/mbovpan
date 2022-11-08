@@ -1,6 +1,6 @@
 nextflow.enable.dsl=2
 
-input = params.input 
+input = "$workflow.projectDir/../auxilary/gene_presence_absence.csv" 
 meta = "$workflow.projectDir/../auxilary/UK_meta.csv"
 
 vir_genes = "$workflow.projectDir/../auxilary/M_bovis_virulence_genes.csv"
@@ -27,6 +27,6 @@ process gene_prab {
 }
 
 workflow {
-  def all_files = Channel.fromPath( "${input}/gene_presence_absence.csv" )
+  def all_files = Channel.fromPath( "${input}" )
   gene_prab(all_files)
 }
