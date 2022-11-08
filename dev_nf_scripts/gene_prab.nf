@@ -13,8 +13,8 @@ process gene_prab {
     path 'gene_presence_absence.csv'
     
     output:
-    file("mbov_virulent_prab.csv") into geneprab_ch1
-    file("gene_prab_figures.pdf") into geneprab_ch2
+    file("mbov_virulent_prab.csv") 
+    file("gene_prab_figures.pdf") 
     
     script:
     """
