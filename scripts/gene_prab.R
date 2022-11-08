@@ -51,7 +51,7 @@ if(length(args[1]) != 0){
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
   
   for(i in 1:length(colnames(isolate_dat))){
-    if(colnames(isolate_dat)[i] == "Name" ) { #|| length(unique(isolate_dat[,i])) == 1 ){
+    if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) == 1 ){
       next
     }
     else{
