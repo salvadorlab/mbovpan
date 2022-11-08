@@ -72,7 +72,7 @@ if(length(args[1]) != 0){
       
       ad_gg <- ad_gg %<+% isolate_dat
       
-      print(paste("The metadata col.", "\n", ad_gg_onlytip[,metadata])
+      print(paste("The metadata col.", "\n", ad_gg_onlytip[,metadata]))
       print(hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"))
       t1 <- gheatmap(ad_gg, ad_gg_onlytip[metadata], width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
