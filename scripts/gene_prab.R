@@ -46,12 +46,9 @@ accessory_dendro <- as.dendrogram(hclust(d = dist(accessory_transpose, method = 
 ad_gg <- ggtree(accessory_dendro)
 ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 
-
-ad_gg <- ad_gg %<+% isolate_dat + 
-  geom_tippoint(aes(color = Species))
-ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE))
-rownames(ad_gg_onlytip) <- ad_gg_onlytip$label
-
+if(length(args[1]) != 0){
+  
+}
 pdf("gene_prab_figures.pdf")
 
 if(length(args[1]) != 0){
@@ -62,6 +59,12 @@ if(length(args[1]) != 0){
       next
     }
     else{
+
+      
+      ad_gg <- ad_gg %<+% isolate_dat 
+    
+      ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE))
+      rownames(ad_gg_onlytip) <- ad_gg_onlytip$label
       
       mbov_tree <- function(mydata,metadata){
       ad_gg <- ggtree(mydata)
