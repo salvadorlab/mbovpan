@@ -44,22 +44,19 @@ accessory_dendro <- as.dendrogram(hclust(d = dist(accessory_transpose, method = 
 
 ad_gg <- ggtree(accessory_dendro)
 ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
-
-if(length(args[1]) != 0){
   
 }
 pdf("gene_prab_figures.pdf")
 
 if(length(args[1]) != 0){
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
+  head(isolate_dat)
   
   for(i in 1:length(colnames(isolate_dat))){
     if(colnames(isolate_dat)[i] == "Name"){
       next
     }
     else{
-
-      
       ad_gg <- ad_gg %<+% isolate_dat 
     
       ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE))
@@ -72,7 +69,7 @@ if(length(args[1]) != 0){
       
       ad_gg <- ad_gg %<+% isolate_dat
       
-      print(paste("The metadata col.", "\n", ad_gg_onlytip[,metadata]))
+      print(paste("The metadata col.", ad_gg_onlytip[,metadata]))
       print(hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"))
       t1 <- gheatmap(ad_gg, ad_gg_onlytip[metadata], width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
