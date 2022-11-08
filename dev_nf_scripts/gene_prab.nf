@@ -27,6 +27,6 @@ process gene_prab {
 }
 
 workflow {
-  def all_files = Channel.fromPath( "${input}/*" )
+  def all_files = Channel.fromPath( "${input}/gene_presence_absence.csv" )
   gene_prab(all_files)
 }
