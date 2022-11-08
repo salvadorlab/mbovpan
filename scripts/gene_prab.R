@@ -62,9 +62,9 @@ if(length(args[1]) != 0){
       
       
       ad_gg <- ad_gg %<+% isolate_dat
-
+      row_id <- ad_gg[["data"]]$label
       ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE)[,metadata])
-      rownames(ad_gg_onlytip) <- ad_gg_onlytip$label
+      rownames(ad_gg_onlytip) <- row_id
       print(head(ad_gg_onlytip))
       
     
