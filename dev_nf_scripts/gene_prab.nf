@@ -2,7 +2,7 @@ input = params.input
 meta = params.meta
 
 process gene_prab {
-     publishDir = output
+     publishDir = "./"
     
     conda "$workflow.projectDir/envs/gene_prab.yaml"
 
