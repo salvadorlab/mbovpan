@@ -1,6 +1,9 @@
 nextflow.enable.dsl=2
+
 input = params.input 
 meta = params.meta
+
+vir_genes = "$workflow.projectDir/../auxilary/M_bovis_virulence_genes.csv"
 
 process gene_prab {
      publishDir = "./"
@@ -18,7 +21,7 @@ process gene_prab {
     
     script:
     """
-    python $workflow.projectDir/../scripts/mbov_virulence.py
+    python $workflow.projectDir/../scripts/mbov_virulence.py ${vir_genes}
     Rscript $workflow.projectDir/../scripts/gene_prab.R ${meta}
     """
 }
