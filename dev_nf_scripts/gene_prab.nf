@@ -1,3 +1,4 @@
+nextflow.enable.dsl=2
 input = params.input 
 meta = params.meta
 
