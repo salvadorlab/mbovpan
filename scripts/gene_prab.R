@@ -67,10 +67,13 @@ if(length(args[1]) != 0){
       
       
       ad_gg <- ad_gg %<+% isolate_dat
+
+      ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE)[,metadata])
+      rownames(ad_gg_onlytip) <- ad_gg_onlytip$label
+      print(head(ad_gg_onlytip))
       
-      print(paste("The metadata col.", ad_gg_onlytip[,metadata]))
-      print(hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"))
-      t1 <- gheatmap(ad_gg, ad_gg_onlytip[metadata], width = 0.3, colnames = FALSE) +
+    
+      t1 <- gheatmap(ad_gg, ad_gg_onlytip, width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
       
       t1_scaled <- t1 + new_scale_fill()
