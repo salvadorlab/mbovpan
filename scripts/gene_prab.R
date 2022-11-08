@@ -45,7 +45,6 @@ accessory_dendro <- as.dendrogram(hclust(d = dist(accessory_transpose, method = 
 ad_gg <- ggtree(accessory_dendro)
 ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
   
-}
 pdf("gene_prab_figures.pdf")
 
 if(length(args[1]) != 0){
