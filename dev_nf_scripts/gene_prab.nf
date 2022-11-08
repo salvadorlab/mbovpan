@@ -18,8 +18,8 @@ process gene_prab {
     
     script:
     """
-    python $workflow.projectDir/scripts/mbov_virulence.py
-    Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
+    python $workflow.projectDir/../scripts/mbov_virulence.py
+    Rscript $workflow.projectDir/../scripts/gene_prab.R ${meta}
     """
 }
 
