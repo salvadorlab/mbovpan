@@ -30,7 +30,6 @@ accessory_pa$perc_pr <- accessory_pa$pr/num_col
 accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
 
 accessory_pa$gene_id = rownames(accessory_pa)
-print(accessory_pa$gene_id)
 accessory_pa_long <- accessory_pa %>% gather(sample,prab,-gene_id)
 accessory_matrix <- as.matrix(accessory_pa %>% select(-gene_id))
 
@@ -73,6 +72,7 @@ if(length(args[1]) != 0){
       
       ad_gg <- ad_gg %<+% isolate_dat
       
+      print(hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"))
       t1 <- gheatmap(ad_gg, ad_gg_onlytip[metadata], width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
       
