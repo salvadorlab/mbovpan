@@ -1,7 +1,7 @@
 nextflow.enable.dsl=2
 
 input = params.input 
-meta = params.meta
+meta = "$workflow.projectDir/../auxilary/UK_meta.csv"
 
 vir_genes = "$workflow.projectDir/../auxilary/M_bovis_virulence_genes.csv"
 
