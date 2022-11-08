@@ -51,15 +51,10 @@ if(length(args[1]) != 0){
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
   
   for(i in 1:length(colnames(isolate_dat))){
-    if(colnames(isolate_dat)[i] == "Name"){
+    if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) == 1 ){
       next
     }
     else{
-      ad_gg <- ad_gg %<+% isolate_dat 
-    
-      ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE))
-      rownames(ad_gg_onlytip) <- ad_gg_onlytip$label
-      print(head(ad_gg_onlytip))
       
       mbov_tree <- function(mydata,metadata){
       ad_gg <- ggtree(mydata)
