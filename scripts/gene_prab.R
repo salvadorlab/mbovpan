@@ -49,7 +49,6 @@ pdf("gene_prab_figures.pdf")
 
 if(length(args[1]) != 0){
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
-  print(head(isolate_dat))
   
   for(i in 1:length(colnames(isolate_dat))){
     if(colnames(isolate_dat)[i] == "Name"){
@@ -60,6 +59,7 @@ if(length(args[1]) != 0){
     
       ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE))
       rownames(ad_gg_onlytip) <- ad_gg_onlytip$label
+      print(head(ad_gg_onlytip))
       
       mbov_tree <- function(mydata,metadata){
       ad_gg <- ggtree(mydata)
