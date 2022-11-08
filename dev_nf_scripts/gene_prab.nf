@@ -5,7 +5,7 @@ meta = params.meta
 process gene_prab {
      publishDir = "./"
     
-    conda "$workflow.projectDir/envs/gene_prab.yaml"
+    conda "$workflow.projectDir/../envs/gene_prab.yaml"
 
     //errorStrategy 'ignore'
     
