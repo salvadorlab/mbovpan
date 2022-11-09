@@ -27,8 +27,9 @@ loadings <- prab_pca$rotation
 scores <- prab_pca$x 
 
 scores4 <- as.data.frame(scores[,1:4])
-rownames(scores4) <- isolate_ids
+scores4$label <- isolate_ids
 isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
+scores4 <- scores4 %>% left_join(isolate_ids,by = c("label" = "Name"))
 
 # Add code to make a PCA for each pairwise comp. 
 
