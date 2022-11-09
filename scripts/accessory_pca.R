@@ -55,7 +55,7 @@ if(length(args[1]) != 0){
             labs(color = colnames(isolate_dat)[k])
           }
           
-          plot(scatterplot(scores4, scores4[,i], scores4[,j], scores4[,colnames(isolate_dat)[k]]))
+          plot(scatterplot(scores4, colnames(scores4)[i], colnames(scores4)[i], names(scores4[,colnames(isolate_dat)[k]])[1]))
           
           } else {
             next
