@@ -47,7 +47,7 @@ if(length(args[1]) != 0){
           if(i > j){
 
           scatterplot <- function(data_used, x.variable, y.variable, fill.variable) {
-          ggplot(data_used,aes_(x=x.variable,y=y.variable)) +
+          ggplot(data_used,aes_(x=names(x.variable),y=names(y.variable))) +
             geom_point(aes_(color = fill.variable)) +
             theme_minimal() + 
             ggtitle("M. bovis pangenome (15% to 99% PRAB)") + 
