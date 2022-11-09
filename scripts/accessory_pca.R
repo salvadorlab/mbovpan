@@ -28,6 +28,7 @@ rownames(loadings) <- colnames(pa_transpose)
 scores <- prab_pca$x 
 
 scores4 <- as.data.frame(scores[,1:4])
+rownames(scores4) <- isolate_ids
 head(scores4)
 
 # Add code to make a PCA for each pairwise comp. 
