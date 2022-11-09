@@ -28,6 +28,7 @@ scores <- prab_pca$x
 
 scores4 <- as.data.frame(scores[,1:4])
 rownames(scores4) <- isolate_ids
+isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
 
 # Add code to make a PCA for each pairwise comp. 
 
