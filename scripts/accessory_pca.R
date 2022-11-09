@@ -55,7 +55,7 @@ if(length(args[1]) != 0){
             ylab(names(scores4)[j]) 
           }
           
-          plot(scatterplot(scores4, names(scores4)[i], names(scores4)[i], names(scores4[,colnames(isolate_dat)[k]])[1]))
+          plot(scatterplot(scores4, !!names(scores4)[i], !!names(scores4)[i], !!names(scores4[,colnames(isolate_dat)[k]])[1]))
           
           } else {
             next
