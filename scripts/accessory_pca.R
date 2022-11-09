@@ -20,13 +20,12 @@ accessory_pa$perc_pr <- accessory_pa$pr/num_col
 accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
 
 pa_transpose <- t(data.matrix(accessory_pa))
-isolate_ids <- data.frame(Samples = gsub("_trimmed_R1.scaffold.annot","",row.names(pa_transpose)))
+isolate_ids <- gsub("_trimmed_R1.scaffold.annot","",row.names(pa_transpose))
 print(length(isolate_ids))
 print(isolate_ids[1:10])
 prab_pca <- prcomp(pa_transpose)
 variance <- (prab_pca$sdev)^2
 loadings <- prab_pca$rotation
-rownames(loadings) <- colnames(pa_transpose)
 scores <- prab_pca$x 
 
 scores4 <- as.data.frame(scores[,1:4])
