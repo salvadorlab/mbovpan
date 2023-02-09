@@ -155,7 +155,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     cpus threads
     
-    conda "$workflow.projectDir/envs/samtools.yaml"
+    conda "$workflow.projectDir/../envs/samtools.yaml"
    
     input:
     tuple file(trim1), file (trim2) from fastp_reads2 
@@ -177,7 +177,7 @@ if(run_mode == "snp" || run_mode == "all"){
     process mark_dups {
     publishDir = output 
 
-    conda "$workflow.projectDir/envs/picard.yaml"    
+    conda "$workflow.projectDir/../envs/picard.yaml"    
 
     input:
     file(bam) from bam
@@ -203,7 +203,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     cpus threads
 
-    conda "$workflow.projectDir/envs/freebayes.yaml"
+    conda "$workflow.projectDir/../envs/freebayes.yaml"
 
     input:
     file(bam) from nodup1_ch
@@ -224,7 +224,7 @@ if(run_mode == "snp" || run_mode == "all"){
     process vcf_filter {
     publishDir = output 
 
-    conda "$workflow.projectDir/envs/vcflib.yaml"
+    conda "$workflow.projectDir/../envs/vcflib.yaml"
 
     input:
     file(vcf) from freebayes_ch
