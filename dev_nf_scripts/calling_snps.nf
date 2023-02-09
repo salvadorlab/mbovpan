@@ -51,8 +51,8 @@ if(params.scoary_meta != null){
 }
 
 // record the path for the M. bovis reference genome
-ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
-range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
+ref = "$workflow.projectDir/../ref/mbovAF212297_reference.fasta"
+range = "$workflow.projectDir/../auxilary/chrom_ranges.txt" 
 
 // are default parameters included?
 if(params.input == null || params.output == null){
