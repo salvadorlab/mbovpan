@@ -48,12 +48,6 @@ depth = 10
 
 mapq = 55
 
-// Provide path to metadata for analysis
-// isolate name as rows with metadata as columns
-meta = ""
-
-scoary_meta = ""
-
 if(params.qual != null){
     qual = params.qual as Integer
     }
@@ -63,16 +57,6 @@ if(params.depth != null){
 if(params.mapq != null){
     mapq = params.mapq as Integer
     }
-
-if(params.meta != null){
-    meta = params.meta 
-    println "metadata loaded successfully"
-}
-
-if(params.scoary_meta != null){
-    scoary_meta = params.scoary_meta 
-    println "scoary metadata loaded successfully"
-}
 
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
@@ -474,32 +458,7 @@ process roary {
     """
 }
 
-roary_ch.into {
-        roary_ch1
-        roary_ch2
-        roary_ch3
-        roary_ch4
-        roary_ch5
-    }
 
-process pan_curve {
-    publishDir = output
-    
-    conda 'r-ggplot2'
-
-    errorStrategy 'ignore'
-    
-    input:
-    file(input) from roary_ch1.collect()
-    
-    output:
-    file("pangenome_curve.png") into pancurve_ch
-    
-    script:
-    """
-    Rscript $workflow.projectDir/scripts/pangenome_curve.R 
-    """
-}  
 
 // This will make the tree for core gene alignment
 process iqtree_core {
@@ -515,7 +474,7 @@ process iqtree_core {
         
         
         input:
-        file(input) from roary_ch2.collect()
+        file(input) from roary_ch.collect()
     
         output:
         file("*") into iqtreecore_ch
@@ -526,6 +485,9 @@ process iqtree_core {
         """
     }
 
+<<<<<<< HEAD
+
+=======
 // Rscript to generate a heatmap of the pangenome
 // this can be changed into the virulence gene presence absence matrix given a list from Hind
 process gene_prab {
@@ -590,6 +552,7 @@ process scoary {
     """
 }
 }
+>>>>>>> a87c419fdf20e3d86db69f58bf91199abfcbdf99
 
 }
 
