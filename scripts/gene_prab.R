@@ -1,5 +1,5 @@
 # Author: Noah Legall
-# Purpose: Creation of Pangenome curve figure for mbovpan 
+# Purpose: Output a presence absence matrix of M. bovis virulence genes 
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -12,10 +12,9 @@ library(ggnewscale)
 args = commandArgs(trailingOnly=TRUE)
 
 
-
-
 # load in the gene presence absence data, keep only accessory
-gene_pres_abs <- read.csv("gene_presence_absence.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+# we should already have access to this in our directory
+gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
 auxil <- gene_pres_abs %>% select(2:14)
@@ -36,46 +35,77 @@ accessory_matrix <- as.matrix(accessory_pa %>% select(-gene_id))
 
 # perform clustering 
 accessory_transpose <- t(accessory_matrix)
-rownames(accessory_transpose) <- gsub(".annot","",rownames(accessory_transpose))
+rownames(accessory_transpose) <- gsub("_trimmed_R1.scaffold.annot","",rownames(accessory_transpose))
 
 
 accessory_matrix <- as.matrix(accessory_pa %>% select(-gene_id))
-rownames(accessory_matrix) <- gene_id
+rownames(accessory_matrix) <- accessory_pa$gene_id
 accessory_dendro <- as.dendrogram(hclust(d = dist(accessory_transpose, method = "binary"), method = "ward.D"))
 
-# reorder the rows 
-accessory_order <- order.dendrogram(accessory_dendro)
-accessory_pa_long$sample <- factor(x = accessory_pa_long$sample,
-                               levels = rownames(accessory_transpose)[accessory_order], 
-                               ordered = TRUE)
-
+ad_gg <- ggtree(accessory_dendro)
+ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
+  
 pdf("gene_prab_figures.pdf")
 
 if(length(args[1]) != 0){
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
+  
   for(i in 1:length(colnames(isolate_dat))){
-    if(i == "Name"){
+    if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) == 1 ){
       next
     }
-    else{  
-      ad_gg <- ggtree(accessory_dendro)
+    else{
+      
+      mbov_tree <- function(mydata,metadata){
+      ad_gg <- ggtree(mydata)
       ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
-
-      ad_gg <- ad_gg %<+% isolate_dat + 
-        geom_tippoint(aes(color = i))
-
-      t1 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames = FALSE) +  
+      
+      
+      ad_gg <- ad_gg %<+% isolate_dat
+      row_id <- subset(ad_gg[["data"]], isTip == TRUE)$label
+      ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE)[,metadata])
+      rownames(ad_gg_onlytip) <- row_id
+      print(head(ad_gg_onlytip))
+      
+    
+      t1 <- gheatmap(ad_gg, ad_gg_onlytip, width = 0.3, colnames = FALSE) +
+        scale_fill_manual(values = hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
+      
+      t1_scaled <- t1 + new_scale_fill()
+      t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames = FALSE) +  
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
-      plot(t1)
-    }
-}
+      Sys.sleep(1) #gives program the time to make the figure
+      t2
+      
+      }
+      
+      plot(mbov_tree(accessory_dendro,colnames(isolate_dat)[i]))
+    
   
-} else{
+} 
+   }
+  } else{
   ad_gg <- ggtree(accessory_dendro)
   ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
   
   t1 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames = FALSE) +  
     scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
   plot(t1) 
+  
+  mbov_tree <- function(mydata,metadata){
+    ad_gg <- ggtree(mydata)
+    ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
+    
+    
+    ad_gg <- ad_gg %<+% isolate_dat
+    
+    t2 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames = FALSE) +  
+      scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
+    Sys.sleep(1) #gives program the time to make the figure
+    t2
+    
+  }
 }
 dev.off()
+
+### Finish Code and update mbovpan 

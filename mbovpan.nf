@@ -1,3 +1,5 @@
+//test to see if 'dev' successful
+
 // Author: Noah Austin Legall
 // Note to self: do NOT run this program within the github folder
 // test outside of the github folder. we do not want to make the github too full with run information 
@@ -100,15 +102,15 @@ else {
 
 // how many threads will be utilized
 if(params.threads != null){
-    println "mbovpan will run using ${threads} threads"
+    println "mbovpan will run using ${params.threads} threads"
     threads = params.threads
 }
 else{
     println "mbovpan will run using ${threads} threads by default"
 }
 
-reads = Channel.fromFilePairs("$input*{1,2}*.fastq*").ifEmpty { error "Cannot find the read files" }
-
+reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
+println " ${reads} "
 
 reads.into {
     reads_process
@@ -221,8 +223,6 @@ if(run_mode == "snp" || run_mode == "all"){
     bam = map_ch
 
   
-
-// picard MarkDuplicates INPUT={sorted_bamfile} OUTPUT={rmdup_bamfile} ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv
 
 // Important to have 'USE_JDK_DEFLATER=true USE_JDK_INFLATER=true'
     process mark_dups {
@@ -364,10 +364,6 @@ if(run_mode == "snp" || run_mode == "all"){
     }
 }
 
-// vcf filtering + generate alignment? 
-// pangenome steps (might need to separately create environment for pangenome software. inclusion in main environment might lead to conflicts)
-// roary, quast OR busco
-
 // PART 3: Pangenome 
 assembly = Channel.create()
 if(run_mode == "pan" || run_mode == "all"){
@@ -489,7 +485,74 @@ process iqtree_core {
         """
     }
 
+<<<<<<< HEAD
 
+=======
+// Rscript to generate a heatmap of the pangenome
+// this can be changed into the virulence gene presence absence matrix given a list from Hind
+process gene_prab {
+     publishDir = output
+    
+    conda "$workflow.projectDir/envs/gene_prab.yaml"
+
+    //errorStrategy 'ignore'
+    
+    input:
+    file(input) from roary_ch3.collect()
+    
+    output:
+    file("mbov_virulent_prab.csv") into geneprab_ch1
+    file("gene_prab_figures.pdf") into geneprab_ch2
+    
+    script:
+    """
+    python $workflow.projectDir/scripts/mbov_virulence.py
+    Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
+    """
+}
+
+process accessory_pca {
+     publishDir = output
+    
+    conda 'r conda-forge::r-ggplot2 conda-forge::r-dplyr'
+
+    errorStrategy 'ignore'
+    
+    input:
+    file(input) from roary_ch4.collect()
+    
+    output:
+    file("pca_figures.pdf") into accessory_ch
+    
+    script:
+    """
+    Rscript $workflow.projectDir/scripts/accessory_pca.R ${meta}
+    """
+}
+
+
+if(params.scoary_meta != null){
+process scoary {
+    publishDir = output
+    
+    conda "$workflow.projectDir/envs/scoary.yaml"
+
+    errorStrategy 'ignore'
+    
+    input:
+    file(input) from roary_ch5.collect()
+    
+    output:
+    file("*.csv") into scoary_ch
+    
+    script:
+    """
+    sed 's/.annot//g' gene_presence_absence.csv > prab.csv
+    scoary -t ${scoary_meta} -g prab.csv
+    """
+}
+}
+>>>>>>> a87c419fdf20e3d86db69f58bf91199abfcbdf99
 
 }
 
