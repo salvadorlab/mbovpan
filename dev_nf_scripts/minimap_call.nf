@@ -156,7 +156,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     cpus threads
     
-    conda "$workflow.projectDir/../envs/samtools.yaml bioconda::minimap2"
+    conda "samtools bioconda::minimap2"
    
     input:
     tuple file(trim1), file (trim2) from fastp_reads2 
