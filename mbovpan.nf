@@ -126,7 +126,7 @@ else{
 }
 
 reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
-
+println " ${reads} "
 
 reads.into {
     reads_process
