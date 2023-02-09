@@ -125,7 +125,7 @@ else{
     println "mbovpan will run using ${threads} threads by default"
 }
 
-reads = Channel.fromFilePairs("$input*{1,2}*.fastq*").ifEmpty { error "Cannot find the read files" }
+reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
 
 
 reads.into {
