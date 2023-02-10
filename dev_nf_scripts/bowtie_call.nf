@@ -165,10 +165,8 @@ if(run_mode == "snp" || run_mode == "all"){
     file("${trim1.baseName - ~/_trimmed_R*/}.bam")  into map_ch 
 
     script:
-    """
-    bowtie2-build ${ref} mbov_bowtie_index
-    
-     bowtie2 --threads ${task.cpus} -x mbov_bowtie_index -1 ${trim1} -2 ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
+    """    
+    bowtie2 --threads ${task.cpus} -x $workflow.projectDir/../ref/mbov_bowtie_index -1 ${trim1} -2 ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
     """
     }
 
