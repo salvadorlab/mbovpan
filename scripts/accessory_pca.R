@@ -50,9 +50,14 @@ if(length(args[1]) != 0){
           ggplot(data_used,aes_(x=x.variable,y=y.variable)) +
             geom_point(aes_(color = fill.variable)) +
             theme_minimal() + 
-            ggtitle("M. bovis pangenome (15% to 99% PRAB)") + 
-            xlab(names(scores4)[i]) +
-            ylab(names(scores4)[j]) 
+            xlab(paste(names(scores4)[i],"(",signif(variance[i],3),"% )")) +
+            ylab(paste(names(scores4)[j],"(",signif(variance[j],3),"% )")) + 
+            labs(color=colnames(isolate_dat)[k])  +
+              theme(
+                axis.text = element_text(size = 13),
+                axis.title = element_text(size = 15),
+                axis.line = element_line(color = "black")
+              )
           }
           
           plot(scatterplot(scores4, scores4[,i], scores4[,j], scores4[,colnames(isolate_dat)[k]]))
