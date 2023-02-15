@@ -28,7 +28,7 @@ scores <- prab_pca$x
 
 scores4 <- as.data.frame(scores[,1:4])
 scores4$label <- isolate_ids
-isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
+isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
 scores4 <- scores4 %>% left_join(isolate_dat,by = c("label" = "Name"))
 
 # Add code to make a PCA for each pairwise comp. 
