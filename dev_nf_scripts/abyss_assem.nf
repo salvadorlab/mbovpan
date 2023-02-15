@@ -171,9 +171,8 @@ if(run_mode == "pan" || run_mode == "all"){
 
 /*
 
-Completed at: 14-Feb-2023 19:25:56
-Duration    : 1h 9m 17s
-CPU hours   : 17.0
+abyss
+Duration    : 1h 29m 31s
+CPU hours   : 23.1
 Succeeded   : 16
-
 */
