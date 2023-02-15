@@ -154,7 +154,7 @@ if(run_mode == "pan" || run_mode == "all"){
     
     errorStrategy "ignore"
 
-    cpus threads
+    cpus threads/4
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads3
