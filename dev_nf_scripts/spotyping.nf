@@ -53,6 +53,7 @@ if(params.scoary_meta != null){
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/../ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/../auxilary/chrom_ranges.txt" 
+spotyping = "$workflow.projectDir/../script/SpoTyping_copy.py"
 
 // are default parameters included?
 if(params.input == null || params.output == null){
@@ -159,7 +160,7 @@ process spotyping {
  
     script:
     """
-    SpoTyping.py ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
+    ${spotyping} ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
     """
 
     }
