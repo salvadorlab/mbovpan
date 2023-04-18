@@ -151,10 +151,6 @@ process spotyping {
 
     conda "bioconda::spotyping"
 
-    errorStrategy "ignore"
-
-    cpus threads
-
     input:
     tuple file(trim1), file(trim2) from fastp_reads2
 
@@ -163,7 +159,7 @@ process spotyping {
  
     script:
     """
-    python SpoTyping.py ${trim1} ${trim2}
+    python SpoTyping.py ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
     """
 
     }
