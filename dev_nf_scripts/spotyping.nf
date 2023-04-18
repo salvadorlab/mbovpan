@@ -159,7 +159,6 @@ process spotyping {
  
     script:
     """
-    #!/usr/bin/env python
     SpoTyping.py ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
     """
 
