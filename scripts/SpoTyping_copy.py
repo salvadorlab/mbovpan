@@ -32,6 +32,7 @@ import urllib2
 
 ## Global variables
 dir = os.path.split(os.path.realpath(__file__))[0] # script directory
+print dir
 setlength = 50*5000000                             # base input cut-off for swift mode
 
 ## Option variables
