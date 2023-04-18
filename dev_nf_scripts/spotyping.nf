@@ -160,7 +160,7 @@ process spotyping {
  
     script:
     """
-    SpoTyping ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
+    SpoTyping.py ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
     """
 
     }
