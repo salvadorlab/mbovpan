@@ -149,7 +149,7 @@ process spotyping {
 
     publishDir = output
 
-    conda "python=2.7.13 bioconda::spotyping"
+    conda "conda-forge::python=2.7.14 bioconda::spotyping"
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads2
