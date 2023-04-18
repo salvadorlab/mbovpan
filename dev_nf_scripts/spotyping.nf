@@ -150,7 +150,7 @@ process spotyping {
 
     publishDir = output
 
-    conda "bioconda::spotyping"
+    conda "bioconda::spotyping3"
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads2
@@ -160,7 +160,7 @@ process spotyping {
  
     script:
     """
-    python2.7 ${spotyping} ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
+    SpoTyping ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
     """
 
     }

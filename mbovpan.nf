@@ -4,6 +4,8 @@
 // Note to self: do NOT run this program within the github folder
 // test outside of the github folder. we do not want to make the github too full with run information 
 
+//Token: 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
+
 /*
 Finish the pipeline
 Extend Figure 2 with runtime reports
