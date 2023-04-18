@@ -356,7 +356,7 @@ if __name__ == "__main__":
 
     tmpH = open("%s.blast.out" % tmpfile, 'w')
     subprocess.call(["makeblastdb", "-in", blastDB, "-out", blastDB, "-dbtype", "nucl"])
-    subprocess.call(["blastn", "-query", "./../ref/spacer.fasta" % dir, "-db", blastDB, "-task", "blastn", "-dust", "no", "-outfmt", "7", "-max_target_seqs", "1000000"], stdout=tmpH)
+    subprocess.call(["blastn", "-query", "%s/ref/spacer.fasta" % dir, "-db", blastDB, "-task", "blastn", "-dust", "no", "-outfmt", "7", "-max_target_seqs", "1000000"], stdout=tmpH)
     tmpH.close()
 
     ##########################################################
