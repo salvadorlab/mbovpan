@@ -51,8 +51,8 @@ if(params.scoary_meta != null){
 }
 
 // record the path for the M. bovis reference genome
-ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
-range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
+ref = "$workflow.projectDir/../ref/mbovAF212297_reference.fasta"
+range = "$workflow.projectDir/../auxilary/chrom_ranges.txt" 
 
 // are default parameters included?
 if(params.input == null || params.output == null){
@@ -155,7 +155,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     cpus threads
     
-    conda "$workflow.projectDir/envs/samtools.yaml"
+    conda "$workflow.projectDir/../envs/samtools.yaml"
    
     input:
     tuple file(trim1), file (trim2) from fastp_reads2 
@@ -177,7 +177,7 @@ if(run_mode == "snp" || run_mode == "all"){
     process mark_dups {
     publishDir = output 
 
-    conda "$workflow.projectDir/envs/picard.yaml"    
+    conda "$workflow.projectDir/../envs/picard.yaml"    
 
     input:
     file(bam) from bam
@@ -203,7 +203,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     cpus threads
 
-    conda "$workflow.projectDir/envs/freebayes.yaml"
+    conda "$workflow.projectDir/../envs/freebayes.yaml"
 
     input:
     file(bam) from nodup1_ch
@@ -224,7 +224,7 @@ if(run_mode == "snp" || run_mode == "all"){
     process vcf_filter {
     publishDir = output 
 
-    conda "$workflow.projectDir/envs/vcflib.yaml"
+    conda "$workflow.projectDir/../envs/vcflib.yaml"
 
     input:
     file(vcf) from freebayes_ch
@@ -234,7 +234,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     script:
     """
-    vcffilter -f "QUAL > ${qual}" ${vcf} | vcffilter -f "DP > ${depth}" | vcffilter -f "MQM > ${mapq}" |  vcffilter -f "TYPE = snp" | bedtools intersect -header -a - -b $workflow.projectDir/ref/pe_ppe_regions.gff3 -v > ${vcf.baseName}.filtered.vcf
+    vcffilter -f "QUAL > ${qual}" ${vcf} | vcffilter -f "DP > ${depth}" | vcffilter -f "MQM > ${mapq}" |  vcffilter -f "TYPE = snp" | bedtools intersect -header -a - -b $workflow.projectDir/../ref/pe_ppe_regions.gff3 -v > ${vcf.baseName}.filtered.vcf
     """
 
     } 

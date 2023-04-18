@@ -48,7 +48,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 pdf("gene_prab_figures.pdf")
 
 if(length(args[1]) != 0){
-  isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE)
+  isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
   
   for(i in 1:length(colnames(isolate_dat))){
     if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) == 1 ){
@@ -61,7 +61,8 @@ if(length(args[1]) != 0){
       ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       
       
-      ad_gg <- ad_gg %<+% isolate_dat
+      ad_gg <- ad_gg %<+% isolate_dat +
+        ggtree::vexpand(.1, -1)
       row_id <- subset(ad_gg[["data"]], isTip == TRUE)$label
       ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE)[,metadata])
       rownames(ad_gg_onlytip) <- row_id
@@ -72,7 +73,7 @@ if(length(args[1]) != 0){
         scale_fill_manual(values = hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
       
       t1_scaled <- t1 + new_scale_fill()
-      t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames = FALSE) +  
+      t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames_angle=45,hjust = 1,colnames_offset_y = -2.5,font.size = 3) +  
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
       Sys.sleep(1) #gives program the time to make the figure
       t2
@@ -99,7 +100,7 @@ if(length(args[1]) != 0){
     
     ad_gg <- ad_gg %<+% isolate_dat
     
-    t2 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames = FALSE) +  
+    t2 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames_angle=-45) +  
       scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
     Sys.sleep(1) #gives program the time to make the figure
     t2
