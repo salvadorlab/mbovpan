@@ -1,0 +1,15 @@
+name: tb-profile
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - mamba
+  - python=3.9
+  - ca-certificates
+  - certifi
+  - openssl
+  - tb-profiler=4.4.0
+  - bcftools
+  - gsl
+prefix: /home/noahaus/.conda/envs/tb-profile
