@@ -144,11 +144,11 @@ reads.into {
     }
 
 // tb-profiler
-process spotyping {
+process lineage {
 
     publishDir = output
 
-    conda "bioconda::tb-profiler"
+    conda "$workflow.projectDir/../envs/tbprofile.yaml"
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads2
