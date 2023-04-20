@@ -144,8 +144,6 @@ reads.into {
     }
 
 // tb-profiler
-bioconda tb-profiler
-
 process spotyping {
 
     publishDir = output
