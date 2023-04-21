@@ -154,7 +154,7 @@ process lineage {
     tuple file(trim1), file(trim2) from fastp_reads2
 
     output:
-    file("${trim1.baseName - ~/_trimmed_R*/}.resuls.json") into tbprofile_ch 
+    file("${trim1.baseName - ~/_trimmed_R*/}.results.json") into tbprofile_ch 
  
     script:
     """
