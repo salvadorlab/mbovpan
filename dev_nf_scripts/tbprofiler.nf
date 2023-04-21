@@ -159,7 +159,7 @@ process lineage {
     script:
     """
     tb-profiler profile -1 ${trim1} -2 ${trim2} --no_flagstat --no_delly --verbose 2 -p ${trim1.baseName - ~/_trimmed_R*/}
-    cp ./results/${trim1.baseName - ~/_trimmed_R*/}.resuls.json ./
+    cp ./results/${trim1.baseName - ~/_trimmed_R*/}.results.json ./
     """
 
     }
