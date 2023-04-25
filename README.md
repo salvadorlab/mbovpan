@@ -9,7 +9,9 @@ Mbovpan can be ran in three separate modes: SNP mode for only inferring Single N
 ![image](https://user-images.githubusercontent.com/40697188/191386250-52b8a354-5611-44b5-8055-db29337cbe31.png)
 
 
-### Quick Start 
+### Quick Start  
+
+The first step would be to download the pipeline using 
 ```
 $git clone https://github.com/salvadorlab/mbovpan.git
 ```
