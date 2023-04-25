@@ -11,17 +11,132 @@ Mbovpan can be ran in three separate modes: SNP mode for only inferring Single N
 
 ### Quick Start  
 
-The first step would be to download the pipeline using 
+The first step would be to download the pipeline using the following git command.
 ```
 $git clone https://github.com/salvadorlab/mbovpan.git
 ```
+Successfully downloading will lead to a directory with the following layout 
 
+```
+.
+├── auxilary
+│   ├── accessory_binary_genes.fa.newick
+│   ├── badger_cattle_PCA.png
+│   ├── chrom_ranges.txt
+│   ├── example_meta.csv
+│   ├── gene_prab_figures.pdf
+│   ├── gene_presence_absence.csv
+│   ├── M_bovis_virulence_genes.csv
+│   ├── mbovpan_figures.Rmd
+│   ├── mbov_virulent_prab.csv
+│   ├── pca_figures.pdf
+│   ├── scoary_15_11_2021_1547.log
+│   ├── scoary_15_11_2021_1548.log
+│   ├── scoary_15_11_2021_1551.log
+│   ├── scoary_15_11_2021_1552.log
+│   ├── scoary_15_11_2021_1559.log
+│   ├── snpcalling_runtimes.csv
+│   ├── Species_15_11_2021_1559.results.csv
+│   ├── test.results.json
+│   ├── trait.csv
+│   ├── traits.csv
+│   └── UK_meta.csv
+├── chrom_ranges.py
+├── dev_nf_scripts
+│   ├── abyss_assem.nf
+│   ├── accessory_pca.nf
+│   ├── bowtie_call.nf
+│   ├── calling_snps.nf
+│   ├── gene_prab.nf
+│   ├── megahit_assem.nf
+│   ├── minimap_call.nf
+│   ├── smalt_call.nf
+│   ├── spades_assem.nf
+│   ├── spotyping.nf
+│   └── tbprofiler.nf
+├── envs
+│   ├── consensus.yaml
+│   ├── freebayes.yaml
+│   ├── gene_prab.yaml
+│   ├── iqtree.yaml
+│   ├── longread.yaml
+│   ├── mbovpan.yaml
+│   ├── megahit.yaml
+│   ├── multiqc.yaml
+│   ├── picard.yaml
+│   ├── prokka.yaml
+│   ├── quast.yaml
+│   ├── raven.yaml
+│   ├── roary.yaml
+│   ├── samtools.yaml
+│   ├── scoary.yaml
+│   ├── statistics.yaml
+│   ├── tbprofile.yaml
+│   ├── vcflib.yaml
+│   └── vcflib.yaml~
+├── mbovpan.nf
+├── README.md
+├── ref
+│   ├── mbovAF212297_annotation.gb
+│   ├── mbovAF212297_reference.fasta
+│   ├── mbovAF212297_reference.fasta.amb
+│   ├── mbovAF212297_reference.fasta.ann
+│   ├── mbovAF212297_reference.fasta.bwt
+│   ├── mbovAF212297_reference.fasta.dict
+│   ├── mbovAF212297_reference.fasta.fai
+│   ├── mbovAF212297_reference.fasta.pac
+│   ├── mbovAF212297_reference.fasta.sa
+│   ├── mbov_bowtie_index.1.bt2
+│   ├── mbov_bowtie_index.2.bt2
+│   ├── mbov_bowtie_index.3.bt2
+│   ├── mbov_bowtie_index.4.bt2
+│   ├── mbov_bowtie_index.rev.1.bt2
+│   ├── mbov_bowtie_index.rev.2.bt2
+│   ├── mbov_reference.fasta
+│   ├── pe_ppe_regions.gff3
+│   └── spacer.fasta
+├── scripts
+│   ├── accessory_pca.R
+│   ├── gene_prab.R
+│   ├── install_mbovpan.sh
+│   ├── mbov_virulence.py
+│   ├── pangenome_curve.R
+│   ├── SpoTyping
+│   │   ├── README.md
+│   │   ├── ref
+│   │   │   └── spacer.fasta
+│   │   ├── SpoTyping_plot.r
+│   │   ├── SpoTyping.py
+│   │   ├── SpoTyping-README-md.pdf
+│   │   └── Update-history.md
+│   ├── SpoTyping_copy.py
+│   └── statistics.py
+└── seqs
+    ├── SRR998656_1.fastq.gz
+    ├── SRR998656_2.fastq.gz
+    ├── SRR998657_1.fastq.gz
+    ├── SRR998657_2.fastq.gz
+    ├── SRR998658_1.fastq.gz
+    ├── SRR998658_2.fastq.gz
+    ├── SRR998659_1.fastq.gz
+    └── SRR998659_2.fastq.gz
+
+```
 After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. The specifications in the environment yaml file will work across Linux and OS X operating systems. 
 
 ```
 $conda env create -f mbovpan/envs/mbovpan.yaml 
-$conda activate mbovpan 
+$conda activate mbovpan #replace 'conda' with 'source' based on conda version
 (mbovpan)$ #ready for input
+```
+
+Another option is to install using a provided script in 'scripts/install_mbovpan.sh'
+
+```
+$conda env create -n mbovpan
+$bash path/to/install_mbovpan.sh
+$conda activate mbovpan #replace 'conda' with 'source' based on conda version
+(mbovpan)$ #ready for input 
 ```
 
 Once the conda environment is created, the user can execute a simple run of the pipeline by providing an input path, an output path, and specific parameters. 
