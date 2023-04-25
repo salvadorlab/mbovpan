@@ -9,7 +9,7 @@ Mbovpan can be ran in three separate modes: SNP mode for only inferring Single N
 ![image](https://user-images.githubusercontent.com/40697188/191386250-52b8a354-5611-44b5-8055-db29337cbe31.png)
 
 
-### Quick Start  
+### Installation  
 
 The first step would be to download the pipeline using the following git command.
 ```
@@ -139,12 +139,17 @@ $conda activate mbovpan #replace 'conda' with 'source' based on conda version
 (mbovpan)$ #ready for input 
 ```
 
+### Quickstart
+
 Once the conda environment is created, the user can execute a simple run of the pipeline by providing an input path, an output path, and specific parameters. 
 
 ```
-(mbovpan)$nextflow run mbovpan/mbovpan.nf --input mbovpan/seqs/ --run snp --output path/to/output 
+(mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ 
 ```
+In this command, 'nextflow run' is the command used to look at and execute the pipeline instructions in 'mbovpan.nf'. This file contains the general flow of the mbovpan pipeline
 
-Mbovpan is downloaded with test data already included, therefore the above command should run with no problems and accept input from the user’s own curated dataset.
+Mbovpan is downloaded with test data already included, and this is captured with the '--input ./mbovpan/seqs/' parameter. If paired end sequences are present in the input directory, they will be matched and ran through the pipeline. 
+
+'--run snp' signifies what analysis mode mbovpan utilizes. 'snp' mode maps the paired end files to the reference genome while, 'pan' mode creates de novo genomes from scratch. if no option is supplied, the pipeline will run both. 
 
 
