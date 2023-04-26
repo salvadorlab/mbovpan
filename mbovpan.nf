@@ -241,7 +241,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     script:
     """
-    picard MarkDuplicates INPUT=SRR9986591.bam OUTPUT=SRR9986591.nodup.bam ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv USE_JDK_DEFLATER=true USE_JDK_INFLATER=true
+    picard MarkDuplicates INPUT=${bam} OUTPUT=${bam.baseName}.nodup.bam ASSUME_SORTED=true REMOVE_DUPLICATES=true METRICS_FILE=dup_metrics.csv USE_JDK_DEFLATER=true USE_JDK_INFLATER=true
     samtools index ${bam.baseName}.nodup.bam
     cp ${bam.baseName}.nodup.bam.bai $workflow.launchDir
     """
