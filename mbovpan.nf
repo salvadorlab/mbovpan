@@ -113,7 +113,7 @@ else{
 
 println " $input "
 
-reads = Channel.fromFilePairs("$input*{1,2}*.fq*").ifEmpty { error "Cannot find the read files" }
+reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
 
 reads.into {
     reads_process
