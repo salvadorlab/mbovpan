@@ -152,6 +152,8 @@ Mbovpan is downloaded with test data already included, and this is captured with
 
 '--run snp' signifies what analysis mode mbovpan utilizes. 'snp' mode maps the paired end files to the reference genome while, 'pan' mode creates de novo genomes from scratch. if no option is supplied, the pipeline will run both. 
 
+Running the above command should result in a 
+
 ### Advanced Usage
 
 
