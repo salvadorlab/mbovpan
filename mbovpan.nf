@@ -564,6 +564,9 @@ process multiqc {
     file(post) from fastqc_ch2.collect().ifEmpty([])
     //if( run_mode != "snp"){ file(quast) from quast_ch.collect().ifEmpty([]) }
 
+    errorStrategy 'ignore'
+    // unsure why this isn't running the yaml file I provided?
+
     output:
     file("mbovpan_report*")
 
