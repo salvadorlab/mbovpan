@@ -551,7 +551,6 @@ process scoary {
     """
 }
 }
->>>>>>> a87c419fdf20e3d86db69f58bf91199abfcbdf99
 
 }
 
