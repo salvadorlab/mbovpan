@@ -462,7 +462,6 @@ process roary {
 }
 
 
-
 // This will make the tree for core gene alignment
 process iqtree_core {
         publishDir = output
@@ -488,9 +487,6 @@ process iqtree_core {
         """
     }
 
-<<<<<<< HEAD
-
-=======
 // Rscript to generate a heatmap of the pangenome
 // this can be changed into the virulence gene presence absence matrix given a list from Hind
 process gene_prab {
