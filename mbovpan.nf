@@ -159,7 +159,7 @@ no. of threads: $threads
 
     publishDir = "$output/mbovpan_results/read_trimming"
 
-    cpus threads
+    cpus threads/2
 
     input:
     tuple sample_id, file(reads_file) from reads_trim
@@ -255,7 +255,7 @@ if(run_mode == "snp" || run_mode == "all"){
     process freebayes {
     publishDir = "$output/mbovpan_results/variant_calling" 
 
-    cpus threads
+    cpus threads/2
 
     conda "$workflow.projectDir/envs/freebayes.yaml"
 
