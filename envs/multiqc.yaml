@@ -2,6 +2,7 @@ name: multiqc
 channels:
   - defaults
   - bioconda
+  - conda-forge
 dependencies:
   - multiqc
 prefix: /home/noahaus/.conda/envs/multiqc
