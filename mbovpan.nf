@@ -138,7 +138,7 @@ no. of threads: $threads
 
     process pre_fastqc {
 
-    publishDir = output
+    publishDir = "$output/mbovpan_results/fastqc"
 
     input:
     tuple sample_id, file(reads_file) from reads_process
@@ -157,7 +157,7 @@ no. of threads: $threads
 //change this around to get rid of the weird naming
     process fastp {
 
-    publishDir = "$output/read_trimming"
+    publishDir = "$output/mbovpan_results/read_trimming"
 
     cpus threads
 
@@ -184,7 +184,7 @@ no. of threads: $threads
 
     process post_fastqc {
 
-    publishDir = output
+    publishDir = "$output/mbovpan_results/fastqc"
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads1
@@ -205,7 +205,7 @@ bam = Channel.create()
 if(run_mode == "snp" || run_mode == "all"){
 
     process read_map {
-    publishDir = output 
+    publishDir = "$output/mbovpan_results/readmapping" 
 
     cpus threads
     
@@ -229,7 +229,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
 // Important to have 'USE_JDK_DEFLATER=true USE_JDK_INFLATER=true'
     process mark_dups {
-    publishDir = output 
+    publishDir = "$output/mbovpan_results/readmapping" 
 
     conda "$workflow.projectDir/envs/picard.yaml"    
 
@@ -253,7 +253,7 @@ if(run_mode == "snp" || run_mode == "all"){
     }
 
     process freebayes {
-    publishDir = output 
+    publishDir = "$output/mbovpan_results/variant_calling" 
 
     cpus threads
 
@@ -276,7 +276,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
 //Start with a basic QUAL > 150, later add a parameter for changing this
     process vcf_filter {
-    publishDir = output 
+    publishDir = "$output/mbovpan_results/variant_calling" 
 
     conda "$workflow.projectDir/envs/vcflib.yaml"
 
@@ -301,7 +301,7 @@ if(run_mode == "snp" || run_mode == "all"){
     stats_ch = fastp_reads4.merge(nodup2_ch).merge(filter2_ch).view()
 
     process stats {
-        publishDir = output
+        publishDir = "$output/mbovpan_results/statistics"
 
         conda "$workflow.projectDir/envs/statistics.yaml"
 
@@ -320,7 +320,7 @@ if(run_mode == "snp" || run_mode == "all"){
     }
 
     process psuedo_assembly {
-        publishDir = output
+        publishDir = "$output/mbovpan_results/assemblies"
 
         conda "$workflow.projectDir/envs/consensus.yaml"
 
@@ -340,7 +340,7 @@ if(run_mode == "snp" || run_mode == "all"){
     }
     
     process iqtree_phylo {
-        publishDir = output
+        publishDir = "$output/mbovpan_results/phylogeny"
         
         conda "$workflow.projectDir/envs/iqtree.yaml"
         
