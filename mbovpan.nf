@@ -157,7 +157,7 @@ no. of threads: $threads
 //change this around to get rid of the weird naming
     process fastp {
 
-    publishDir = output
+    publishDir = "$output/read_trimming"
 
     cpus threads
 
