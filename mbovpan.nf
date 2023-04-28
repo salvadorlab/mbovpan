@@ -379,19 +379,19 @@ if(run_mode == "pan" || run_mode == "all"){
     
     errorStrategy "ignore"
 
-    cpus threads
+    cpus threads/2
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads3
 
     output:
-    file("${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta") into shortassembly_ch
+    file("${trim1.baseName - ~/_trimmed_R1/}.scaffold.fasta") into shortassembly_ch
 
     script:
     """
     megahit -t ${task.cpus} -1 ${trim1} -2 ${trim2} -o ${trim1.baseName}
     cd ${trim1.baseName}
-    mv final.contigs.fa  ../${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta
+    mv final.contigs.fa  ../${trim1.baseName - ~/_trimmed_R1/}.scaffold.fasta
     """
 }
 assembly_ch = shortassembly_ch
@@ -406,7 +406,7 @@ process quast {
 
     conda "$workflow.projectDir/envs/quast.yaml"
     
-    cpus threads
+    cpus threads/2
 
     input:
     file(assemblies) from assembly_ch1.collect()
@@ -424,7 +424,7 @@ process quast {
 process annotate {
     publishDir = output
     
-    cpus threads
+    cpus threads/2
 
     conda "$workflow.projectDir/envs/prokka.yaml"
     //conda "/scratch/noahaus/aim_1/prokka"
