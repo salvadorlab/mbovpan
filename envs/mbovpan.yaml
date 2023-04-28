@@ -4,14 +4,16 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - nextflow
   - fastp
   - fastqc
-  - nextflow
   - samtools
   - picard
   - bwa
   - biopython
   - freebayes
-  - prokka
   - spades
-prefix: /Users/noahaus/opt/miniconda3/envs/mbovpan
+  - mamba
+  - multiqc
+prefix: /home/n/noahlegall/.conda/envs/mbovpan
+
