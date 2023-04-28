@@ -4,7 +4,7 @@
 // Note to self: do NOT run this program within the github folder
 // test outside of the github folder. we do not want to make the github too full with run information 
 
-//Token: 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
+//Token: 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
 
 /*
 Finish the pipeline
@@ -200,6 +200,7 @@ no. of threads: $threads
     }
 
 // MODE 1: Variant Calling 
+// just made the output names consistent
 bam = Channel.create()
 
 if(run_mode == "snp" || run_mode == "all"){
@@ -215,11 +216,11 @@ if(run_mode == "snp" || run_mode == "all"){
     tuple file(trim1), file (trim2) from fastp_reads2 
 
     output:
-    file("${trim1.baseName - ~/_trimmed_R*/}.bam")  into map_ch 
+    file("${trim1.baseName - ~/_trimmed_R1*/}.bam")  into map_ch 
 
     script:
     """
-    bwa mem -t ${task.cpus}-M -R "@RG\\tID:${trim1.baseName - ~/_trimmed_R*/}\\tSM:${trim1.baseName - ~/_trimmed_R*/}\\tPL:ILLUMINA\\tPI:250" ${ref} ${trim1} ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
+    bwa mem -t ${task.cpus}-M -R "@RG\\tID:${trim1.baseName - ~/_trimmed_R1*/}\\tSM:${trim1.baseName - ~/_trimmed_R1*/}\\tPL:ILLUMINA\\tPI:250" ${ref} ${trim1} ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R1*/}.bam
     """
     }
 
