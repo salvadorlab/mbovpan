@@ -4,10 +4,11 @@
 # mbovpan
 Mbovpan is a nextflow bioinformatic pipeline for Mycobacterium bovis pangenome analysis. The goal of Mbovpan is to make the insights from M. bovis genomics easily accesible to reseachers.  
 
-Mbovpan can be ran in three separate modes: SNP mode for only inferring Single Nucleotide Polymorphisms, PAN mode for assessing gene presence absences, or BOTH to do a full analysis. 
+Mbovpan can be ran in three separate modes: SNP mode for only inferring Single Nucleotide Polymorphisms, PAN mode for assessing gene presence absences, or BOTH to do a full analysis. Below you can witness the main workflow encapsulated by mbovpan, and below that one can visualize the DAGs for both SNP and PAN mode. 
 
 ![image](https://user-images.githubusercontent.com/40697188/191386250-52b8a354-5611-44b5-8055-db29337cbe31.png)
 
+<img width="517" alt="Flowchart" src="https://user-images.githubusercontent.com/40697188/235159642-3397c879-86f6-431a-80e3-ca14211b7e47.png">
 
 ### Installation  
 
