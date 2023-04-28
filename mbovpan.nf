@@ -462,6 +462,13 @@ process roary {
     """
 }
 
+roary_ch.into{
+    roary_ch2
+    roary_ch3
+    roary_ch4
+    roary_ch5
+}
+
 
 // This will make the tree for core gene alignment
 process iqtree_core {
