@@ -10,9 +10,9 @@ library(ggnewscale)
 
 # load in the general metadata
 args = commandArgs(trailingOnly=TRUE)
-#print("testing")
-#gene_pres_abs <- read.csv('mbov_virulent_prab.csv', header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
-
+print("testing")
+gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+head(gene_pres_abs)
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
 print(args[1])
