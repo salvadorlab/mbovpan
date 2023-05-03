@@ -683,8 +683,7 @@ process gene_prab_test {
     
     script:
     """
-    #!/usr/bin/env Rscript
-    Rscript --vanilla $workflow.projectDir/scripts/gene_prab.R ${vir_prab}
+    R --vanilla $workflow.projectDir/scripts/gene_prab.R ${vir_prab}
     """
     //Rscript $workflow.projectDir/scripts/gene_prab.R mbov_virulent_prab.csv
     
