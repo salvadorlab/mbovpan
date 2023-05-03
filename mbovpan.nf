@@ -43,6 +43,7 @@ run_mode = "snp"
 threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
 test = "n"
+println("$launchDir/gene_presence_absence.csv")
 
 reads = ""
 
