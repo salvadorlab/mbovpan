@@ -676,14 +676,14 @@ process gene_prab_test {
     //errorStrategy 'ignore'
     
     input:
-    file("mbov_virulent_prab.csv") from vir_ch
+    file(vir_prab) from vir_ch
     
     output:
     file("gene_prab_figures.pdf") 
     
     script:
     """
-    Rscript --vanilla $workflow.projectDir/scripts/gene_prab.R mbov_virulent_prab.csv
+    Rscript --vanilla $workflow.projectDir/scripts/gene_prab.R ${vir_prab}
     """
     //Rscript $workflow.projectDir/scripts/gene_prab.R mbov_virulent_prab.csv
     
