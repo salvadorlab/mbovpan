@@ -662,7 +662,7 @@ process gene_prab_test {
     script:
     """
     python $workflow.projectDir/scripts/mbov_virulence.py ${vir_genes}
-    Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
+    Rscript $workflow.projectDir/scripts/gene_prab.R 
     """
 
     
