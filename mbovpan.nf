@@ -114,6 +114,12 @@ else{
     println "mbovpan will run using ${threads} threads by default"
 }
 
+if(params.test_feature != "y"){
+    println "mbovpan is testing a feature"
+    test = "y"
+}
+
+
 println " $input "
 
 reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
@@ -134,11 +140,12 @@ reference location: $ref
 input: $input
 output: $output
 no. of threads: $threads
+testing: $test
 =====================================
 """
 
 /* AUTOMATIC QC of read data */
-if(params.test_feature != 'y'){
+if(test != 'y'){
     process pre_fastqc {
 
     publishDir = "$output/mbovpan_results/fastqc"
@@ -649,11 +656,6 @@ process gene_prab_test {
     python $workflow.projectDir/scripts/mbov_virulence.py ${vir_genes}
     Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
     """
-
-
-
-
-
 }
 }
 
