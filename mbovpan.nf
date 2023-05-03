@@ -645,7 +645,7 @@ input = "$launchDir/gene_presence_absence.csv"
 all_files = Channel.fromPath( "$input" )
 
 
-process gene_prab_test {
+process vir_prab_test {
      publishDir = "./"
     
     conda "$workflow.projectDir/envs/gene_prab.yaml"
@@ -656,8 +656,30 @@ process gene_prab_test {
     path "$input" from all_files
     
     output:
-    file("mbov_virulent_prab.csv") 
+    file("mbov_virulent_prab.csv") into vir_ch
     //file("gene_prab_figures.pdf") 
+    
+    script:
+    """
+    python $workflow.projectDir/scripts/mbov_virulence.py ${input} ${vir_genes}
+    
+    """
+    //Rscript $workflow.projectDir/scripts/gene_prab.R mbov_virulent_prab.csv
+    
+}
+
+process gene_prab_test {
+     publishDir = "./"
+    
+    conda "$workflow.projectDir/envs/gene_prab.yaml"
+
+    //errorStrategy 'ignore'
+    
+    input:
+    file("mbov_virulent_prab.csv") from vir_ch
+    
+    output:
+    file("gene_prab_figures.pdf") 
     
     script:
     """
