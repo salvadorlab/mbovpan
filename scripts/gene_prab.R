@@ -14,6 +14,7 @@ args = commandArgs(trailingOnly=TRUE)
 
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
+print(args[1])
 gene_pres_abs <- read.csv(args[1], header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
