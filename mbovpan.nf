@@ -540,7 +540,7 @@ process accessory_pca {
 }
 
 else{
-    process gene_prab {
+    process gene_prab_nometa {
      publishDir = output
     
     conda "$workflow.projectDir/envs/gene_prab.yaml"
@@ -561,7 +561,7 @@ else{
     """
 }
 
-process accessory_pca {
+process accessory_pca_nometa {
      publishDir = output
     
     conda 'r conda-forge::r-ggplot2 conda-forge::r-dplyr'
