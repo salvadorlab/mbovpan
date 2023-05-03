@@ -2,8 +2,8 @@
 import pandas as pd
 import sys
 
-mbov_prab = pd.read_csv(sys.argv[1])
-mbov_virulence = pd.read_csv(sys.argv[2])
+mbov_prab = pd.read_csv("gene_presence_absence.csv")
+mbov_virulence = pd.read_csv(sys.argv[1])
 
 # extract virulence genes as a list of unique elements
 virulent_gene_list = list(set(mbov_virulence.loc[:,"Accronyme"].to_list()))

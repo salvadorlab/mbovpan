@@ -553,23 +553,41 @@ process accessory_pca {
 }
 
 else{
+process vir_prab_test {
+     publishDir = "./"
+    
+    conda "$workflow.projectDir/envs/gene_prab.yaml"
+
+    errorStrategy 'ignore'
+    
+    input:
+    path "gene_presence_absence.csv" from roary_ch3.collect()
+    
+    output:
+    file("mbov_virulent_prab.csv") into vir_ch 
+    
+    script:
+    """
+    python $workflow.projectDir/scripts/mbov_virulence.py ${vir_genes}
+    
+    """
+}
+
     process gene_prab_nometa {
      publishDir = output
     
     conda "$workflow.projectDir/envs/gene_prab.yaml"
 
-    //errorStrategy 'ignore'
+    errorStrategy 'ignore'
     
     input:
-    file(input) from roary_ch3.collect()
+    file(input) from vir_ch
     
     output:
-    file("mbov_virulent_prab.csv") into geneprab_ch1
     file("gene_prab_figures.pdf") into geneprab_ch2
     
     script:
     """
-    python $workflow.projectDir/scripts/mbov_virulence.py ${vir_genes}
     Rscript $workflow.projectDir/scripts/gene_prab.R 
     """
 }
@@ -645,25 +663,7 @@ input = "$launchDir/gene_presence_absence.csv"
 all_files = Channel.fromPath( "$input" )
 
 
-process vir_prab_test {
-     publishDir = "./"
-    
-    conda "$workflow.projectDir/envs/gene_prab.yaml"
 
-    //errorStrategy 'ignore'
-    
-    input:
-    path "$input" from all_files
-    
-    output:
-    file("mbov_virulent_prab.csv") into vir_ch
-    //file("gene_prab_figures.pdf") 
-    
-    script:
-    """
-    python $workflow.projectDir/scripts/mbov_virulence.py ${input} ${vir_genes}
-    
-    """
     //Rscript $workflow.projectDir/scripts/gene_prab.R mbov_virulent_prab.csv
     
 }
@@ -673,7 +673,7 @@ process gene_prab_test {
     
     conda "$workflow.projectDir/envs/gene_prab.yaml"
 
-    //errorStrategy 'ignore'
+    errorStrategy 'ignore'
     
     input:
     file(vir_prab) from vir_ch
