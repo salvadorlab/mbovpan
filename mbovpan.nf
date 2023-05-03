@@ -641,8 +641,8 @@ process multiqc {
 else {
 //If I want to test something in mbovpan quickly, I'll just do it at the end of the script'
 
-nextflow.enable.dsl=2
 input = "$launchDir/gene_presence_absence.csv" 
+all_files = Channel.fromPath( "$input" )
 
 
 process gene_prab_test {
@@ -653,7 +653,7 @@ process gene_prab_test {
     //errorStrategy 'ignore'
     
     input:
-    path 'gene_presence_absence.csv'
+    path "$input" from all_files
     
     output:
     file("mbov_virulent_prab.csv") 
@@ -668,10 +668,7 @@ process gene_prab_test {
     
 }
 
-workflow {
-        def all_files = Channel.fromPath( "${input}" )
-        gene_prab(all_files)
-    }
+
 }
 
 
