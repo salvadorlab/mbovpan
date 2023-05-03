@@ -666,7 +666,6 @@ all_files = Channel.fromPath( "$input" )
 
     //Rscript $workflow.projectDir/scripts/gene_prab.R mbov_virulent_prab.csv
     
-}
 
 process gene_prab_test {
      publishDir = "./"
@@ -689,8 +688,5 @@ process gene_prab_test {
     
 }
 
-
 }
-
-
 
