@@ -648,7 +648,7 @@ process gene_prab_test {
     //errorStrategy 'ignore'
     
     input:
-    path "$launchDir/gene_presence_absence.csv"
+    path("$launchDir/gene_presence_absence.csv")
     
     output:
     file("mbov_virulent_prab.csv") 
