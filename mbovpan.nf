@@ -42,6 +42,8 @@ run_mode = "snp"
 // If not specified, use 50% of available resources 
 threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
+test = "n"
+
 reads = ""
 
 qual = 150
