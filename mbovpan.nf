@@ -116,7 +116,7 @@ else{
     println "mbovpan will run using ${threads} threads by default"
 }
 
-if(params.test_feature != "y"){
+if(params.test_feature == "y"){
     println "mbovpan is testing a feature"
     test = "y"
 }
