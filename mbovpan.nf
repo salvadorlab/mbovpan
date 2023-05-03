@@ -683,8 +683,7 @@ process gene_prab_test {
     
     script:
     """
-    python $workflow.projectDir/scripts/mbov_virulence.py ${input} ${vir_genes}
-    
+    Rscript $workflow.projectDir/scripts/gene_prab.R mbov_virulent_prab.csv
     """
     //Rscript $workflow.projectDir/scripts/gene_prab.R mbov_virulent_prab.csv
     
