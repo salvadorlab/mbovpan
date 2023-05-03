@@ -17,7 +17,7 @@ gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFact
 # we should already have access to this in our directory
 print(args)
 print(args[1])
-print(args[2])
+print(is.na(args[2])
 test = toString(args[1])
 gene_pres_abs <- read.csv(test, header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 head(gene_pres_abs)
@@ -53,7 +53,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 print("testing")
 pdf("gene_prab_figures.pdf")
 
-if(is.na(args[2])){
+if(!is.na(args[2])){
   print("this shouldn't work")
   isolate_dat <- read.csv(args[2], stringsAsFactors = FALSE, check.names = FALSE)
   
