@@ -53,7 +53,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 print("testing")
 pdf("gene_prab_figures.pdf")
 
-if(length(args[2]) != 0){
+if(is.na(args[2])){
   print("this shouldn't work")
   isolate_dat <- read.csv(args[2], stringsAsFactors = FALSE, check.names = FALSE)
   
