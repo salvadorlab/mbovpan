@@ -640,6 +640,11 @@ process multiqc {
 
 else {
 //If I want to test something in mbovpan quickly, I'll just do it at the end of the script'
+
+nextflow.enable.dsl=2
+input = "$launchDir/gene_presence_absence.csv" 
+
+
 process gene_prab_test {
      publishDir = "./"
     
@@ -648,7 +653,7 @@ process gene_prab_test {
     //errorStrategy 'ignore'
     
     input:
-    path("$launchDir/gene_presence_absence.csv")
+    path 'gene_presence_absence.csv'
     
     output:
     file("mbov_virulent_prab.csv") 
@@ -659,7 +664,14 @@ process gene_prab_test {
     python $workflow.projectDir/scripts/mbov_virulence.py ${vir_genes}
     Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
     """
+
+    
 }
+
+workflow {
+        def all_files = Channel.fromPath( "${input}" )
+        gene_prab(all_files)
+    }
 }
 
 
