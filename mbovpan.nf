@@ -657,7 +657,7 @@ process gene_prab_test {
     
     output:
     file("mbov_virulent_prab.csv") 
-    file("gene_prab_figures.pdf") 
+    //file("gene_prab_figures.pdf") 
     
     script:
     """
