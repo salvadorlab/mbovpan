@@ -17,7 +17,7 @@ gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFact
 # we should already have access to this in our directory
 print(args)
 print(args[1])
-print(is.na(args[2])
+print(is.na(args[2]))
 test = toString(args[1])
 gene_pres_abs <- read.csv(test, header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 head(gene_pres_abs)
