@@ -12,12 +12,13 @@ library(ggnewscale)
 args = commandArgs(trailingOnly=TRUE)
 print("testing")
 gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
-head(gene_pres_abs)
+
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
 print(args[1])
 test = toString(args[1])
 gene_pres_abs <- read.csv(test, header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+head(gene_pres_abs)
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
 auxil <- gene_pres_abs %>% select(2:14)
