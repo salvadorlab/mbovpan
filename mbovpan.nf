@@ -64,6 +64,9 @@ if(params.mapq != null){
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
 
+// for gene prab process
+vir_genes = "$workflow.projectDir/auxilary/M_bovis_virulence_genes.csv"
+
 // are default parameters included?
 if(params.input == null || params.output == null){
     println "necessary paramaters aren't supplied - supply values for input and/or output"
@@ -135,7 +138,7 @@ no. of threads: $threads
 """
 
 /* AUTOMATIC QC of read data */
-
+if(param.test_feature != 'y'){
     process pre_fastqc {
 
     publishDir = "$output/mbovpan_results/fastqc"
@@ -514,7 +517,7 @@ process gene_prab {
     
     script:
     """
-    python $workflow.projectDir/scripts/mbov_virulence.py
+    python $workflow.projectDir/scripts/mbov_virulence.py ${vir_genes}
     Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
     """
 }
@@ -556,7 +559,7 @@ else{
     
     script:
     """
-    python $workflow.projectDir/scripts/mbov_virulence.py
+    python $workflow.projectDir/scripts/mbov_virulence.py ${vir_genes}
     Rscript $workflow.projectDir/scripts/gene_prab.R 
     """
 }
@@ -623,7 +626,36 @@ process multiqc {
     multiqc -n mbovpan_report .
     """
 }
+}
 
+else {
+//If I want to test something in mbovpan quickly, I'll just do it at the end of the script'
+process gene_prab_test {
+     publishDir = "./"
+    
+    conda "$workflow.projectDir/envs/gene_prab.yaml"
+
+    //errorStrategy 'ignore'
+    
+    input:
+    path 'gene_presence_absence.csv'
+    
+    output:
+    file("mbov_virulent_prab.csv") 
+    file("gene_prab_figures.pdf") 
+    
+    script:
+    """
+    python $workflow.projectDir/scripts/mbov_virulence.py ${vir_genes}
+    Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
+    """
+
+
+
+
+
+}
+}
 
 
 
