@@ -138,7 +138,7 @@ no. of threads: $threads
 """
 
 /* AUTOMATIC QC of read data */
-if(param.test_feature != 'y'){
+if(params.test_feature != 'y'){
     process pre_fastqc {
 
     publishDir = "$output/mbovpan_results/fastqc"
