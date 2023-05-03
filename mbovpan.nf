@@ -497,6 +497,7 @@ process iqtree_core {
 
 // Rscript to generate a heatmap of the pangenome
 // this can be changed into the virulence gene presence absence matrix given a list from Hind
+if(params.meta != null){
 process gene_prab {
      publishDir = output
     
@@ -536,7 +537,49 @@ process accessory_pca {
     Rscript $workflow.projectDir/scripts/accessory_pca.R ${meta}
     """
 }
+}
 
+else{
+    process gene_prab {
+     publishDir = output
+    
+    conda "$workflow.projectDir/envs/gene_prab.yaml"
+
+    //errorStrategy 'ignore'
+    
+    input:
+    file(input) from roary_ch3.collect()
+    
+    output:
+    file("mbov_virulent_prab.csv") into geneprab_ch1
+    file("gene_prab_figures.pdf") into geneprab_ch2
+    
+    script:
+    """
+    python $workflow.projectDir/scripts/mbov_virulence.py
+    Rscript $workflow.projectDir/scripts/gene_prab.R 
+    """
+}
+
+process accessory_pca {
+     publishDir = output
+    
+    conda 'r conda-forge::r-ggplot2 conda-forge::r-dplyr'
+
+    errorStrategy 'ignore'
+    
+    input:
+    file(input) from roary_ch4.collect()
+    
+    output:
+    file("pca_figures.pdf") into accessory_ch
+    
+    script:
+    """
+    Rscript $workflow.projectDir/scripts/accessory_pca.R 
+    """
+}
+}
 
 if(params.scoary_meta != null){
 process scoary {
