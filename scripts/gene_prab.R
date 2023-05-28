@@ -10,11 +10,17 @@ library(ggnewscale)
 
 # load in the general metadata
 args = commandArgs(trailingOnly=TRUE)
-
+print("testing")
+gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
-gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+print(args)
+print(args[1])
+print(is.na(args[2]))
+test = toString(args[1])
+gene_pres_abs <- read.csv(test, header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+head(gene_pres_abs)
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
 auxil <- gene_pres_abs %>% select(2:14)
@@ -44,11 +50,12 @@ accessory_dendro <- as.dendrogram(hclust(d = dist(accessory_transpose, method = 
 
 ad_gg <- ggtree(accessory_dendro)
 ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
-  
+print("testing")
 pdf("gene_prab_figures.pdf")
 
-if(length(args[1]) != 0){
-  isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
+if(!is.na(args[2])){
+  print("this shouldn't work")
+  isolate_dat <- read.csv(args[2], stringsAsFactors = FALSE, check.names = FALSE)
   
   for(i in 1:length(colnames(isolate_dat))){
     if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) == 1 ){
