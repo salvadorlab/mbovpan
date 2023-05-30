@@ -40,5 +40,5 @@ process gene_prab {
 }
 
 workflow {
-  gene_prab("${input}", "${meta}")
+  gene_prab(Channel.fromPath("${input}")), Channel.fromPath("${meta}"))
 }
