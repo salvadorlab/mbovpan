@@ -48,7 +48,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 print("testing")
 pdf("gene_prab_figures.pdf")
 
-if(!is.na(args[2])){
+
   print("this shouldn't work")
   isolate_dat <- read.csv(args[2], stringsAsFactors = FALSE, check.names = FALSE)
   
@@ -86,29 +86,8 @@ if(!is.na(args[2])){
     
   
 } 
-   }
-  } else{
-  ad_gg <- ggtree(accessory_dendro)
-  ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
-  
-  t1 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames = FALSE) +  
-    scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
-  plot(t1) 
-  
-  mbov_tree <- function(mydata,metadata){
-    ad_gg <- ggtree(mydata)
-    ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
-    
-    
-    ad_gg <- ad_gg %<+% isolate_dat
-    
-    t2 <- gheatmap(ad_gg,accessory_transpose, offset = 0.5, colnames_angle=-45) +  
-      scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
-    Sys.sleep(1) #gives program the time to make the figure
-    t2
-    
   }
-}
+   
 dev.off()
 
 ### Finish Code and update mbovpan 
