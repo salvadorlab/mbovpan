@@ -28,7 +28,8 @@ process gene_prab {
     //errorStrategy 'ignore'
     
     input:
-    path x, y
+    path x
+    path y
     
     
     script:
