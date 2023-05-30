@@ -2,7 +2,7 @@
 import pandas as pd
 import sys
 
-mbov_prab = pd.read_csv(sys.argv[1])
+mbov_prab = pd.read_csv(sys.argv[1],low_memory=False)
 mbov_virulence = pd.read_csv(sys.argv[2])
 
 # extract virulence genes as a list of unique elements
