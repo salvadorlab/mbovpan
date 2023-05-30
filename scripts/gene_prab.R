@@ -50,7 +50,7 @@ pdf("gene_prab_figures.pdf")
 
 
   print("this shouldn't work")
-  isolate_dat <- read.csv(args[2], stringsAsFactors = FALSE, check.names = FALSE)
+  isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
   
   for(i in 1:length(colnames(isolate_dat))){
     if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) == 1 ){
