@@ -40,6 +40,5 @@ process gene_prab {
 }
 
 workflow {
-  def all_files = Channel.fromPath( "${input}", "${meta}" )
-  gene_prab(all_files)
+  gene_prab("${input}", "${meta}")
 }
