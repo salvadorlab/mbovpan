@@ -95,8 +95,13 @@ pdf("gene_prab_figures.pdf")
   print(colnames(isolate_dat))
   for(i in 1:length(colnames(isolate_dat))){
     print(colnames(isolate_dat)[i])
-    if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) <2){
+    if(colnames(isolate_dat)[i] == "Name"){ 
       print("skipping the Name column")
+      next
+    }
+
+    else if(length(unique(isolate_dat[,i])) <2){
+      print("not unique metadata")
       next
     }
     else{
