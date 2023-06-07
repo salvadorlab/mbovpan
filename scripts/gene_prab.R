@@ -70,7 +70,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       #print(length(unique(mytree_onlytip[,metadata]))
 
       #if the column is not unique, skip it
-      if(length(unique(mytree_onlytip[,metadata]) < 2){
+      if(length(unique(mytree_onlytip[,metadata]) < 2)){
         print("not unique column")
         return(NULL)
       }
