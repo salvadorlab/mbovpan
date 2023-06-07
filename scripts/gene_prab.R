@@ -66,8 +66,9 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       mytree_onlytip <- as.data.frame(subset(mytree[["data"]], isTip == TRUE)[,metadata])
       rownames(mytree_onlytip) <- row_id
       
+      #check number of unique values
+      print(length(unique(mytree_onlytip[,metadata]))
       
-    
       t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(mytree_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
       
