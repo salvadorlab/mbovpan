@@ -67,6 +67,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       rownames(mytree_onlytip) <- row_id
 
       #
+      print(row_id)
       print(nrow(mytree_onlytip))
       
       #check number of unique values
