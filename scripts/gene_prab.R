@@ -49,47 +49,52 @@ ad_gg <- ggtree(accessory_dendro)
 ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 
 # check if the dendrogram was made accordingly based on the data present
-print(ad_gg[["data"]])
+#print(ad_gg[["data"]])
 
-pdf("gene_prab_figures.pdf")
-
-
-  isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
-  
-  # this works out 
-  #head(isolate_dat)
-
-  for(i in 1:length(colnames(isolate_dat))){
-    if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) == 1 ){
-      next
-    }
-    else{
-      
-      mbov_tree <- function(mydata,metadata){
-      ad_gg <- ggtree(mydata)
-      ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
-      
-      
-      ad_gg <- ad_gg %<+% isolate_dat +
+ isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
+ ad_gg <- ad_gg %<+% isolate_dat +
         ggtree::vexpand(.1, -1)
-      row_id <- subset(ad_gg[["data"]], isTip == TRUE)$label
-      ad_gg_onlytip <- as.data.frame(subset(ad_gg[["data"]], isTip == TRUE)[,metadata])
-      rownames(ad_gg_onlytip) <- row_id
-      print(head(ad_gg_onlytip))
+#function to make the dendrograms programatically
+    mbov_tree <- function(mytree,metadata){
       
+
+      #checking how the data looks after incorporationg metadata
+
+      print(mytree[["data"]])
+
+      row_id <- subset(mytree[["data"]], isTip == TRUE)$label
+      mytree_onlytip <- as.data.frame(subset(mytree[["data"]], isTip == TRUE)[,metadata])
+      rownames(mytree_onlytip) <- row_id
+      
+      print(mytree_onlytip)
     
-      t1 <- gheatmap(ad_gg, ad_gg_onlytip, width = 0.3, colnames = FALSE) +
-        scale_fill_manual(values = hcl.colors(length(unique(ad_gg_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
+      t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
+        scale_fill_manual(values = hcl.colors(length(unique(mytree_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
       
       t1_scaled <- t1 + new_scale_fill()
       t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames_angle=45,hjust = 1,colnames_offset_y = -2.5,font.size = 3) +  
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
       Sys.sleep(1) #gives program the time to make the figure
+      print(t2[["data"]])
       t2
       
       }
+
+pdf("gene_prab_figures.pdf")
+
+
+ 
+  # this works out 
+  #head(isolate_dat)
+
+  for(i in 1:length(colnames(isolate_dat))){
+    if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) <= 1 ){
+      next
+      print("skipping the Name column")
+    }
+    else{
       
-      plot(mbov_tree(accessory_dendro,colnames(isolate_dat)[i]))
+      plot(mbov_tree(ad_gg,colnames(isolate_dat)[i]))
     
   
 } 
