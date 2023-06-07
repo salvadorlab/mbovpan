@@ -89,7 +89,8 @@ pdf("gene_prab_figures.pdf")
   #head(isolate_dat)
   print(colnames(isolate_dat))
   for(i in 1:length(colnames(isolate_dat))){
-    if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) <= 1 ){
+    print(colnames(isolate_dat)[i])
+    if(colnames(isolate_dat)[i] == "Name"){
       print("skipping the Name column")
       next
     }
