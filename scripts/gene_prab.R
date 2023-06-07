@@ -72,11 +72,6 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       #check number of unique values
       print(length(unique(mytree_onlytip[,metadata])))
 
-      #if the column is not unique, skip it
-      if(length(unique(mytree_onlytip[,metadata]) < 2)){
-        print("not unique column")
-        return(NULL)
-      }
 
       t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(mytree_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
@@ -100,7 +95,7 @@ pdf("gene_prab_figures.pdf")
   print(colnames(isolate_dat))
   for(i in 1:length(colnames(isolate_dat))){
     print(colnames(isolate_dat)[i])
-    if(colnames(isolate_dat)[i] == "Name"){
+    if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) <2){
       print("skipping the Name column")
       next
     }
