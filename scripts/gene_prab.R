@@ -60,7 +60,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 
       #checking how the data looks after incorporationg metadata
 
-      print(mytree[["data"]])
+      
 
       row_id <- subset(mytree[["data"]], isTip == TRUE)$label
       mytree_onlytip <- as.data.frame(subset(mytree[["data"]], isTip == TRUE)[,metadata])
@@ -90,8 +90,8 @@ pdf("gene_prab_figures.pdf")
   print(colnames(isolate_dat))
   for(i in 1:length(colnames(isolate_dat))){
     if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) <= 1 ){
-      next
       print("skipping the Name column")
+      next
     }
     else{
       
