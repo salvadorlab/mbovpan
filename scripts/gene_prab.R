@@ -10,12 +10,12 @@ library(ggnewscale)
 
 # load in the general metadata
 args = commandArgs(trailingOnly=TRUE)
-print("loading arguments")
 gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
-head(gene_pres_abs)
+#head(gene_pres_abs)
+
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
 auxil <- gene_pres_abs %>% select(2:14)
@@ -25,7 +25,9 @@ accessory_pa[!(accessory_pa=="")] <- 1
 accessory_pa[accessory_pa==""] <- 0 
 
 num_col <- ncol(accessory_pa)
+
 task <- function(x){sum(as.numeric(as.character(x)))}
+
 accessory_pa$pr <- apply(accessory_pa,1,task)
 accessory_pa$perc_pr <- accessory_pa$pr/num_col
 accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
@@ -45,13 +47,18 @@ accessory_dendro <- as.dendrogram(hclust(d = dist(accessory_transpose, method = 
 
 ad_gg <- ggtree(accessory_dendro)
 ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
-print("testing")
+
+# check if the dendrogram was made accordingly based on the data present
+head(ad_gg[["data"]])
+
 pdf("gene_prab_figures.pdf")
 
 
   isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
-  head(isolate_dat)
   
+  # this works out 
+  #head(isolate_dat)
+
   for(i in 1:length(colnames(isolate_dat))){
     if(colnames(isolate_dat)[i] == "Name" || length(unique(isolate_dat[,i])) == 1 ){
       next
