@@ -82,7 +82,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
       Sys.sleep(1) #gives program the time to make the figure
       print(t2[["data"]])
-      plot(t2)
+      return(t2)
       
       }
 
