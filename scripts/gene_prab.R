@@ -66,17 +66,18 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       mytree_onlytip <- as.data.frame(subset(mytree[["data"]], isTip == TRUE)[,metadata])
       rownames(mytree_onlytip) <- row_id
       
-      print(mytree_onlytip)
+      
     
       t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(mytree_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
       
+      plot(t1)
       t1_scaled <- t1 + new_scale_fill()
       t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames_angle=45,hjust = 1,colnames_offset_y = -2.5,font.size = 3) +  
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
       Sys.sleep(1) #gives program the time to make the figure
       print(t2[["data"]])
-      t2
+      plot(t2)
       
       }
 
