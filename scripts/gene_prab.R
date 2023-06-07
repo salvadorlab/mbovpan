@@ -65,6 +65,8 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       row_id <- subset(mytree[["data"]], isTip == TRUE)$label
       mytree_onlytip <- as.data.frame(subset(mytree[["data"]], isTip == TRUE)[,metadata])
       rownames(mytree_onlytip) <- row_id
+
+      print(mytree_onlytip)
       
       #check number of unique values
       print(length(unique(mytree_onlytip[,metadata])))
@@ -72,7 +74,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       #if the column is not unique, skip it
       if(length(unique(mytree_onlytip[,metadata]) < 2)){
         print("not unique column")
-        next
+        return(NULL)
       }
 
       t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
