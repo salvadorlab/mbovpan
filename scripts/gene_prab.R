@@ -72,7 +72,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       #if the column is not unique, skip it
       if(length(unique(mytree_onlytip[,metadata]) < 2){
         print("not unique column")
-        next
+        return(NULL)
       }
 
       t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
