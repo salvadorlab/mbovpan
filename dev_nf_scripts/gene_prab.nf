@@ -22,6 +22,8 @@ vir_genes = "$workflow.projectDir/../auxilary/M_bovis_virulence_genes.csv"
 
 process gene_prab {
     publishDir = "./"
+
+    debug true
     
     conda "$workflow.projectDir/../envs/gene_prab.yaml"
 
