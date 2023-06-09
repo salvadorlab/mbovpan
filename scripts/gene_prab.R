@@ -111,7 +111,7 @@ pdf("gene_prab_figures.pdf")
     }
     else{
       
-      mbov_tree(ad_gg,colnames(isolate_dat)[i])
+      print(mbov_tree(ad_gg,colnames(isolate_dat)[i]))
     
   
 } 
