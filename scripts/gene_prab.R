@@ -51,7 +51,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 # check if the dendrogram was made accordingly based on the data present
 #print(ad_gg[["data"]])
 
-png("gene_prab_figures.png")
+pdf("gene_prab_figures.pdf",4,4)
 
  isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
  ad_gg <- ad_gg %<+% isolate_dat +
@@ -118,5 +118,6 @@ png("gene_prab_figures.png")
 } 
   }
 
+dev.off()
 
 ### Finish Code and update mbovpan 
