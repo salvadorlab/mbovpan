@@ -32,6 +32,9 @@ process gene_prab {
     input:
     path x
     path y
+
+    output:
+    path 'gene_prab_figures.pdf'
     
     
     script:
