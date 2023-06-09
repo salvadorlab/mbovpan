@@ -3,7 +3,7 @@ library(dplyr)
 
 args = commandArgs(trailingOnly=TRUE)
 
-gene_pres_abs <- read.csv("gene_presence_absence.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+gene_pres_abs <- read.csv(args[1], header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
