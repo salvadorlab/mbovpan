@@ -57,7 +57,7 @@ png("gene_prab_figures.png")
  ad_gg <- ad_gg %<+% isolate_dat +
         ggtree::vexpand(.1, -1)
 
-  ad_gg
+  print(ad_gg)
   # lets check 
 #function to make the dendrograms programatically
     mbov_tree <- function(mytree,metadata){
