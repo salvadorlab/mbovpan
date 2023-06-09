@@ -118,4 +118,6 @@ pdf("gene_prab_figures.pdf")
 } 
   }
 
+  dev.off()
+
 ### Finish Code and update mbovpan 
