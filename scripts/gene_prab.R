@@ -82,7 +82,7 @@ pdf("gene_prab_figures.pdf")
       t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(mytree_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
       
-      plot(t1)
+      #plot(t1)
       t1_scaled <- t1 + new_scale_fill()
       t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames_angle=45,hjust = 1,colnames_offset_y = -2.5,font.size = 3) +  
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
@@ -106,13 +106,13 @@ pdf("gene_prab_figures.pdf")
       next
     }
 
-    else if(length(unique(isolate_dat[,i])) <2){
+    else if(length(unique(isolate_dat[,i])) < 2){
       print("not unique metadata")
       next
     }
     else{
       
-      mbov_tree(ad_gg,colnames(isolate_dat)[i])
+      #mbov_tree(ad_gg,colnames(isolate_dat)[i])
     
   
 } 
