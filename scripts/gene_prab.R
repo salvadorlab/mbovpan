@@ -51,9 +51,14 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 # check if the dendrogram was made accordingly based on the data present
 #print(ad_gg[["data"]])
 
+pdf("gene_prab_figures.pdf")
+
  isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
  ad_gg <- ad_gg %<+% isolate_dat +
         ggtree::vexpand(.1, -1)
+
+  plot(ad_gg)
+  # lets check 
 #function to make the dendrograms programatically
     mbov_tree <- function(mytree,metadata){
       
@@ -81,13 +86,13 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
       t1_scaled <- t1 + new_scale_fill()
       t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames_angle=45,hjust = 1,colnames_offset_y = -2.5,font.size = 3) +  
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
-      Sys.sleep(5) #gives program the time to make the figure
+      Sys.sleep(1) #gives program the time to make the figure
       print(t2[["data"]])
       return(t2)
       
       }
 
-pdf("gene_prab_figures.pdf")
+
 
 
  
