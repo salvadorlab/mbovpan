@@ -132,7 +132,7 @@ $conda activate mbovpan #replace 'conda' with 'source' based on conda version
 Another option is to install using a provided script in 'scripts/install_mbovpan.sh'
 
 ```
-$conda env create -n mbovpan
+$conda create -n mbovpan
 $bash path/to/install_mbovpan.sh
 $conda activate mbovpan #replace 'conda' with 'source' based on conda version
 (mbovpan)$ #ready for input 
