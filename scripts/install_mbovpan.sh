@@ -1,5 +1,5 @@
 source activate mbovpan
-conda install -y -c bioconda -c conda-forge -c defaults nextflow
+conda install -y -c bioconda -c conda-forge -c defaults nextflow=22.10.6
 conda install -y -c bioconda -c conda-forge -c defaults fastp
 conda install -y -c bioconda fastqc
 conda install -y -c conda-forge -c bioconda -c defaults samtools

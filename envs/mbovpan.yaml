@@ -4,7 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - nextflow
+  - nextflow=22.10.6
   - fastp
   - fastqc
   - samtools
