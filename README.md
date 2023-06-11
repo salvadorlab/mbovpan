@@ -129,7 +129,7 @@ $conda activate mbovpan #replace 'conda' with 'source' based on conda version
 (mbovpan)$ #ready for input
 ```
 
-Another option is to install using a provided script in 'scripts/install_mbovpan.sh'
+Another option is to install using a provided script in 'scripts/install_mbovpan.sh'. This should take about 10 minutes. 
 
 ```
 $conda create -n mbovpan
