@@ -121,15 +121,7 @@ Successfully downloading will lead to a directory with the following layout
     └── SRR998659_2.fastq.gz
 
 ```
-After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. The specifications in the environment yaml file will work across Linux and OS X operating systems. 
-
-```
-$conda env create -f mbovpan/envs/mbovpan.yaml 
-$conda activate mbovpan #replace 'conda' with 'source' based on conda version
-(mbovpan)$ #ready for input
-```
-
-Another option is to install using a provided script in 'scripts/install_mbovpan.sh'. This should take about 10 minutes. 
+After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. You can install by using a provided script in 'scripts/install_mbovpan.sh'. This should take about 10 minutes. 
 
 ```
 $conda create -n mbovpan
