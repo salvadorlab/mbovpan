@@ -145,6 +145,18 @@ Mbovpan is downloaded with test data already included, and this is captured with
 
 Running the above command should result in a 
 
-### Advanced Usage
+### Additional Usage
+
+```
+# boost the number of threads utilized
+(mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --threads 16
+
+# modulate the minimum quality and maximum SNP depth required
+(mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --qual 20 --depth 20
+
+# Using most of the parameters that mbovpan has to offer to decipher the pangenome
+(mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --qual 100 --depth 5 --mapq 50 --threads 30 --run pan
+
+```
 
 
