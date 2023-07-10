@@ -136,6 +136,33 @@ Mbovpan is downloaded with test data already included, and this is captured with
 (mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --qual 100 --depth 5 --mapq 50 --threads 30 --run pan
 ```
 
+### Help
+```
+    M B O V P A N (v0.1)    
+=============================
+A pangenomic pipeline for the analysis of
+Mycobacterium bovis isolates 
+
+
+usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --output ./path/to/output
+  options:
+    --run [all|snp|pan]: 
+        Specifies in what mode to run mbovpan in [DEFAULT:all]
+    --qual [INT]:
+        The minimum QUAL score for a SNP to be considered [DEFAULT:150]
+    --depth [INT]:
+        The minimum DP score for a SNP to be considered [DEFAULT:10]
+    --mapq [INT]:
+        The minimum MQ score for a SNP to be considered [DEFAULT:55]
+    --threads [INT]:
+        How many threads to use for the programs [DEFAULT:(number of avail. threads)/2]
+    --help
+        Prints this help message
+    --version
+        Prints the current version 
+=============================
+```
+
 ### Authors
 mbovpan is software initiated and maintained by Noah Legall, PhD under the supervision of Liliana C. M. Salvador, PhD.
 
