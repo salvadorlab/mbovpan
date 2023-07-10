@@ -1,6 +1,5 @@
 ![image](https://user-images.githubusercontent.com/40697188/193487621-a4b91a1c-19b6-42df-9e63-7fcff0658be0.png)
 
-
 # mbovpan
 Mbovpan is a nextflow bioinformatic pipeline for Mycobacterium bovis pangenome analysis. The goal of Mbovpan is to make the insights from M. bovis genomics easily accesible to reseachers.  
 
@@ -19,27 +18,6 @@ Successfully downloading will lead to a directory with the following layout
 ```
 .
 ├── auxilary
-│   ├── accessory_binary_genes.fa.newick
-│   ├── badger_cattle_PCA.png
-│   ├── chrom_ranges.txt
-│   ├── example_meta.csv
-│   ├── gene_prab_figures.pdf
-│   ├── gene_presence_absence.csv
-│   ├── M_bovis_virulence_genes.csv
-│   ├── mbovpan_figures.Rmd
-│   ├── mbov_virulent_prab.csv
-│   ├── pca_figures.pdf
-│   ├── scoary_15_11_2021_1547.log
-│   ├── scoary_15_11_2021_1548.log
-│   ├── scoary_15_11_2021_1551.log
-│   ├── scoary_15_11_2021_1552.log
-│   ├── scoary_15_11_2021_1559.log
-│   ├── snpcalling_runtimes.csv
-│   ├── Species_15_11_2021_1559.results.csv
-│   ├── test.results.json
-│   ├── trait.csv
-│   ├── traits.csv
-│   └── UK_meta.csv
 ├── chrom_ranges.py
 ├── dev_nf_scripts
 │   ├── abyss_assem.nf
@@ -137,15 +115,15 @@ Once the conda environment is created, the user can execute a simple run of the 
 ```
 (mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ 
 ```
-In this command, 'nextflow run' is the command used to look at and execute the pipeline instructions in 'mbovpan.nf'. This file contains the general flow of the mbovpan pipeline
+In this command, **'nextflow run'** is the command used to look at and execute the pipeline instructions in **'mbovpan.nf'**. This file contains the general flow of the mbovpan pipeline
 
-Mbovpan is downloaded with test data already included, and this is captured with the '--input ./mbovpan/seqs/' parameter. If paired end sequences are present in the input directory, they will be matched and ran through the pipeline. 
+Mbovpan is downloaded with test data already included, and this is captured with the **'--input ./mbovpan/seqs/'** parameter. If paired end sequences are present in the input directory, they will be matched and ran through the pipeline. 
 
-'--run snp' signifies what analysis mode mbovpan utilizes. 'snp' mode maps the paired end files to the reference genome while, 'pan' mode creates de novo genomes from scratch. if no option is supplied, the pipeline will run both. 
+**'--run snp'** signifies what analysis mode mbovpan utilizes. **'snp'** mode maps the paired end files to the reference genome while, **'pan'** mode creates de novo genomes from scratch. if no option is supplied, the pipeline will run both. 
 
-Running the above command should result in a 
 
-### Additional Usage
+
+### Additional Usages
 
 ```
 # boost the number of threads utilized
@@ -156,7 +134,21 @@ Running the above command should result in a
 
 # Using most of the parameters that mbovpan has to offer to decipher the pangenome
 (mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --qual 100 --depth 5 --mapq 50 --threads 30 --run pan
-
 ```
+
+### Authors
+mbovpan is software initiated and maintained by Noah Legall, PhD under the supervision of Liliana C. M. Salvador, PhD.
+
+### Maintainers 
+Noah Legall 
+<a href="https://github.com/noahaus">
+    <img src="https://github.com/salvadorlab/mbovpan/assets/40697188/89705d13-4265-4cda-98d3-d21064344892"  width="45" height="45">
+</a> <a href="https://orcid.org/0009-0008-6582-9553">
+    <img src="https://github.com/salvadorlab/mbovpan/assets/40697188/75dc0536-0d3a-46dc-9e06-c6b9d462be4a"  width="35" height="35">
+</a>
+
+
+### Citation 
+The mbovpan manuscript is currently in preparation. 
 
 
