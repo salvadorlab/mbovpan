@@ -24,7 +24,7 @@ mode = "short"
 // Are we computing SNPs or computing the pangenome? 
 run_mode = "snp"
 
-
+params.version = false 
 if(params.version){
     println("v0.1")
     exit(0)
