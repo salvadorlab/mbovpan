@@ -13,10 +13,6 @@ Testing in sapelo2!!!
 */
 
 log.info """ 
-    M B O V P A N (v0.1)    
-=============================
-A pangenomic pipeline for the analysis of
-Mycobacterium bovis isolates 
 
 Project : $workflow.projectDir
 Git info: $workflow.repository - $workflow.revision [$workflow.commitId]
@@ -63,9 +59,20 @@ if(params.mapq != null){
     }
 
 
+if(params.version){
+    println("v0.1")
+    exit(0)
+}
+
 if(params.help){
     println(
 """
+    M B O V P A N (v0.1)    
+=============================
+A pangenomic pipeline for the analysis of
+Mycobacterium bovis isolates 
+
+
 usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --output ./path/to/output
   options:
     --run [all|snp|pan]: 
@@ -78,9 +85,15 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
         The minimum MQ score for a SNP to be considered [DEFAULT:55]
     --threads [INT]:
         How many threads to use for the programs [DEFAULT:(number of avail. threads)/2]
+    --help
+        Prints this help message
+    --version
+        Prints the current version 
+=============================
 """
 
     )
+    exit(0)
 }
 
 // record the path for the M. bovis reference genome
