@@ -12,11 +12,6 @@ Extend Figure 2 with runtime reports
 Testing in sapelo2!!!
 */
 
-log.info """ 
-
-
-"""
-
 // Where are we grabbing our sequence data from?     
 input = ""
 
