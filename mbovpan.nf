@@ -24,31 +24,6 @@ mode = "short"
 // Are we computing SNPs or computing the pangenome? 
 run_mode = "snp"
 
-// How many threads will be available to run the pipeline. 
-// Automatically uses all the cpus that are available 
-// If not specified, use 50% of available resources 
-threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
-
-reads = ""
-
-qual = 150
-
-depth = 10 
-
-mapq = 55
-
-
-
-if(params.qual != null){
-    qual = params.qual as Integer
-    }
-if(params.depth != null){
-    depth = params.depth as Integer
-    }
-if(params.mapq != null){
-    mapq = params.mapq as Integer
-    }
-
 
 if(params.version){
     println("v0.1")
@@ -86,6 +61,33 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
     )
     exit(0)
 }
+
+// How many threads will be available to run the pipeline. 
+// Automatically uses all the cpus that are available 
+// If not specified, use 50% of available resources 
+threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
+
+reads = ""
+
+qual = 150
+
+depth = 10 
+
+mapq = 55
+
+
+
+if(params.qual != null){
+    qual = params.qual as Integer
+    }
+if(params.depth != null){
+    depth = params.depth as Integer
+    }
+if(params.mapq != null){
+    mapq = params.mapq as Integer
+    }
+
+
 
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
