@@ -14,11 +14,7 @@ Testing in sapelo2!!!
 
 log.info """ 
 
-Project : $workflow.projectDir
-Git info: $workflow.repository - $workflow.revision [$workflow.commitId]
-Cmd line: $workflow.commandLine
-Manifest's pipeline version: $workflow.manifest.version
-=============================
+
 """
 
 // Where are we grabbing our sequence data from?     
@@ -158,7 +154,19 @@ reads.into {
 
  // PART 1: Processing 
 
- log.info """ 
+println(""" 
+    M B O V P A N (v0.1)    
+=============================
+A pangenomic pipeline for the analysis of
+Mycobacterium bovis isolates 
+
+
+Project : $workflow.projectDir
+Git info: $workflow.repository - $workflow.revision [$workflow.commitId]
+Cmd line: $workflow.commandLine
+Manifest's pipeline version: $workflow.manifest.version
+=============================
+
 Summary of pipeline run
 
 mode: $mode
@@ -168,7 +176,7 @@ input: $input
 output: $output
 no. of threads: $threads
 =====================================
-"""
+""")
 
 /* AUTOMATIC QC of read data */
 
