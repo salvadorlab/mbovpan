@@ -49,6 +49,9 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
         The minimum DP score for a SNP to be considered [DEFAULT:10]
     --mapq [INT]:
         The minimum MQ score for a SNP to be considered [DEFAULT:55]
+    --scoary_meta [STR]:
+        Provide a metadata file in the style of the Scoary style. 
+        Runs a Scoary analysis on genome pres/abs. data.
     --threads [INT]:
         How many threads to use for the programs [DEFAULT:(number of avail. threads)/2]
     --help
