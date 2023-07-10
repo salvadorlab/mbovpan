@@ -62,6 +62,27 @@ if(params.mapq != null){
     mapq = params.mapq as Integer
     }
 
+
+if(params.help){
+    println(
+"""
+usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --output ./path/to/output
+  options:
+    --run [all|snp|pan]: 
+        Specifies in what mode to run mbovpan in [DEFAULT:all]
+    --qual [INT]:
+        The minimum QUAL score for a SNP to be considered [DEFAULT:150]
+    --depth [INT]:
+        The minimum DP score for a SNP to be considered [DEFAULT:10]
+    --mapq [INT]:
+        The minimum MQ score for a SNP to be considered [DEFAULT:55]
+    --threads [INT]:
+        How many threads to use for the programs [DEFAULT:(number of avail. threads)/2]
+"""
+
+    )
+}
+
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
