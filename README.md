@@ -177,10 +177,8 @@ mbovpan is software initiated and maintained by Noah Legall, PhD under the super
 
 ### Maintainers 
 Noah Legall 
-    [![image search api]<img src="https://github.com/salvadorlab/mbovpan/assets/40697188/89705d13-4265-4cda-98d3-d21064344892"  width="45" height="45">](https://github.com/noahaus)
+    [![image search api](<img src="https://github.com/salvadorlab/mbovpan/assets/40697188/89705d13-4265-4cda-98d3-d21064344892"  width="45" height="45">)](https://github.com/noahaus)
 
-    <img src="https://github.com/salvadorlab/mbovpan/assets/40697188/75dc0536-0d3a-46dc-9e06-c6b9d462be4a"  width="35" height="35">
-</a>
 
 
 ### Citation 
