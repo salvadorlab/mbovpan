@@ -1,7 +1,5 @@
 [![image search api](https://user-images.githubusercontent.com/40697188/193487621-a4b91a1c-19b6-42df-9e63-7fcff0658be0.png)](https://github.com/noahaus)
 
-<iframe src="https://giphy.com/embed/7SF5scGB2AFrgsXP63" width="480" height="272" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/pokemon-anime-7SF5scGB2AFrgsXP63">via GIPHY</a></p>
-
 # mbovpan
 Mbovpan is a nextflow bioinformatic pipeline for Mycobacterium bovis pangenome analysis. The goal of Mbovpan is to make the insights from M. bovis genomics easily accesible to reseachers.  
 
