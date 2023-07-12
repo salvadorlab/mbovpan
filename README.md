@@ -100,7 +100,7 @@ Successfully downloading will lead to a directory with the following layout
 
 ```  
 
-We encourage the user to add the 'mbovpan' directory to the PATH variable  
+We encourage the user to add the 'mbovpan' directory to the PATH variable. This makes running the pipeline much easier.
 
 ```
 #if NOT in the directory, give the absolute path
@@ -108,8 +108,9 @@ export PATH=$PATH:/path/to/mbovpan
 
 #if already in the directory
 export PATH=$PATH:$(pwd)
-```
-After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. You can install by using a provided script in 'scripts/install_mbovpan.sh'. This should take about 10 minutes. 
+```  
+
+After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. You can install by using a provided script in 'scripts/install_mbovpan.sh'. This should take a few minutes. 
 
 ```
 $conda create -n mbovpan
@@ -130,8 +131,6 @@ In this command, **'nextflow run'** is the command used to look at and execute t
 Mbovpan is downloaded with test data already included, and this is captured with the **'--input ./mbovpan/seqs/'** parameter. If paired end sequences are present in the input directory, they will be matched and ran through the pipeline. 
 
 **'--run snp'** signifies what analysis mode mbovpan utilizes. **'snp'** mode maps the paired end files to the reference genome while, **'pan'** mode creates de novo genomes from scratch. if no option is supplied, the pipeline will run both. 
-
-
 
 ### Additional Usages
 
