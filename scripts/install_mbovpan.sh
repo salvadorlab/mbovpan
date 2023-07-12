@@ -8,4 +8,3 @@ conda install -y -c conda-forge -c bioconda -c defaults bwa
 conda install -y -c conda-forge -c bioconda -c defaults biopython
 conda install -y -c conda-forge -c bioconda -c defaults freebayes
 conda install -y -c conda-forge -c bioconda -c defaults spades
-conda install -y -c conda-forge -c bioconda -c defaults mamba

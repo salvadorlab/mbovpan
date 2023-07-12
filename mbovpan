@@ -1,0 +1,3 @@
+str="$*"
+nf=$(echo $(type -P mbovpan.nf))
+$(echo "nextflow run $nf $str")

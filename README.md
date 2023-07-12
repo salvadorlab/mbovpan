@@ -98,6 +98,16 @@ Successfully downloading will lead to a directory with the following layout
     ├── SRR998659_1.fastq.gz
     └── SRR998659_2.fastq.gz
 
+```  
+
+We encourage the user to add the 'mbovpan' directory to the PATH variable  
+
+```
+#if NOT in the directory, give the absolute path
+export PATH=$PATH:/path/to/mbovpan
+
+#if already in the directory
+export PATH=$PATH:$(pwd)
 ```
 After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. You can install by using a provided script in 'scripts/install_mbovpan.sh'. This should take about 10 minutes. 
 
