@@ -1,0 +1,38 @@
+{% set name = "mbovpan" %}
+{% set version = "1.0.0" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  git_url: "https://github.com/salvadorlab/mbovpan.git"
+  git_rev: v1.0.0
+
+requirements:
+  run:
+    - nextflow=22.10.6
+    - fastp
+    - fastqc
+    - samtools
+    - picard
+    - bwa
+    - biopython
+    - freebayes
+    - spades
+    - mamba
+    - multiqc
+
+test:
+  commands:
+    - nextflow run mbovpan.nf --help
+    - mbovpan --help 
+
+about:
+  home: "https://github.com/salvadorlab/mbovpan.git"
+  summary: "nextflow pipeline for Mycobacterium bovis pangenome analysis."
+
+
+extra:
+  recipe-maintainers:
+    - noahaus
