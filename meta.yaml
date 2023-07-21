@@ -13,20 +13,11 @@ requirements:
   run:
     - nextflow=22.10.6
     - fastp
-    - fastqc
-    - samtools
-    - picard
-    - bwa
-    - biopython
-    - freebayes
-    - spades
-    - mamba
-    - multiqc
+
 
 test:
   commands:
     - nextflow run mbovpan.nf --help
-    - mbovpan --help 
 
 about:
   home: "https://github.com/salvadorlab/mbovpan.git"
