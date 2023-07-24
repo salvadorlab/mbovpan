@@ -17,6 +17,8 @@ requirements:
 
 
 test:
+  source_files:
+    - mbovpan.nf
   commands:
     - ls; nextflow run mbovpan.nf --help
 
