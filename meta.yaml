@@ -9,6 +9,8 @@ source:
   git_url: "https://github.com/salvadorlab/mbovpan.git"
 
 requirements:
+  host:
+    - nextflow=22.10.6
   run:
     - nextflow=22.10.6
     - fastp
