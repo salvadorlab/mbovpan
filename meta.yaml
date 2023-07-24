@@ -7,7 +7,6 @@ package:
 
 source:
   git_url: "https://github.com/salvadorlab/mbovpan.git"
-  git_rev: v1.0.0
 
 requirements:
   run:
