@@ -18,7 +18,7 @@ requirements:
 
 test:
   commands:
-    - nextflow run mbovpan.nf --help
+    - ls; nextflow run mbovpan.nf --help
 
 about:
   home: "https://github.com/salvadorlab/mbovpan.git"
