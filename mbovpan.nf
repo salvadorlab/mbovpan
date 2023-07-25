@@ -201,6 +201,8 @@ no. of threads: $threads
 //change this around to get rid of the weird naming
     process fastp {
 
+    conda "bioconda::fastp"
+
     publishDir = "$output/mbovpan_results/read_trimming"
 
     cpus threads/2

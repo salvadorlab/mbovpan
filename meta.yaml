@@ -13,15 +13,6 @@ requirements:
     - nextflow=22.10.6
   run:
     - nextflow=22.10.6
-    - fastp
-    - fastqc
-    - samtools
-    - picard
-    - bwa
-    - biopython
-    - freebayes
-    - spades
-    - multiqc
 
 test:
   source_files:
@@ -36,4 +27,4 @@ about:
 
 extra:
   recipe-maintainers:
-    - noahaus
+    - noahlegall
