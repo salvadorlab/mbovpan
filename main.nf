@@ -182,6 +182,8 @@ no. of threads: $threads
 
     process pre_fastqc {
 
+    conda "bioconda::fastqc"
+
     publishDir = "$output/mbovpan_results/fastqc"
 
     input:
@@ -229,6 +231,8 @@ no. of threads: $threads
 
 
     process post_fastqc {
+
+    conda "bioconda::fastqc"
 
     publishDir = "$output/mbovpan_results/fastqc"
 
