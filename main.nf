@@ -182,7 +182,7 @@ no. of threads: $threads
 
     process pre_fastqc {
 
-    conda "bioconda::fastqc"
+    conda 'fastqc'
 
     publishDir = "$output/mbovpan_results/fastqc"
 
@@ -203,7 +203,7 @@ no. of threads: $threads
 //change this around to get rid of the weird naming
     process fastp {
 
-    conda "bioconda::fastp"
+    conda 'fastp'
 
     publishDir = "$output/mbovpan_results/read_trimming"
 
@@ -232,7 +232,7 @@ no. of threads: $threads
 
     process post_fastqc {
 
-    conda "bioconda::fastqc"
+    conda 'fastqc'
 
     publishDir = "$output/mbovpan_results/fastqc"
 
