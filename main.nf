@@ -95,6 +95,7 @@ if(params.mapq != null){
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
+spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py"
 
 // are default parameters included?
 if(params.input == null || params.output == null){
@@ -178,7 +179,10 @@ no. of threads: $threads
 =====================================
 """)
 
-/* AUTOMATIC QC of read data */
+// MODE 0: M. bovis classification 
+
+
+    
 
     process pre_fastqc {
 
@@ -247,6 +251,25 @@ no. of threads: $threads
     mkdir  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs
     fastqc -o  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs -f fastq -q ${trim1} ${trim2}
     """
+    }
+
+    process spotyping {
+
+    publishDir = "$output/mbovpan_results/spotyping"
+
+    conda "bioconda::spotyping3"
+
+    input:
+    tuple file(trim1), file(trim2) from fastp_reads4
+
+    output:
+    file("${trim1.baseName - ~/_trimmed_R*/}.log") into spoligo_ch
+ 
+    script:
+    """
+    python3 ${spotyping} ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
+    """
+
     }
 
 // MODE 1: Variant Calling 
