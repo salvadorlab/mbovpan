@@ -258,7 +258,7 @@ no. of threads: $threads
 
     publishDir = "$output/mbovpan_results/spotyping"
 
-    conda 'bioconda::spotyping3 conda-forge::python=3.7.10'
+    conda 'bioconda::spotyping3'
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads5
