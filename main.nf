@@ -258,7 +258,7 @@ no. of threads: $threads
 
     publishDir = "$output/mbovpan_results/spotyping"
 
-    conda 'spotyping3'
+    conda "$workflow.projectDir/envs/spotyping.yaml"
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads5

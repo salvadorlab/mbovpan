@@ -1,0 +1,7 @@
+name: scoary
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - spotyping3
