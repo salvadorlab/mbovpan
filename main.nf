@@ -231,6 +231,7 @@ no. of threads: $threads
         fastp_reads2
         fastp_reads3
         fastp_reads4
+        fastp_reads5
     }
 
 
@@ -260,7 +261,7 @@ no. of threads: $threads
     conda "bioconda::spotyping3"
 
     input:
-    tuple file(trim1), file(trim2) from fastp_reads4
+    tuple file(trim1), file(trim2) from fastp_reads5
 
     output:
     file("${trim1.baseName - ~/_trimmed_R*/}.log") into spoligo_ch
