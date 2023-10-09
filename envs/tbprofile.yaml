@@ -4,11 +4,6 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - python=3.9
-  - ca-certificates
-  - certifi
-  - openssl
-  - tb-profiler=4.4.0
-  - bcftools
-  - gsl
+  - python=3.10
+  - tb-profiler
 prefix: /home/noahaus/.conda/envs/tb-profile
