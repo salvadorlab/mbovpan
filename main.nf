@@ -390,7 +390,7 @@ if(run_mode == "snp" || run_mode == "all"){
         filter2_ch
     }
 
-    stats_ch = fastp_reads4.merge(nodup2_ch).merge(filter2_ch).view()
+    stats_ch = fastp_reads4.merge(nodup2_ch).merge(filter2_ch)
 
     process stats {
         publishDir = "$output/mbovpan_results/statistics"
