@@ -180,10 +180,6 @@ no. of threads: $threads
 """)
 
 // MODE 0: M. bovis classification 
-
-
-    
-
     process pre_fastqc {
 
     conda 'fastqc'
@@ -232,6 +228,7 @@ no. of threads: $threads
         fastp_reads3
         fastp_reads4
         fastp_reads5
+        fastp_reads_lineage
     }
 
 
@@ -269,6 +266,26 @@ no. of threads: $threads
     script:
     """
     python3 ${spotyping} ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
+    """
+
+    }
+
+    process lineage {
+
+    publishDir = "$output/mbovpan_results/lineage"
+
+    conda "$workflow.projectDir/envs/tbprofile.yaml"
+
+    input:
+    tuple file(trim1), file(trim2) from fastp_reads_lineage
+
+    output:
+    file("${trim1.baseName - ~/_trimmed_R*/}.results.json") into tbprofile_ch 
+ 
+    script:
+    """
+    tb-profiler profile -1 ${trim1} -2 ${trim2} --no_flagstat --no_delly --verbose 2 -p ${trim1.baseName - ~/_trimmed_R*/}
+    cp ./results/${trim1.baseName - ~/_trimmed_R*/}.results.json ./
     """
 
     }
