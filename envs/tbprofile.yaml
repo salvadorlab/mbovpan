@@ -4,7 +4,6 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - mamba
   - python=3.9
   - ca-certificates
   - certifi
