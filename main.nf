@@ -182,7 +182,7 @@ no. of threads: $threads
 // MODE 0: M. bovis classification 
     process pre_fastqc {
 
-    conda 'fastqc'
+    conda 'bioconda::fastqc'
 
     publishDir = "$output/mbovpan_results/fastqc"
 
@@ -203,7 +203,7 @@ no. of threads: $threads
 //change this around to get rid of the weird naming
     process fastp {
 
-    conda 'fastp'
+    conda 'bioconda::fastp'
 
     publishDir = "$output/mbovpan_results/read_trimming"
 
@@ -234,7 +234,7 @@ no. of threads: $threads
 
     process post_fastqc {
 
-    conda 'fastqc'
+    conda 'bioconda::fastqc'
 
     publishDir = "$output/mbovpan_results/fastqc"
 
