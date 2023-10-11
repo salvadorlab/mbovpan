@@ -4,5 +4,5 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - tb-profiler
+  - tb-profiler=4.4.0
 prefix: /home/noahaus/.conda/envs/tb-profile
