@@ -6,4 +6,5 @@ channels:
 dependencies:
   - tb-profiler
   - python=3.10
+  - freebayes=1.3.6
 prefix: /home/noahaus/.conda/envs/tb-profile
