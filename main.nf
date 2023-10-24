@@ -479,7 +479,7 @@ assembly = Channel.create()
 if(run_mode == "pan" || run_mode == "all"){
     
     process assembly {
-    publishDir = output 
+    publishDir = "$output/mbovpan_results/assembly"
     
     conda "$workflow.projectDir/envs/megahit.yaml"
     
@@ -508,7 +508,7 @@ assembly_ch.into {
 }
 
 process quast {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/statistics"
 
     conda "$workflow.projectDir/envs/quast.yaml"
     
@@ -528,7 +528,7 @@ process quast {
 
 
 process annotate {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/annotations"
     
     cpus threads/2
 
@@ -550,7 +550,7 @@ process annotate {
 }
 
 process panaroo {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/pangenome"
 
     conda "$workflow.projectDir/envs/panaroo.yaml"
 
@@ -578,7 +578,7 @@ roary_ch.into{
 
 // This will make the tree for core gene alignment
 process iqtree_core {
-        publishDir = output
+        publishDir = "$output/mbovpan_results/phylogeny"
         
         conda "$workflow.projectDir/envs/iqtree.yaml"
         
@@ -606,7 +606,7 @@ process iqtree_core {
 
 if(params.scoary_meta == "true"){
 process scoary {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/pan_gwas"
     
     conda "$workflow.projectDir/envs/scoary.yaml"
 
@@ -629,7 +629,7 @@ process scoary {
 }
 
 process multiqc {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/statistics"
     
     conda "$workflow.projectDir/envs/multiqc.yaml"
 
