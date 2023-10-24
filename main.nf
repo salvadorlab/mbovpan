@@ -81,6 +81,7 @@ params.mapq = 55
 
 
 
+
 if(params.qual){
     qual = params.qual as Integer
     }
@@ -90,6 +91,13 @@ if(params.depth){
 if(params.mapq){
     mapq = params.mapq as Integer
     }
+
+params.scoary_meta = "false"
+if(params.scoary_meta == "true"){
+    params.scoary_meta = "true"
+} else if(params.scoary_meta != "true" || params.scoary_meta != "false"){
+    params.scoary_meta = "false"
+}
 
 
 
@@ -182,6 +190,7 @@ no. of threads: $threads
 QUAL: $qual
 MAPQ: $mapq
 DEPTH: $depth
+running scoary: $params.scoary_meta
 =====================================
 """)
 
@@ -595,8 +604,7 @@ process iqtree_core {
 // Rscript to generate a heatmap of the pangenome
 // this can be changed into the virulence gene presence absence matrix given a list from Hind
 
-params.scoary_meta = false
-if(params.scoary_meta){
+if(params.scoary_meta == "true"){
 process scoary {
     publishDir = output
     
