@@ -1,8 +1,8 @@
-name: roary
+name: panaroo
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - roary
+  - panaroo>=1.3
 prefix: /home/noahaus/miniconda3/envs/roary

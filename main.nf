@@ -190,7 +190,7 @@ no. of threads: $threads
 QUAL: $qual
 MAPQ: $mapq
 DEPTH: $depth
-running scoary: $params.scoary_meta
+trait file for running scoary: $params.scoary_meta
 =====================================
 """)
 
@@ -549,10 +549,10 @@ process annotate {
     """
 }
 
-process roary {
+process panaroo {
     publishDir = output
 
-    conda "$workflow.projectDir/envs/roary.yaml"
+    conda "$workflow.projectDir/envs/panaroo.yaml"
 
     cpus threads
 
@@ -564,7 +564,7 @@ process roary {
 
     script:
     """
-    roary -e --mafft -p ${task.cpus} $gff
+    panaroo -i *.gff -o ./ -t ${task.cpus} -a core --core_threshold 0.98 --clean-mode strict
     """
 }
 
@@ -621,7 +621,7 @@ process scoary {
     script:
     """
     sed 's/.annot//g' gene_presence_absence.csv > prab.csv
-    scoary -t ${scoary_meta} -g prab.csv
+    scoary -t ${params.scoary_meta} -g prab.csv
     """
 }
 }
