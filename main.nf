@@ -30,6 +30,7 @@ if(params.version){
     exit(0)
 }
 
+params.help = false
 if(params.help){
     println(
 """
@@ -68,25 +69,25 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
 // How many threads will be available to run the pipeline. 
 // Automatically uses all the cpus that are available 
 // If not specified, use 50% of available resources 
-threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
+param.threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
 reads = ""
 
-qual = 150
+params.qual = 150
 
-depth = 10 
+params.depth = 10 
 
-mapq = 55
+params.mapq = 55
 
 
 
-if(params.qual != null){
+if(params.qual){
     qual = params.qual as Integer
     }
-if(params.depth != null){
+if(params.depth){
     depth = params.depth as Integer
     }
-if(params.mapq != null){
+if(params.mapq){
     mapq = params.mapq as Integer
     }
 
@@ -136,7 +137,8 @@ else {
 }
 
 // how many threads will be utilized
-if(params.threads != null){
+
+if(params.threads){
     println "mbovpan will run using ${params.threads} threads"
     threads = params.threads
 }
@@ -146,6 +148,7 @@ else{
 
 println " $input "
 
+// no need to check the file pairs if this command just naturally takes care of it!
 reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
 
 reads.into {
