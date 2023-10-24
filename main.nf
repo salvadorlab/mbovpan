@@ -595,9 +595,8 @@ process iqtree_core {
 // Rscript to generate a heatmap of the pangenome
 // this can be changed into the virulence gene presence absence matrix given a list from Hind
 
-
-
-if(params.scoary_meta != null){
+params.scoary_meta = false
+if(params.scoary_meta){
 process scoary {
     publishDir = output
     
