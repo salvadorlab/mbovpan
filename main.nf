@@ -69,7 +69,7 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
 // How many threads will be available to run the pipeline. 
 // Automatically uses all the cpus that are available 
 // If not specified, use 50% of available resources 
-param.threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
+params.threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
 reads = ""
 
