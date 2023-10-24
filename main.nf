@@ -179,6 +179,9 @@ reference location: $ref
 input: $input
 output: $output
 no. of threads: $threads
+QUAL: $qual
+MAPQ: $mapq
+DEPTH: $depth
 =====================================
 """)
 
