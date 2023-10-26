@@ -19,7 +19,7 @@ f.close()
 
 
 #work with the spoligotyping files
-spotyping_csv = pd.read_table(sys.argv[1],header=False)
+spotyping_csv = pd.read_table(sys.argv[1],header=None)
 
 print("files read successfully")
 #print(lineage_csv)
