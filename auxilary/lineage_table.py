@@ -21,8 +21,8 @@ f.close()
 #work with the spoligotyping files
 spotyping_csv = pd.read_table(sys.argv[1],header=None)
 
-for index, row in spotyping_csv.iterrows():
-    row[0] = row[0].split("&")
+for i in spotyping_csv.index:
+    spotyping_csv[0][i] = spotyping_csv[0][i].split("&")
 
 
 print("files read successfully")
