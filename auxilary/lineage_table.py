@@ -2,7 +2,7 @@
 import pandas as pd
 import sys
 
-lineage_csv = pd.read_json(sys.argv[1], lines=True)
+lineage_csv = pd.read_json(sys.argv[1], lines=True, encoding='utf-8-sig')
 spotyping_csv = pd.read_csv(sys.argv[2])
 
 print("files read successfully")
