@@ -4,6 +4,7 @@ import sys
 import json
 import glob
 
+#work with all the json files
 jsons = glob.glob("*.results.json")
 
 for j in jsons:
@@ -11,7 +12,8 @@ for j in jsons:
     f = open(j)
     data = json.load(f)
 
-    print(data["id"])
+    lineage_str = "{},{},{}".format(data["id"],data["main_lin"],data["sublin"])
+    print(lineage_str)
 f.close()
 
 
