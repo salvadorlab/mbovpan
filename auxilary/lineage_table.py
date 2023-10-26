@@ -11,8 +11,8 @@ for j in jsons:
     f = open(j)
     data = json.load(f)
 
-    for i in data['id']:
-        print(i)
+    print(data["id"])
+f.close()
 
 
 # lineage_csv = pd.read_json(sys.argv[1], lines=True, encoding='utf-8-sig')
