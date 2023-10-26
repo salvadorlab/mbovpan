@@ -8,7 +8,8 @@ jsons = glob.glob("*.results.json")
 
 for j in jsons:
     print(j)
-    data = json.load(j)
+    f = open(j)
+    data = json.load(f)
 
     for i in data['id']:
         print(i)
