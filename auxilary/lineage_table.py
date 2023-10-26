@@ -2,12 +2,15 @@
 import pandas as pd
 import sys
 import json
+import glob
 
-lineage_csv = open(sys.argv[1])
-data = json.load(lineage_csv)
+jsons = glob.glob("*.results.json")
 
-for i in data['id']:
-    print(i)
+for j in jsons:
+    data = json.load(j)
+
+    for i in data['id']:
+        print(i)
 
 
 # lineage_csv = pd.read_json(sys.argv[1], lines=True, encoding='utf-8-sig')
