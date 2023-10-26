@@ -22,7 +22,7 @@ f.close()
 spotyping_csv = pd.read_table(sys.argv[1],header=None)
 
 for index, row in spotyping_csv.iterrows():
-    row["0"] = row["0"].split("&")
+    row[0] = row[0].split("&")
 
 
 print("files read successfully")
