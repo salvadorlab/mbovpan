@@ -7,6 +7,7 @@ import glob
 #work with all the json files
 jsons = glob.glob("*.results.json")
 
+print("id,main lineage,sub lineage")
 for j in jsons:
     print(j)
     f = open(j)
@@ -17,8 +18,8 @@ for j in jsons:
 f.close()
 
 
-# lineage_csv = pd.read_json(sys.argv[1], lines=True, encoding='utf-8-sig')
-spotyping_csv = pd.read_csv(sys.argv[1])
+#work with the spoligotyping files
+spotyping_csv = pd.read_table(sys.argv[1],header=False)
 
 print("files read successfully")
 #print(lineage_csv)
