@@ -647,7 +647,25 @@ process multiqc {
     """
 }
 
+process mbovis_verification {
+    publishDir = "$output/mbovpan_results/lineage_info"
 
+    input:
+    file(spoligotype_info) from spoligo_ch.collect().ifEmpty([])
+    file(lineage_info) from tbprofile_ch.collect().ifEmpty([])
+
+    output:
+    file("mbovpan_lineage_info.csv")
+
+    script:
+    """
+    cat *.results.json > lineage_info.txt
+    cat *.log > spotyping_info.txt
+    python lineage_table.py lineage_info.txt spotyping.txt 
+    """
+
+
+}
 /*
 
 process gene_prab {
