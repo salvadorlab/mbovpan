@@ -18,9 +18,8 @@ spotype_octo = []
 warning = []
 
 
-print("id,main lineage,sub lineage,spoligotype (binary),spoligotype (octal), note")
+print("id,main lineage,sub lineage,spoligotype (binary),spoligotype (octal),note,")
 for i in range(len(jsons)):
-    print(i) # test the value of the index
     json_file = open(jsons[i])
     spo_file = open(spotypes[i])
 
@@ -38,7 +37,6 @@ for i in range(len(jsons)):
     #good to notify the user if a spotyping pattern is not M. bovis
     #this code checks the final 5 spotype spacers and checks that they
     #are '00000', which all M. bovis possess
-    print(first_line[1][len(first_line[1])-5:len(first_line[1])])
     if(first_line[1][len(first_line[1]) - 5:len(first_line[1])] == "00000"):
         warning.append(" ")
     else:
@@ -49,7 +47,7 @@ for i in range(len(jsons)):
 
 
 for i in range(len(id)):
-    print("{},{},{},{},{},{}".format(id[i],main_lin[i],sub_lin[i],spotype_binary[i],spotype_octo[i],warning[i]))
+    print("{},{},{},{},{},{},".format(id[i],main_lin[i],sub_lin[i],spotype_binary[i],spotype_octo[i],warning[i]))
 
 
 
