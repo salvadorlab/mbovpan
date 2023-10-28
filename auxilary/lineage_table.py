@@ -4,29 +4,52 @@ import sys
 import json
 import glob
 
-#work with all the json files
-jsons = glob.glob("*.results.json")
-
-print("id,main lineage,sub lineage")
-for j in jsons:
-    print(j)
-    f = open(j)
-    data = json.load(f)
-
-    lineage_str = "{},{},{}".format(data["id"],data["main_lin"],data["sublin"])
-    print(lineage_str)
-f.close()
+#work with all the json files and log files
+#sort to make sure they are operating on the same index
+jsons = sorted(glob.glob("*.results.json"))
+spotypes = sorted(glob.glob("*.log"))
 
 
-#work with the spoligotyping files
-spotyping_csv = pd.read_table(sys.argv[1],header=None)
+#variables to print 
+id = []
+main_lin = []
+sub_lin = []
+spotype_binary = []
+spotype_octo = []
+warning = []
 
-for i in spotyping_csv.index:
-    spotyping_csv[0][i] = spotyping_csv[0][i].split("&")
+
+print("id,main lineage,sub lineage,spoligotype (binary),spoligotype (octal), note")
+for i in range(len(jsons)):
+    print(i) # test the value of the index
+    json_file = open(jsons[i])
+    spo_file = open(spotypes[i])
+
+    # data of the lineages
+    data = json.load(json_file)
+    id.append(data["id"])
+    main_lin.append(data["main_lin"])
+    sub_lin.append(data["sublin"])
+
+    #data of the spoligotype
+    first_line = spo_file.readline().strip('\n').split()
+    spotype_binary.append(first_line[1])
+    spotype_octo.append(first_line[2])
+
+    #good to notify the user if a spotyping pattern is not M. bovis
+    #this code checks the final 5 spotype spacers and checks that they
+    #are '00000', which all M. bovis possess
+    if(first_line[1][len(first_line) - 5:len(first_line) - 1] == "00000"):
+        warning.append(" ")
+    else:
+        warning.append("NOT M. BOVIS")
+    
+    json_file.close()
+    spo_file.close()
 
 
-print("files read successfully")
-#print(lineage_csv)
-print(spotyping_csv)
+for i in range(id):
+    print("{},{},{},{},{},{}".format(id[i],main_lin[i],sub_lin[i],spotype_binary[i],spotype_octo[i],warning[i]))
+
 
 

@@ -659,54 +659,10 @@ process mbovis_verification {
 
     script:
     """
-    cat *.results.json > lineage_info.txt
-    cat *.log > spotyping_info.txt
-    python lineage_table.py lineage_info.txt spotyping.txt 
+    python lineage_table.py  
     """
 
 
 }
-/*
 
-process gene_prab {
-     publishDir = output
-    
-    conda "$workflow.projectDir/envs/gene_prab.yaml"
-
-    //errorStrategy 'ignore'
-    
-    input:
-    file(input) from roary_ch3.collect()
-    
-    output:
-    file("mbov_virulent_prab.csv") into geneprab_ch1
-    file("gene_prab_figures.pdf") into geneprab_ch2
-    
-    script:
-    """
-    python $workflow.projectDir/scripts/mbov_virulence.py
-    Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
-    """
-}
-
-process accessory_pca {
-     publishDir = output
-    
-    conda 'r conda-forge::r-ggplot2 conda-forge::r-dplyr'
-
-    errorStrategy 'ignore'
-    
-    input:
-    file(input) from roary_ch4.collect()
-    
-    output:
-    file("pca_figures.pdf") into accessory_ch
-    
-    script:
-    """
-    Rscript $workflow.projectDir/scripts/accessory_pca.R ${meta}
-    """
-}
-
-*/
 
