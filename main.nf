@@ -105,6 +105,7 @@ if(params.scoary_meta == "true"){
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
 spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py"
+lineage_table = "$workflow.projectDir/scripts/lineage_table.py"
 
 // are default parameters included?
 if(params.input == null || params.output == null){
@@ -167,7 +168,7 @@ reads.into {
  // PART 1: Processing 
 
 println(""" 
-    M B O V P A N (v0.1)    
+    M B O V P A N (v1.0.0)    
 =============================
 A pangenomic pipeline for the analysis of
 Mycobacterium bovis isolates 
@@ -659,7 +660,7 @@ process mbovis_verification {
 
     script:
     """
-    python lineage_table.py  
+    python ${lineage_table} > mbovpan_lineage_info.csv
     """
 
 
