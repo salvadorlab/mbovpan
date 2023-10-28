@@ -651,6 +651,8 @@ process multiqc {
 process mbovis_verification {
     publishDir = "$output/mbovpan_results/lineage_info"
 
+    conda "pandas"
+
     input:
     file(spoligotype_info) from spoligo_ch.collect().ifEmpty([])
     file(lineage_info) from tbprofile_ch.collect().ifEmpty([])
