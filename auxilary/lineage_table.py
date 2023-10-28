@@ -39,7 +39,7 @@ for i in range(len(jsons)):
     #this code checks the final 5 spotype spacers and checks that they
     #are '00000', which all M. bovis possess
     print(first_line[1][len(first_line[1])-5:len(first_line[1])])
-    if(first_line[1][len(first_line[1]) - 5:len(first_line[1]) - 1] == "00000"):
+    if(first_line[1][len(first_line[1]) - 5:len(first_line[1])] == "00000"):
         warning.append(" ")
     else:
         warning.append("NOT M. BOVIS")
