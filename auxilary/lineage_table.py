@@ -1,6 +1,5 @@
 # Return a filtered PRAB matrix
 import pandas as pd
-import sys
 import json
 import glob
 
@@ -48,7 +47,7 @@ for i in range(len(jsons)):
     spo_file.close()
 
 
-for i in range(id):
+for i in range(len(id)):
     print("{},{},{},{},{},{}".format(id[i],main_lin[i],sub_lin[i],spotype_binary[i],spotype_octo[i],warning[i]))
 
 
