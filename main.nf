@@ -454,11 +454,6 @@ if(run_mode == "snp" || run_mode == "all"){
         
         cpus threads 
 
-        memory '2 GB'
-        
-        errorStrategy 'ignore'
-        
-
         input:
         file(aln) from fasta_ch.collect()
         
