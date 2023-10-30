@@ -646,7 +646,7 @@ process multiqc {
 process mbovis_verification {
     publishDir = "$output/mbovpan_results/lineage_info"
 
-    conda "$workflow.projectDir/envs/pandas.yaml"
+    //conda "$workflow.projectDir/envs/pandas.yaml"
 
     input:
     file(spoligotype_info) from spoligo_ch.collect().ifEmpty([])
