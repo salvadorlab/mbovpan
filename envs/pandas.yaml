@@ -1,0 +1,8 @@
+name: pandas
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - pandas
+prefix: /home/n/noahlegall/.conda/envs/pandas
