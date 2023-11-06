@@ -548,7 +548,7 @@ process annotate {
 process panaroo {
     publishDir = "$output/mbovpan_results/pangenome"
 
-    conda "$workflow.projectDir/envs/panaroo.yaml"
+    //conda "$workflow.projectDir/envs/panaroo.yaml"
 
     cpus threads
 
