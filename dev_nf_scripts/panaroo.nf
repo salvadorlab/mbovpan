@@ -4,7 +4,7 @@ gffs = Channel.fromPath("*.gff")
 process panaroo {
     publishDir = "./"
 
-    conda "$workflow.projectDir/envs/panaroo.yaml"
+    conda "$workflow.projectDir/../envs/panaroo.yaml"
 
     cpus threads
 
