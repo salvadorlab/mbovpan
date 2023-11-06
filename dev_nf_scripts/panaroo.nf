@@ -2,7 +2,7 @@ threads = Math.floor(Runtime.getRuntime().availableProcessors())
 gffs = Channel.fromPath("*.gff")
 
 process panaroo {
-    publishDir = "$output/mbovpan_results/pangenome"
+    publishDir = "./"
 
     conda "$workflow.projectDir/envs/panaroo.yaml"
 
