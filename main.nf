@@ -288,7 +288,7 @@ spoligo_ch.into {
     tuple file(trim1), file(trim2) from spoligo_post
 
     output:
-    file("pre_fastqc_${trim1.baseName - ~/_1*/}_logs") into fastqc_ch2
+    file("post_fastqc_${trim1.baseName - ~/_1*/}_logs") into fastqc_ch2
 
     script:
     """
