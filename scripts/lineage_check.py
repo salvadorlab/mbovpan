@@ -1,10 +1,9 @@
 # Return a filtered PRAB matrix
-import json
 import glob
+import sys
 
 #work with all the json files and log files
 #sort to make sure they are operating on the same index
-print("welcome!")
 spotypes = sorted(glob.glob("*.out"))
 
 for i in range(len(spotypes)):
@@ -20,7 +19,7 @@ for i in range(len(spotypes)):
     if(first_line[1][len(first_line[1]) - 5:len(first_line[1])] == "00000"):
         print("0")
     else:
-        print("1")
+        raise Exception("not M. bovis")
 
     spo_file.close()
 

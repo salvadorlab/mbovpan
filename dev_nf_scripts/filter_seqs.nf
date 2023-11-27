@@ -10,6 +10,8 @@ process spotyping {
 
     conda "$workflow.projectDir/../envs/spotyping.yaml"
 
+    errorStrategy 'ignore'
+
     debug true
 
     input:
