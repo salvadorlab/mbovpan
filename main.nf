@@ -105,7 +105,7 @@ if(params.scoary_meta == "true"){
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
 spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py"
-lineage_table = "$workflow.projectDir/scripts/lineage_table.py"
+check = "$workflow.projectDir/scripts/lineage_check.py"
 
 // are default parameters included?
 if(params.input == null || params.output == null){
@@ -160,11 +160,6 @@ println " $input "
 // no need to check the file pairs if this command just naturally takes care of it!
 reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
 
-reads.into {
-    reads_process
-    reads_trim
-}
-
  // PART 1: Processing 
 
 println(""" 
@@ -196,6 +191,40 @@ trait file for running scoary: $params.scoary_meta
 """)
 
 // MODE 0: M. bovis classification 
+
+process spotyping {
+
+    publishDir = "$output/mbovpan_results/spotyping"
+
+    conda "$workflow.projectDir/envs/spotyping.yaml"
+
+    errorStrategy 'ignore'
+
+    debug true
+
+    input:
+    tuple sample_id, file(reads_file) from reads
+
+    output:
+    tuple file("${reads_file[0].baseName}.fastq"), file("${reads_file[1].baseName}.fastq") into spoligo_ch
+ 
+    script:
+    """
+    python3 ${spotyping} ${reads_file[0]} ${reads_file[1]} -o ${reads_file[0].baseName - ~/_1*/}.out > stdout.txt 
+    python3 ${check} 
+    """
+
+    }
+
+
+spoligo_ch.into {
+    spoligo_pre
+    spoligo_post
+    spoligo_process
+}
+
+
+
     process pre_fastqc {
 
     conda 'bioconda::fastqc'
@@ -203,7 +232,7 @@ trait file for running scoary: $params.scoary_meta
     publishDir = "$output/mbovpan_results/fastqc"
 
     input:
-    tuple sample_id, file(reads_file) from reads_process
+    tuple sample_id, file(reads_file) from spoligo_pre
 
     output:
     file("pre_fastqc_${sample_id}_logs") into fastqc_ch1
@@ -226,7 +255,7 @@ trait file for running scoary: $params.scoary_meta
     cpus threads/2
 
     input:
-    tuple sample_id, file(reads_file) from reads_trim
+    tuple sample_id, file(reads_file) from spoligo_process
 
     output:
     file("${sample_id}_trimmed_R*.fastq") into fastp_ch
@@ -255,7 +284,7 @@ trait file for running scoary: $params.scoary_meta
     publishDir = "$output/mbovpan_results/fastqc"
 
     input:
-    tuple file(trim1), file(trim2) from fastp_reads1
+    tuple file(trim1), file(trim2) from spoligo_post
 
     output:
     file("post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs") into fastqc_ch2
@@ -265,25 +294,6 @@ trait file for running scoary: $params.scoary_meta
     mkdir  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs
     fastqc -o  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs -f fastq -q ${trim1} ${trim2}
     """
-    }
-
-    process spotyping {
-
-    publishDir = "$output/mbovpan_results/spotyping"
-
-    conda "$workflow.projectDir/envs/spotyping.yaml"
-
-    input:
-    tuple file(trim1), file(trim2) from fastp_reads5
-
-    output:
-    file("${trim1.baseName - ~/_trimmed_R*/}.log") into spoligo_ch
- 
-    script:
-    """
-    python3 ${spotyping} ${trim1} ${trim2} -o ${trim1.baseName - ~/_trimmed_R*/}.log
-    """
-
     }
 
     process lineage {
