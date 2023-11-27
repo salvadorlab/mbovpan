@@ -2,14 +2,16 @@
 spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py"
 check = "$workflow.projectDir/scripts/lineage_check.py"
 
+input_ch = Channel.fromFilePairs("/work/n/noahlegall/mbovpan_testing/*{1,2}*.f*q*")
+
 process spotyping {
 
-    publishDir = "./mbovpan_results/spotyping"
+    publishDir = "/work/n/noahlegall/mbovpan_testing/mbovpan_results/spotyping"
 
     conda "$workflow.projectDir/../envs/spotyping.yaml"
 
     input:
-    tuple sample_id, file(reads_file) from Channel.fromFilePairs("$input*{1,2}*.f*q*")
+    tuple sample_id, file(reads_file) from input_ch
 
     output:
     tuple stdout result, file("${reads_file[0].baseName - ~/_1*/}.log") into spoligo_ch
