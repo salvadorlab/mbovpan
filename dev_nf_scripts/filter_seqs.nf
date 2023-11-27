@@ -28,8 +28,6 @@ process spotyping {
 
     }
 
-spoligo_ch.view()
-
 process test {
 
     input:
