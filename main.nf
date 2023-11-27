@@ -236,11 +236,11 @@ spoligo_ch.into {
     tuple file(read_one), file(read_two) from spoligo_pre
 
     output:
-    file("pre_fastqc_${reads_file[0].baseName - ~/_1*/}_logs") into fastqc_ch1
+    file("pre_fastqc_${read_one.baseName - ~/_1*/}_logs") into fastqc_ch1
 
     script:
     """
-    mkdir  pre_fastqc_${reads_file[0].baseName - ~/_1*/}_logs
+    mkdir  pre_fastqc_${read_one.baseName - ~/_1*/}_logs
     fastqc -o  pre_fastqc_${sample_id}_logs -f fastq -q ${read_one} ${read_two}
     """
     }
