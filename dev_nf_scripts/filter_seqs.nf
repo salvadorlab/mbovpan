@@ -4,7 +4,7 @@ check = "$workflow.projectDir/scripts/lineage_check.py"
 
 process spotyping {
 
-    publishDir = "$output/mbovpan_results/spotyping"
+    publishDir = "./mbovpan_results/spotyping"
 
     conda "$workflow.projectDir/../envs/spotyping.yaml"
 
