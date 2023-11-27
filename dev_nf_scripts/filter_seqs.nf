@@ -29,3 +29,14 @@ process spotyping {
     }
 
 spoligo_ch.view()
+
+process test {
+
+    input:
+    file(reads_file) from spoligo_ch
+
+    script:
+    """
+    cat ${reads_file}
+    """
+}
