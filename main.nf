@@ -207,6 +207,7 @@ process spotyping {
 
     output:
     tuple file("${reads_file[0].baseName}.fastq"), file("${reads_file[1].baseName}.fastq") into spoligo_ch
+    file("${reads_file[0].baseName - ~/_1*/}.out") into spoligo_multi
  
     script:
     """
@@ -659,7 +660,7 @@ process mbovis_verification {
     //conda "$workflow.projectDir/envs/pandas.yaml"
 
     input:
-    file(spoligotype_info) from spoligo_ch.collect().ifEmpty([])
+    file(spoligotype_info) from spoligo_multi.collect().ifEmpty([])
     file(lineage_info) from tbprofile_ch.collect().ifEmpty([])
 
     output:
