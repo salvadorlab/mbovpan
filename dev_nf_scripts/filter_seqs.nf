@@ -14,7 +14,7 @@ process spotyping {
     tuple sample_id, file(reads_file) from input_ch
 
     output:
-    tuple stdout result, file("${reads_file[0].baseName - ~/_1*/}.log") into spoligo_ch
+    file("${reads_file[0].baseName - ~/_1*/}.log") into spoligo_ch
  
     script:
     """
