@@ -263,7 +263,7 @@ spoligo_ch.into {
  
     script:
     """
-    fastp -w ${task.cpus} -q 30 --detect_adapter_for_pe -i  ${read_one} -I  ${read_2} -o  ${read_one.baseName - ~/_1/}_trimmed_R1.fastq -O  ${read_one.baseName - ~/_1/}_trimmed_R2.fastq
+    fastp -w ${task.cpus} -q 30 --detect_adapter_for_pe -i  ${read_one} -I  ${read_two} -o  ${read_one.baseName - ~/_1/}_trimmed_R1.fastq -O  ${read_one.baseName - ~/_1/}_trimmed_R2.fastq
     """
 
     }
