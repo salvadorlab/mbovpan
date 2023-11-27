@@ -10,6 +10,8 @@ process spotyping {
 
     conda "$workflow.projectDir/../envs/spotyping.yaml"
 
+    debug true
+
     input:
     tuple sample_id, file(reads_file) from input_ch
 
