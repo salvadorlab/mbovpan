@@ -6,7 +6,7 @@ import glob
 #work with all the json files and log files
 #sort to make sure they are operating on the same index
 jsons = sorted(glob.glob("*.results.json"))
-spotypes = sorted(glob.glob("*.log"))
+spotypes = sorted(glob.glob("*.out"))
 
 
 #variables to print 
