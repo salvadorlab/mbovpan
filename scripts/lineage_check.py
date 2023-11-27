@@ -5,7 +5,7 @@ import glob
 #work with all the json files and log files
 #sort to make sure they are operating on the same index
 print("welcome!")
-spotypes = sorted(glob.glob("*.txt"))
+spotypes = sorted(glob.glob("*.out"))
 
 for i in range(len(spotypes)):
     spo_file = open(spotypes[i])
