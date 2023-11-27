@@ -463,6 +463,8 @@ if(run_mode == "snp" || run_mode == "all"){
         publishDir = "$output/mbovpan_results/phylogeny"
         
         conda "$workflow.projectDir/envs/iqtree.yaml"
+
+        errorStrategy "ignore"
         
         cpus threads 
 
