@@ -233,15 +233,15 @@ spoligo_ch.into {
     publishDir = "$output/mbovpan_results/fastqc"
 
     input:
-    tuple sample_id, file(reads_file) from spoligo_pre
+    tuple file(read_one), file(read_two) from spoligo_pre
 
     output:
-    file("pre_fastqc_${sample_id}_logs") into fastqc_ch1
+    file("pre_fastqc_${reads_file[0].baseName - ~/_1*/}_logs") into fastqc_ch1
 
     script:
     """
-    mkdir  pre_fastqc_${sample_id}_logs
-    fastqc -o  pre_fastqc_${sample_id}_logs -f fastq -q ${reads_file}
+    mkdir  pre_fastqc_${reads_file[0].baseName - ~/_1*/}_logs
+    fastqc -o  pre_fastqc_${sample_id}_logs -f fastq -q ${read_one} ${read_two}
     """
     }
 
@@ -256,14 +256,14 @@ spoligo_ch.into {
     cpus threads/2
 
     input:
-    tuple sample_id, file(reads_file) from spoligo_process
+    tuple file(read_one), file(read_two) from spoligo_process
 
     output:
-    file("${sample_id}_trimmed_R*.fastq") into fastp_ch
+    file("${read_one.baseName - ~/_1/}_trimmed_R*.fastq") into fastp_ch
  
     script:
     """
-    fastp -w ${task.cpus} -q 30 --detect_adapter_for_pe -i  ${reads_file[0]} -I  ${reads_file[1]} -o  ${sample_id}_trimmed_R1.fastq -O  ${sample_id}_trimmed_R2.fastq
+    fastp -w ${task.cpus} -q 30 --detect_adapter_for_pe -i  ${read_one} -I  ${read_2} -o  ${read_one.baseName - ~/_1/}_trimmed_R1.fastq -O  ${read_one.baseName - ~/_1/}_trimmed_R2.fastq
     """
 
     }
@@ -288,12 +288,12 @@ spoligo_ch.into {
     tuple file(trim1), file(trim2) from spoligo_post
 
     output:
-    file("post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs") into fastqc_ch2
+    file("pre_fastqc_${trim1.baseName - ~/_1*/}_logs") into fastqc_ch2
 
     script:
     """
-    mkdir  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs
-    fastqc -o  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs -f fastq -q ${trim1} ${trim2}
+    mkdir  post_fastqc_${trim1.baseName - ~/_1/}_logs
+    fastqc -o  post_fastqc_${trim1.baseName - ~/_1/}_logs -f fastq -q ${trim1} ${trim2}
     """
     }
 
