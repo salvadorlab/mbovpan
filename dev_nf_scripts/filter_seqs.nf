@@ -1,6 +1,6 @@
 // can we create a tuple in real time of the 
-spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py"
-check = "$workflow.projectDir/scripts/lineage_check.py"
+spotyping = "$workflow.projectDir/../scripts/SpoTyping/SpoTyping.py"
+check = "$workflow.projectDir/../scripts/lineage_check.py" //lets comment
 
 input_ch = Channel.fromFilePairs("/work/n/noahlegall/mbovpan_testing/*{1,2}*.f*q*")
 
