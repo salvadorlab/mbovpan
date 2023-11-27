@@ -16,11 +16,11 @@ process spotyping {
     tuple sample_id, file(reads_file) from input_ch
 
     output:
-    file("${reads_file[0].baseName - ~/_1*/}.log") into spoligo_ch
+    file("${reads_file[0].baseName - ~/_1*/}.out") into spoligo_ch
  
     script:
     """
-    python3 ${spotyping} ${reads_file[0]} ${reads_file[1]} -o ${reads_file[0].baseName - ~/_1*/}.log > stdout.out 
+    python3 ${spotyping} ${reads_file[0]} ${reads_file[1]} -o ${reads_file[0].baseName - ~/_1*/}.out > stdout.txt 
     python3 ${check} 
     """
 
