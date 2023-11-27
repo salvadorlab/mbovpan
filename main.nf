@@ -241,7 +241,7 @@ spoligo_ch.into {
     script:
     """
     mkdir  pre_fastqc_${read_one.baseName - ~/_1*/}_logs
-    fastqc -o  pre_fastqc_${sample_id}_logs -f fastq -q ${read_one} ${read_two}
+    fastqc -o  pre_fastqc_${read_one.baseName - ~/_1*/}_logs -f fastq -q ${read_one} ${read_two}
     """
     }
 
