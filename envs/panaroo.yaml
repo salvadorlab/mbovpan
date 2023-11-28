@@ -1,0 +1,8 @@
+name: panaroo
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - panaroo=1.3.4
+prefix: /home/n/noahlegall/.conda/envs/panaroo

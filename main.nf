@@ -30,6 +30,7 @@ if(params.version){
     exit(0)
 }
 
+params.help = false
 if(params.help){
     println(
 """
@@ -68,33 +69,44 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
 // How many threads will be available to run the pipeline. 
 // Automatically uses all the cpus that are available 
 // If not specified, use 50% of available resources 
-threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
+params.threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
 reads = ""
 
-qual = 150
+params.qual = 150
 
-depth = 10 
+params.depth = 10 
 
-mapq = 55
+params.mapq = 55
 
 
 
-if(params.qual != null){
+
+if(params.qual){
     qual = params.qual as Integer
     }
-if(params.depth != null){
+if(params.depth){
     depth = params.depth as Integer
     }
-if(params.mapq != null){
+if(params.mapq){
     mapq = params.mapq as Integer
     }
+
+params.scoary_meta = "false"
+if(params.scoary_meta == "true"){
+    params.scoary_meta = "true"
+} else if(params.scoary_meta != "true" || params.scoary_meta != "false"){
+    params.scoary_meta = "false"
+}
 
 
 
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
 range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
+spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py"
+check = "$workflow.projectDir/scripts/lineage_check.py"
+lineage_table = "$workflow.projectDir/scripts/lineage_table.py"
 
 // are default parameters included?
 if(params.input == null || params.output == null){
@@ -135,7 +147,8 @@ else {
 }
 
 // how many threads will be utilized
-if(params.threads != null){
+
+if(params.threads){
     println "mbovpan will run using ${params.threads} threads"
     threads = params.threads
 }
@@ -145,17 +158,13 @@ else{
 
 println " $input "
 
+// no need to check the file pairs if this command just naturally takes care of it!
 reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
-
-reads.into {
-    reads_process
-    reads_trim
-}
 
  // PART 1: Processing 
 
 println(""" 
-    M B O V P A N (v0.1)    
+    M B O V P A N (v1.0.0)    
 =============================
 A pangenomic pipeline for the analysis of
 Mycobacterium bovis isolates 
@@ -175,25 +184,65 @@ reference location: $ref
 input: $input
 output: $output
 no. of threads: $threads
+QUAL: $qual
+MAPQ: $mapq
+DEPTH: $depth
+trait file for running scoary: $params.scoary_meta
 =====================================
 """)
 
-/* AUTOMATIC QC of read data */
+// MODE 0: M. bovis classification 
+
+process spotyping {
+
+    publishDir = "$output/mbovpan_results/spotyping"
+
+    conda "$workflow.projectDir/envs/spotyping.yaml"
+
+    errorStrategy 'ignore'
+
+    debug true
+
+    input:
+    tuple sample_id, file(reads_file) from reads
+
+    output:
+    tuple file("${reads_file[0].baseName}.fastq"), file("${reads_file[1].baseName}.fastq") into spoligo_ch
+    file("${reads_file[0].baseName - ~/_1*/}.out") into spoligo_multi
+ 
+    script:
+    """
+    python3 ${spotyping} ${reads_file[0]} ${reads_file[1]} -o ${reads_file[0].baseName - ~/_1*/}.out > stdout.txt 
+    python3 ${check} 
+    """
+
+    }
+
+
+spoligo_ch.into {
+    spoligo_pre
+    spoligo_post
+    spoligo_process
+}
+
+
 
     process pre_fastqc {
+
+    conda 'bioconda::fastqc'
 
     publishDir = "$output/mbovpan_results/fastqc"
 
     input:
-    tuple sample_id, file(reads_file) from reads_process
+    tuple file(read_one), file(read_two) from spoligo_pre
 
     output:
-    file("pre_fastqc_${sample_id}_logs") into fastqc_ch1
+    file("pre_fastqc_${read_one.baseName - ~/_1*/}_logs") into fastqc_ch1
 
     script:
     """
-    mkdir  pre_fastqc_${sample_id}_logs
-    fastqc -o  pre_fastqc_${sample_id}_logs -f fastq -q ${reads_file}
+    mkdir  pre_fastqc_${read_one.baseName - ~/_1*/}_logs
+    fastqc -o  pre_fastqc_${read_one.baseName - ~/_1*/}_logs -f fastq -q ${read_one} ${read_two}
     """
     }
 
@@ -201,21 +250,21 @@ no. of threads: $threads
 //change this around to get rid of the weird naming
     process fastp {
 
-    conda "bioconda::fastp"
+    conda 'bioconda::fastp'
 
     publishDir = "$output/mbovpan_results/read_trimming"
 
     cpus threads/2
 
     input:
-    tuple sample_id, file(reads_file) from reads_trim
+    tuple file(read_one), file(read_two) from spoligo_process
 
     output:
-    file("${sample_id}_trimmed_R*.fastq") into fastp_ch
+    file("${read_one.baseName - ~/_1/}_trimmed_R*.fastq") into fastp_ch
  
     script:
     """
-    fastp -w ${task.cpus} -q 30 --detect_adapter_for_pe -i  ${reads_file[0]} -I  ${reads_file[1]} -o  ${sample_id}_trimmed_R1.fastq -O  ${sample_id}_trimmed_R2.fastq
+    fastp -w ${task.cpus} -q 30 --detect_adapter_for_pe -i  ${read_one} -I  ${read_two} -o  ${read_one.baseName - ~/_1/}_trimmed_R1.fastq -O  ${read_one.baseName - ~/_1/}_trimmed_R2.fastq
     """
 
     }
@@ -225,24 +274,48 @@ no. of threads: $threads
         fastp_reads2
         fastp_reads3
         fastp_reads4
+        fastp_reads5
+        fastp_reads_lineage
     }
 
 
     process post_fastqc {
 
+    conda 'bioconda::fastqc'
+
     publishDir = "$output/mbovpan_results/fastqc"
 
     input:
-    tuple file(trim1), file(trim2) from fastp_reads1
+    tuple file(trim1), file(trim2) from spoligo_post
 
     output:
-    file("post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs") into fastqc_ch2
+    file("post_fastqc_${trim1.baseName - ~/_1*/}_logs") into fastqc_ch2
 
     script:
     """
-    mkdir  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs
-    fastqc -o  post_fastqc_${trim1.baseName - ~/_trimmed_R*/}_logs -f fastq -q ${trim1} ${trim2}
+    mkdir  post_fastqc_${trim1.baseName - ~/_1/}_logs
+    fastqc -o  post_fastqc_${trim1.baseName - ~/_1/}_logs -f fastq -q ${trim1} ${trim2}
     """
+    }
+
+    process lineage {
+
+    publishDir = "$output/mbovpan_results/lineage"
+
+    conda "$workflow.projectDir/envs/tbprofile.yaml"
+
+    input:
+    tuple file(trim1), file(trim2) from fastp_reads_lineage
+
+    output:
+    file("${trim1.baseName - ~/_trimmed_R*/}.results.json") into tbprofile_ch 
+ 
+    script:
+    """
+    tb-profiler profile --read1 ${trim1} --read2 ${trim2} --no_delly --prefix ${trim1.baseName - ~/_trimmed_R*/}
+    cp ./results/${trim1.baseName - ~/_trimmed_R*/}.results.json ./
+    """
+
     }
 
 // MODE 1: Variant Calling 
@@ -345,7 +418,7 @@ if(run_mode == "snp" || run_mode == "all"){
         filter2_ch
     }
 
-    stats_ch = fastp_reads4.merge(nodup2_ch).merge(filter2_ch).view()
+    stats_ch = fastp_reads4.merge(nodup2_ch).merge(filter2_ch)
 
     process stats {
         publishDir = "$output/mbovpan_results/statistics"
@@ -390,13 +463,10 @@ if(run_mode == "snp" || run_mode == "all"){
         publishDir = "$output/mbovpan_results/phylogeny"
         
         conda "$workflow.projectDir/envs/iqtree.yaml"
+
+        errorStrategy "ignore"
         
         cpus threads 
-
-        memory '2 GB'
-        
-        errorStrategy 'ignore'
-        
 
         input:
         file(aln) from fasta_ch.collect()
@@ -419,7 +489,7 @@ assembly = Channel.create()
 if(run_mode == "pan" || run_mode == "all"){
     
     process assembly {
-    publishDir = output 
+    publishDir = "$output/mbovpan_results/assembly"
     
     conda "$workflow.projectDir/envs/megahit.yaml"
     
@@ -448,7 +518,7 @@ assembly_ch.into {
 }
 
 process quast {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/statistics"
 
     conda "$workflow.projectDir/envs/quast.yaml"
     
@@ -468,7 +538,7 @@ process quast {
 
 
 process annotate {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/annotations"
     
     cpus threads/2
 
@@ -489,10 +559,10 @@ process annotate {
     """
 }
 
-process roary {
-    publishDir = output
+process panaroo {
+    publishDir = "$output/mbovpan_results/pangenome"
 
-    conda "$workflow.projectDir/envs/roary.yaml"
+    //conda "$workflow.projectDir/envs/panaroo.yaml"
 
     cpus threads
 
@@ -504,7 +574,7 @@ process roary {
 
     script:
     """
-    roary -e --mafft -p ${task.cpus} $gff
+    panaroo -i *.gff -o ./ -t ${task.cpus} -a core --core_threshold 0.98 --clean-mode strict
     """
 }
 
@@ -518,7 +588,7 @@ roary_ch.into{
 
 // This will make the tree for core gene alignment
 process iqtree_core {
-        publishDir = output
+        publishDir = "$output/mbovpan_results/phylogeny"
         
         conda "$workflow.projectDir/envs/iqtree.yaml"
         
@@ -544,11 +614,9 @@ process iqtree_core {
 // Rscript to generate a heatmap of the pangenome
 // this can be changed into the virulence gene presence absence matrix given a list from Hind
 
-
-
-if(params.scoary_meta != null){
+if(params.scoary_meta == "true"){
 process scoary {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/pan_gwas"
     
     conda "$workflow.projectDir/envs/scoary.yaml"
 
@@ -563,7 +631,7 @@ process scoary {
     script:
     """
     sed 's/.annot//g' gene_presence_absence.csv > prab.csv
-    scoary -t ${scoary_meta} -g prab.csv
+    scoary -t ${params.scoary_meta} -g prab.csv
     """
 }
 }
@@ -571,7 +639,7 @@ process scoary {
 }
 
 process multiqc {
-    publishDir = output
+    publishDir = "$output/mbovpan_results/statistics"
     
     conda "$workflow.projectDir/envs/multiqc.yaml"
 
@@ -589,48 +657,24 @@ process multiqc {
     """
 }
 
+process mbovis_verification {
+    publishDir = "$output/mbovpan_results/lineage_info"
 
-/*
+    //conda "$workflow.projectDir/envs/pandas.yaml"
 
-process gene_prab {
-     publishDir = output
-    
-    conda "$workflow.projectDir/envs/gene_prab.yaml"
-
-    //errorStrategy 'ignore'
-    
     input:
-    file(input) from roary_ch3.collect()
-    
+    file(spoligotype_info) from spoligo_multi.collect().ifEmpty([])
+    file(lineage_info) from tbprofile_ch.collect().ifEmpty([])
+
     output:
-    file("mbov_virulent_prab.csv") into geneprab_ch1
-    file("gene_prab_figures.pdf") into geneprab_ch2
-    
+    file("mbovpan_lineage_info.csv")
+
     script:
     """
-    python $workflow.projectDir/scripts/mbov_virulence.py
-    Rscript $workflow.projectDir/scripts/gene_prab.R ${meta}
+    python ${lineage_table} > mbovpan_lineage_info.csv
     """
+
+
 }
 
-process accessory_pca {
-     publishDir = output
-    
-    conda 'r conda-forge::r-ggplot2 conda-forge::r-dplyr'
-
-    errorStrategy 'ignore'
-    
-    input:
-    file(input) from roary_ch4.collect()
-    
-    output:
-    file("pca_figures.pdf") into accessory_ch
-    
-    script:
-    """
-    Rscript $workflow.projectDir/scripts/accessory_pca.R ${meta}
-    """
-}
-
-*/
 

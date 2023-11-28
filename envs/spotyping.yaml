@@ -1,8 +1,7 @@
-name: roary
+name: scoary
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - roary
-prefix: /home/noahaus/miniconda3/envs/roary
+  - spotyping3

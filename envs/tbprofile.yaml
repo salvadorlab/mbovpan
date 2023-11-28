@@ -4,12 +4,6 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - mamba
-  - python=3.9
-  - ca-certificates
-  - certifi
-  - openssl
-  - tb-profiler=4.4.0
-  - bcftools
-  - gsl
+  - tb-profiler
+  - freebayes=1.3.6
 prefix: /home/noahaus/.conda/envs/tb-profile

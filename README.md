@@ -38,18 +38,34 @@ $conda activate mbovpan
 (mbovpan)$ nextflow run mbovpan --help 
 ```
 
-### Quickstart
-
-Once the conda environment is created, the user can execute a simple test of the pipeline by providing an input path, an output path, and specific parameters. 
-
+### Quickstart  
+#### Downloading example sequence data 
 ```
-(mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ 
-```
-In this command, **'nextflow run'** is the command used to look at and execute the pipeline instructions in **'mbovpan.nf'**. This file contains the general flow of the mbovpan pipeline
+#create a new directory that will house NGS files, navigate to the newly created file
+(mbovpan)$mkdir mbovis_input
+(mbovpan)$cd mbovis_input
 
-Mbovpan is downloaded with test data already included, and this is captured with the **'--input ./mbovpan/seqs/'** parameter. If paired end sequences are present in the input directory, they will be matched and ran through the pipeline. 
+#using sratoolkit download 4 M. bovis sequences extracted from United Kingdom badgers
+(mbovpan)$fasterq-dump --verbose --split-3 SRR10482974
+(mbovpan)$fasterq-dump --verbose --split-3 SRR10482944
+(mbovpan)$fasterq-dump --verbose --split-3 ERR11893527
+(mbovpan)$fasterq-dump --verbose --split-3 SRR23174187
+(mbovpan)$fasterq-dump --verbose --split-3 SRR23174144
+
+#once the downloads are complete, exit into the previous directory
+(mbovpan)$cd ../
+```
+#### Example run
+```
+(mbovpan)$nextflow run mbovpan --input ./mbovis_input/ --run snp --output ./ 
+```
+In this command, **'nextflow run'** is the command used to look at and execute the pipeline instructions in **'mbovpan'**. This looks into the mbovpan directory and runs the workflow instructions that are  contained in 'main.nf'
+
+With the test data already downloaded, the parameter **'--input ./mbovis_input/'** looks for if paired end sequences are present in the input directory to initiate the pipeline. Raw sequence data is analyzed to generate the spoligotyping pattern of the isolates, and if the pattern that is generated does not present as _M. bovis_, the file will be filtered out from analysis. 
 
 **'--run snp'** signifies what analysis mode mbovpan utilizes. **'snp'** mode maps the paired end files to the reference genome while, **'pan'** mode creates de novo genomes from scratch. if no option is supplied, the pipeline will run both. 
+
+**--output ./** stipulates where the output directory "mbovpan_results" will be created
 
 ### Additional Usages
 
@@ -66,7 +82,7 @@ Mbovpan is downloaded with test data already included, and this is captured with
 
 ### Inputs
 
-mbovpan requires as input paired end FASTQ files originating from Mycobacterium bovis. mbovpan can run the tool **spotyping** that can use the reads to deduce what MTBC member the sequences originate from. 
+mbovpan requires as input paired end FASTQ files originating from _Mycobacterium bovis_. mbovpan runs the tool **spotyping** that can use the reads to deduce what MTBC member the sequences originate from. 
 
 ### Outputs
 
@@ -119,12 +135,6 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
 
 ### Authors
 mbovpan is software initiated and maintained by Noah Legall, PhD under the supervision of Liliana C. M. Salvador, PhD.
-
-### Maintainers 
-Noah Legall 
-    [![image search api](https://github.com/salvadorlab/mbovpan/assets/40697188/89705d13-4265-4cda-98d3-d21064344892)](https://github.com/noahaus)
-
-
 
 ### Citation 
 The mbovpan manuscript is currently in preparation. 
