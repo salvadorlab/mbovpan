@@ -1,7 +1,7 @@
 [![image search api](https://user-images.githubusercontent.com/40697188/193487621-a4b91a1c-19b6-42df-9e63-7fcff0658be0.png)](https://github.com/noahaus)
 
 # mbovpan
-Mbovpan is a nextflow bioinformatic pipeline for Mycobacterium bovis pangenome analysis. The goal of Mbovpan is to make the insights from M. bovis genomics easily accesible to reseachers.  
+Mbovpan is a nextflow bioinformatic pipeline for _Mycobacterium bovis_ pangenome analysis. The goal of Mbovpan is to make the insights from _M. bovis_ genomics easily accesible to reseachers.  
 
 Mbovpan can be ran in three separate modes: SNP mode for only inferring Single Nucleotide Polymorphisms, PAN mode for assessing gene presence absences, or ALL to do a full analysis (default). Below you can witness the main workflow encapsulated by mbovpan. 
 ![image](https://github.com/salvadorlab/mbovpan/assets/40697188/315e9533-1567-48c1-aa0c-f1b5c12e2589)
@@ -13,92 +13,6 @@ The first step would be to download the pipeline using the following git command
 ```
 $git clone https://github.com/salvadorlab/mbovpan.git
 ```
-Successfully downloading will lead to a directory with the following layout 
-
-```
-.
-├── auxilary
-├── chrom_ranges.py
-├── dev_nf_scripts
-│   ├── abyss_assem.nf
-│   ├── accessory_pca.nf
-│   ├── bowtie_call.nf
-│   ├── calling_snps.nf
-│   ├── gene_prab.nf
-│   ├── megahit_assem.nf
-│   ├── minimap_call.nf
-│   ├── smalt_call.nf
-│   ├── spades_assem.nf
-│   ├── spotyping.nf
-│   └── tbprofiler.nf
-├── envs
-│   ├── consensus.yaml
-│   ├── freebayes.yaml
-│   ├── gene_prab.yaml
-│   ├── iqtree.yaml
-│   ├── longread.yaml
-│   ├── mbovpan.yaml
-│   ├── megahit.yaml
-│   ├── multiqc.yaml
-│   ├── picard.yaml
-│   ├── prokka.yaml
-│   ├── quast.yaml
-│   ├── raven.yaml
-│   ├── roary.yaml
-│   ├── samtools.yaml
-│   ├── scoary.yaml
-│   ├── statistics.yaml
-│   ├── tbprofile.yaml
-│   ├── vcflib.yaml
-│   └── vcflib.yaml~
-├── mbovpan.nf
-├── README.md
-├── ref
-│   ├── mbovAF212297_annotation.gb
-│   ├── mbovAF212297_reference.fasta
-│   ├── mbovAF212297_reference.fasta.amb
-│   ├── mbovAF212297_reference.fasta.ann
-│   ├── mbovAF212297_reference.fasta.bwt
-│   ├── mbovAF212297_reference.fasta.dict
-│   ├── mbovAF212297_reference.fasta.fai
-│   ├── mbovAF212297_reference.fasta.pac
-│   ├── mbovAF212297_reference.fasta.sa
-│   ├── mbov_bowtie_index.1.bt2
-│   ├── mbov_bowtie_index.2.bt2
-│   ├── mbov_bowtie_index.3.bt2
-│   ├── mbov_bowtie_index.4.bt2
-│   ├── mbov_bowtie_index.rev.1.bt2
-│   ├── mbov_bowtie_index.rev.2.bt2
-│   ├── mbov_reference.fasta
-│   ├── pe_ppe_regions.gff3
-│   └── spacer.fasta
-├── scripts
-│   ├── accessory_pca.R
-│   ├── gene_prab.R
-│   ├── install_mbovpan.sh
-│   ├── mbov_virulence.py
-│   ├── pangenome_curve.R
-│   ├── SpoTyping
-│   │   ├── README.md
-│   │   ├── ref
-│   │   │   └── spacer.fasta
-│   │   ├── SpoTyping_plot.r
-│   │   ├── SpoTyping.py
-│   │   ├── SpoTyping-README-md.pdf
-│   │   └── Update-history.md
-│   ├── SpoTyping_copy.py
-│   └── statistics.py
-└── seqs
-    ├── SRR998656_1.fastq.gz
-    ├── SRR998656_2.fastq.gz
-    ├── SRR998657_1.fastq.gz
-    ├── SRR998657_2.fastq.gz
-    ├── SRR998658_1.fastq.gz
-    ├── SRR998658_2.fastq.gz
-    ├── SRR998659_1.fastq.gz
-    └── SRR998659_2.fastq.gz
-
-```  
 
 We encourage the user to add the 'mbovpan' directory to the PATH variable. This makes running the pipeline much easier due to not needing to specify the absolute path of the 'mbovpan.nf' file.
 
@@ -113,10 +27,15 @@ export PATH=$PATH:$(pwd)
 After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. The user can install by using a provided script in 'scripts/install_mbovpan.sh'. This should take a few minutes. 
 
 ```
-$conda create -n mbovpan
-$bash path/to/install_mbovpan.sh
-$conda activate mbovpan #replace 'conda' with 'source' based on conda version
-(mbovpan)$ #ready for input 
+#create the environment with mamba as the first package, then activate
+$conda create -n mbovpan -c conda-forge mamba
+$conda activate mbovpan
+
+#install the necessary packages with mamba - a very fast package solver
+(mbovpan)$mamba install -c bioconda -c conda-forge nextflow=22.10.6 pandas panaroo
+
+#now test that everything downloaded appropriately with a simple help command
+(mbovpan)$ nextflow run mbovpan --help 
 ```
 
 ### Quickstart
