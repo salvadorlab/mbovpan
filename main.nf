@@ -673,8 +673,4 @@ process mbovis_verification {
     """
     python ${lineage_table} > mbovpan_lineage_info.csv
     """
-
-
 }
-
-
