@@ -1,4 +1,0 @@
-str="$*"
-#nf=$(echo $(type -P mbovpan.nf)) #simplified solution
-nf=$(find ${PATH//:/\/ } -name mbovpan.nf 2> /dev/null)
-$(echo "nextflow run $nf $str")
