@@ -9,7 +9,7 @@ process scoary {
     errorStrategy 'ignore'
     
     input:
-    file(input) from input_channel.collect()
+    file(input) from input_ch.collect()
     
     output:
     file("*.csv") into scoary_ch
