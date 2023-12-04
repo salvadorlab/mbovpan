@@ -4,7 +4,8 @@ scoary_meta = "/work/n/noahlegall/mbovpan_testing/mbovpan/ref/scoary_examp.csv"
 process scoary {
     publishDir = "/work/n/noahlegall/mbovpan_testing/mbovpan_results/pan_gwas"
     
-    conda "bioconda::scoary"
+    conda "$workflow.projectDir/../envs/scoary.yaml"
+
 
     debug 'true'
     
@@ -18,7 +19,7 @@ process scoary {
     """
     sed 's/.annot//g' gene_presence_absence_roary.csv > prab.csv
     cat prab.csv
-    scoary.py -t ${scoary_meta} -g prab.csv
+    scoary -t ${scoary_meta} -g prab.csv
     """
 }
 
