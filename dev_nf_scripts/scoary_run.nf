@@ -18,7 +18,7 @@ process scoary {
     """
     sed 's/.annot//g' gene_presence_absence_roary.csv > prab.csv
     cat prab.csv
-    scoary -t ${scoary_meta} -g prab.csv
+    scoary.py -t ${scoary_meta} -g prab.csv
     """
 }
 
