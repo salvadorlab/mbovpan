@@ -6,8 +6,6 @@ process scoary {
     
     conda "$workflow.projectDir/../envs/scoary.yaml"
 
-    errorStrategy 'ignore'
-
     debug 'true'
     
     input:
