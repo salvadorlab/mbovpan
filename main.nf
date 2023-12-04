@@ -630,7 +630,7 @@ process scoary {
     
     script:
     """
-    sed 's/.annot//g' gene_presence_absence.csv > prab.csv
+    sed 's/.annot//g' gene_presence_absence_roary.csv > prab.csv
     scoary -t ${params.scoary_meta} -g prab.csv
     """
 }
