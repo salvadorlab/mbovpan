@@ -4,7 +4,7 @@ scoary_meta = "/work/n/noahlegall/mbovpan_testing/mbovpan/ref/scoary_examp.csv"
 process scoary {
     publishDir = "/work/n/noahlegall/mbovpan_testing/mbovpan_results/pan_gwas"
     
-    conda "$workflow.projectDir/../envs/scoary.yaml"
+    conda "bioconda::scoary"
 
     debug 'true'
     
