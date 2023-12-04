@@ -11,7 +11,7 @@ process scoary {
     debug 'true'
     
     input:
-    file(input) from input_ch.collect()
+    file("gene_presence_absence_roary.csv") from input_ch
     
     output:
     file("*.csv") into scoary_ch
