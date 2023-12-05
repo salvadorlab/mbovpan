@@ -42,6 +42,7 @@ process gene_prab {
     script:
     """
     python $workflow.projectDir/../scripts/mbov_virulence.py $x ${vir_genes}
+    cat mbov_virulent_prab.csv
     Rscript $workflow.projectDir/../scripts/gene_prab.R $y
     """
 }
