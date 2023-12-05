@@ -1,0 +1,9 @@
+name: accessory_pca
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-ggplot2
+  - r-dplyr
+prefix: /Users/noahaus/opt/miniconda3/envs/gene_prab
