@@ -20,6 +20,7 @@ accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
 auxil <- gene_pres_abs %>% select(2:14)
 accessory_pa <- accessory_genome %>% select(14:(ncol(accessory_genome)))
+print(accessory_pa)
 
 accessory_pa[!(accessory_pa=="")] <- 1
 accessory_pa[accessory_pa==""] <- 0 

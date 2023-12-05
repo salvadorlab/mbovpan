@@ -28,6 +28,8 @@ process gene_prab {
     conda "$workflow.projectDir/../envs/gene_prab.yaml"
 
     //errorStrategy 'ignore'
+
+    debug "true"
     
     input:
     path x
