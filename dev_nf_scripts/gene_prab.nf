@@ -29,7 +29,7 @@ process gene_prab {
 
     //errorStrategy 'ignore'
 
-    debug "true"
+    debug 'true'
     
     input:
     path x
