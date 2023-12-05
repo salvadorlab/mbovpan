@@ -51,7 +51,7 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
     --mapq [INT]:
         The minimum MQ score for a SNP to be considered [DEFAULT:55]
     --scoary_meta [STR]:
-        Provide a metadata file in the style of the Scoary style. 
+        Provide path to a metadata file in the style of the Scoary style. 
         Runs a Scoary analysis on genome pres/abs. data.
     --threads [INT]:
         How many threads to use for the programs [DEFAULT:(number of avail. threads)/2]
@@ -92,11 +92,11 @@ if(params.mapq){
     mapq = params.mapq as Integer
     }
 
-params.scoary_meta = "false"
-if(params.scoary_meta == "true"){
-    params.scoary_meta = "true"
-} else if(params.scoary_meta != "true" || params.scoary_meta != "false"){
-    params.scoary_meta = "false"
+params.scoary_meta = "true"
+if(params.scoary_meta){
+    scoary_meta = params.scoary_meta
+} else {
+    scoary_meta = 0
 }
 
 
@@ -187,7 +187,7 @@ no. of threads: $threads
 QUAL: $qual
 MAPQ: $mapq
 DEPTH: $depth
-trait file for running scoary: $params.scoary_meta
+trait file for running scoary: $scoary_meta
 =====================================
 """)
 
@@ -614,7 +614,7 @@ process iqtree_core {
 // Rscript to generate a heatmap of the pangenome
 // this can be changed into the virulence gene presence absence matrix given a list from Hind
 
-if(params.scoary_meta == "true"){
+if(scoary_meta != 0){
 process scoary {
     publishDir = "$output/mbovpan_results/pan_gwas"
     
@@ -623,7 +623,7 @@ process scoary {
     errorStrategy 'ignore'
     
     input:
-    file(input) from roary_ch5.collect()
+    file("gene_presence_absence_roary.csv") from roary_ch5
     
     output:
     file("*.csv") into scoary_ch
@@ -631,7 +631,7 @@ process scoary {
     script:
     """
     sed 's/.annot//g' gene_presence_absence_roary.csv > prab.csv
-    scoary -t ${params.scoary_meta} -g prab.csv
+    scoary -t ${scoary_meta} -g prab.csv
     """
 }
 }
@@ -674,3 +674,6 @@ process mbovis_verification {
     python ${lineage_table} > mbovpan_lineage_info.csv
     """
 }
+
+
+/// Adding in the analysis files for data vis

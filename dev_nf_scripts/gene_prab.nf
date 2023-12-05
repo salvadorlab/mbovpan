@@ -1,6 +1,6 @@
 nextflow.enable.dsl=2
 
-// Start off with a empty channel
+// Start off with a empty channel for prab input and sample metadata
 input = ""
 meta = ""
 
@@ -18,7 +18,7 @@ println "${input}"
 println "${meta}"
 
 //file with the virulence genes 
-vir_genes = "$workflow.projectDir/../auxilary/M_bovis_virulence_genes.csv"
+vir_genes = "$workflow.projectDir/../ref/M_bovis_virulence_genes.csv"
 
 process gene_prab {
     publishDir = "./"
