@@ -15,8 +15,6 @@ gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFact
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
 #head(gene_pres_abs)
-print(ncol(gene_pres_abs))
-print(nrow(gene_pres_abs))
 
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
@@ -25,7 +23,11 @@ accessory_pa <- accessory_genome %>% select(14:(ncol(accessory_genome)))
 print(accessory_pa)
 
 accessory_pa[!(accessory_pa=="")] <- 1
-accessory_pa[accessory_pa==""] <- 0 
+accessory_pa[accessory_pa==""] <- 0
+
+print("The dimensions of accessory_pa")
+print(ncol(accessory_pa))
+print(nrow(accessory_pa))
 
 num_col <- ncol(accessory_pa)
 
@@ -36,6 +38,13 @@ accessory_pa$perc_pr <- accessory_pa$pr/num_col
 accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
 
 accessory_pa$gene_id = rownames(accessory_pa)
+
+print("\nThe gene ids:")
+print(accessory_pa$gene_id)
+
+print("\nThe precent present:")
+print(accessory_pa$perc_pr)
+
 accessory_pa_long <- accessory_pa %>% gather(sample,prab,-gene_id)
 accessory_matrix <- as.matrix(accessory_pa %>% select(-gene_id))
 
