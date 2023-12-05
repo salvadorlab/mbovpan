@@ -22,7 +22,7 @@ process accessory_pca {
 
   debug true
     
-  conda 'r conda-forge::r-ggplot2 conda-forge::r-dplyr'
+  conda "r conda-forge::r-ggplot2 conda-forge::r-dplyr"
 
     //errorStrategy 'ignore'
     
