@@ -15,6 +15,7 @@ gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFact
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
 #head(gene_pres_abs)
+print(gene_pres_abs)
 
 accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
 core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
