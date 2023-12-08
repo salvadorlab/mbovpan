@@ -45,7 +45,7 @@ $conda activate mbovpan
 (mbovpan)$mkdir mbovis_input
 (mbovpan)$cd mbovis_input
 
-#using sratoolkit download 4 M. bovis sequences extracted from United Kingdom badgers
+#using sratoolkit download 5 M. bovis sequences extracted from United Kingdom badgers
 (mbovpan)$fasterq-dump --verbose --split-3 SRR10482974
 (mbovpan)$fasterq-dump --verbose --split-3 SRR10482944
 (mbovpan)$fasterq-dump --verbose --split-3 ERR11893527
