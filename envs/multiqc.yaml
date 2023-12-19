@@ -4,5 +4,5 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - multiqc
+  - multiqc=1.6
 prefix: /home/noahaus/.conda/envs/multiqc
