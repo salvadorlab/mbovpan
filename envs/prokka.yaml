@@ -4,5 +4,5 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - prokka
+  - prokka=1.13.4
 prefix: /home/noahaus/.conda/envs/prokka
