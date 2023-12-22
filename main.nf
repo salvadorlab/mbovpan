@@ -607,7 +607,8 @@ process iqtree_core {
         
         script:
         """
-        iqtree -s core_gene_alignment.aln -m MFP -nt ${task.cpus} -bb 1000 -pre mbovpan_align 
+        snp-sites -o mbovpan_align.snp_only.fasta core_gene_alignment.aln
+        iqtree -s mbovpan_align.snp_only.fasta -m MFP -nt ${task.cpus} -bb 1000 -pre mbovis_core 
         """
     }
 
