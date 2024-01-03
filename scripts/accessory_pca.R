@@ -15,6 +15,10 @@ accessory_pa$pr <- apply(accessory_pa,1,task)
 accessory_pa$perc_pr <- accessory_pa$pr/num_col
 accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
 
+print("percentages are calculated")
+head(accessory_pa)
+nrow(accessory_pa)
+
 pa_transpose <- t(data.matrix(accessory_pa))
 isolate_ids <- row.names(pa_transpose)
 prab_pca <- prcomp(pa_transpose)

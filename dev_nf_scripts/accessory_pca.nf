@@ -22,7 +22,7 @@ process accessory_pca {
     
   conda "r-ggplot2 r-dplyr"
 
-    //errorStrategy 'ignore'
+  debug "true"
     
   input:
      path x
