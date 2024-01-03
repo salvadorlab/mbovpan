@@ -1,4 +1,5 @@
 nextflow.enable.dsl=2
+conda.enabled = true
 
 // Start off with a empty channel
 input = ""
