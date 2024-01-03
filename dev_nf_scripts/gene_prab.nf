@@ -39,7 +39,8 @@ process gene_prab {
     
     script:
     """
-    python $workflow.projectDir/../scripts/mbov_virulence.py $x ${vir_genes}
+    sed 's/.annot//g' $x > prab.csv
+    python $workflow.projectDir/../scripts/mbov_virulence.py prab.csv ${vir_genes}
     Rscript $workflow.projectDir/../scripts/gene_prab.R $y
     """
 }
