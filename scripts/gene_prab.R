@@ -14,7 +14,6 @@ gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFact
 print("the prab was read in successfully")
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
-gene_pres_abs <- read.csv(args[1], header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 accessory_pa <- gene_pres_abs %>% select(14:(ncol(gene_pres_abs)))
 
 
