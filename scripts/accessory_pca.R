@@ -4,11 +4,7 @@ library(dplyr)
 args = commandArgs(trailingOnly=TRUE)
 
 gene_pres_abs <- read.csv(args[1], header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
-
-accessory_genome <- gene_pres_abs[!(is.na(gene_pres_abs$Accessory.Fragment)),]
-core_genome <- gene_pres_abs[is.na(gene_pres_abs$Accessory.Fragment),]
-auxil <- gene_pres_abs %>% select(2:14)
-accessory_pa <- accessory_genome %>% select(14:(ncol(accessory_genome)))
+accessory_pa <- gene_pres_abs %>% select(14:(ncol(gene_pres_abs)))
 
 accessory_pa[!(accessory_pa=="")] <- 1
 accessory_pa[accessory_pa==""] <- 0 
@@ -20,7 +16,7 @@ accessory_pa$perc_pr <- accessory_pa$pr/num_col
 accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
 
 pa_transpose <- t(data.matrix(accessory_pa))
-isolate_ids <- gsub("_trimmed_R1.scaffold.annot","",row.names(pa_transpose))
+isolate_ids <- row.names(pa_transpose)
 prab_pca <- prcomp(pa_transpose)
 variance <- (prab_pca$sdev)^2
 loadings <- prab_pca$rotation
