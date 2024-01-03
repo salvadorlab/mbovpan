@@ -20,7 +20,7 @@ println "${meta}"
 process accessory_pca {
   publishDir = "./"
     
-  conda "$workflow.projectDir/../envs/accessory_pca.yaml"
+  conda "r-ggplot2 r-dplyr"
 
     //errorStrategy 'ignore'
     
