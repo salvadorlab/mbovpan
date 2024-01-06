@@ -21,6 +21,6 @@ for i in range(len(mbov_prab.index)):
             filtered_list.append(i)
             print("part of the list")
 #filter the rows with the passing indicies
-mbov_prab.iloc[filtered_list].to_csv("mbov_virulent_prab.csv",index=False)
+mbov_prab.iloc[filtered_list].drop_duplicates().to_csv("mbov_virulent_prab.csv",index=False)
 print(mbov_prab.iloc[filtered_list])
 print("prab created successfully")
