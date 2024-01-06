@@ -16,9 +16,10 @@ for i in range(len(mbov_prab.index)):
     #print(mbov_prab.loc[i,"Gene"])
     #print(mbov_prab.loc[i,"Gene"].split("_"))
     #print(mbov_prab.loc[i,"Gene"].split("_")[0])
-    if mbov_prab.loc[i,"Gene"].split("_")[0] in virulent_gene_list:
-        filtered_list.append(i)
-        print("part of the list")
+    for gene in mbov_prab.loc[i,"Gene"].split("~~~"):
+        if gene.split("_")[0] in virulent_gene_list:
+            filtered_list.append(i)
+            print("part of the list")
 #filter the rows with the passing indicies
 mbov_prab.iloc[filtered_list].to_csv("mbov_virulent_prab.csv",index=False)
 print(mbov_prab.iloc[filtered_list])
