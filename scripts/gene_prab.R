@@ -30,8 +30,7 @@ task <- function(x){sum(as.numeric(as.character(x)))}
 
 accessory_pa$pr <- apply(accessory_pa,1,task)
 accessory_pa$perc_pr <- accessory_pa$pr/num_col
-#accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
-accessory_pa <- accessory_pa %>% filter(perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
+accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
 
 print("percentages are calculated")
 head(accessory_pa)
