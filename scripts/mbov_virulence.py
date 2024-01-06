@@ -19,7 +19,7 @@ for i in range(len(mbov_prab.index)):
     for gene in mbov_prab.loc[i,"Gene"].split("~~~"):
         if gene.split("_")[0] in virulent_gene_list:
             filtered_list.append(gene)
-            mbov_prab.loc[i,"Gene"] = gene.split("_")[0]
+            #mbov_prab.loc[i,"Gene"] = gene.split("_")[0]
             print("part of the list")
 #filter the rows with the passing indicies
 print(mbov_prab[mbov_prab["Gene"].isin(filtered_list)])
