@@ -24,5 +24,4 @@ for i in range(len(mbov_prab.index)):
 #filter the rows with the passing indicies
 mbov_prab[mbov_prab["Gene"].isin(filtered_list)].drop_duplicates().to_csv("mbov_virulent_prab.csv",index=False)
 #[filtered_list].drop_duplicates().to_csv("mbov_virulent_prab.csv",index=False)
-print(mbov_prab.iloc[filtered_list])
 print("prab created successfully")
