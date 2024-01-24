@@ -41,5 +41,5 @@ process scoary {
 }
 
 workflow {
-  accessory_pca(Channel.fromPath( "${input}" ), Channel.fromPath( "${meta}" ))
+  scoary_run(Channel.fromPath( "${input}" ), Channel.fromPath( "${meta}" ))
 }
