@@ -1,36 +1,45 @@
-input_ch = Channel.fromPath("./*_roary.csv")
-scoary_meta = "/work/n/noahlegall/mbovpan_testing/mbovpan/ref/scoary_examp.csv"
+nextflow.enable.dsl=2
+
+// Start off with a empty channel
+input = ""
+meta = ""
+
+//pass in the paths for 'input' and 'metadata'
+if(params.input != null){
+    input = params.input
+    }
+
+if(params.meta != null){
+    meta = params.meta
+    }
+
+//verify that it worked out 
+println "${input}"
+println "${meta}"
+
 
 process scoary {
-    publishDir = "/work/n/noahlegall/mbovpan_testing/mbovpan_results/pan_gwas"
+    publishDir = "./"
     
     conda "$workflow.projectDir/../envs/scoary.yaml"
 
 
     debug 'true'
-    
+
     input:
-    file("gene_presence_absence_roary.csv") from input_ch
-    
+     path x
+     path y
+
     output:
-    file("*.csv") into scoary_ch
+     path "*.csv"
     
     script:
     """
-    sed 's/.annot//g' gene_presence_absence_roary.csv > prab.csv
-    cat prab.csv
-    scoary -t ${scoary_meta} -g prab.csv
+    sed 's/.annot//g' $x > prab.csv
+    scoary -t $y -g prab.csv
     """
 }
 
-
-process test {
-
-    input:
-    file(reads_file) from scoary_ch
-
-    script:
-    """
-    cat ${reads_file}
-    """
+workflow {
+  accessory_pca(Channel.fromPath( "${input}" ), Channel.fromPath( "${meta}" ))
 }
