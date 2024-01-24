@@ -4,5 +4,5 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - scoary
+  - scoary=1.6.9
 prefix: /Users/noahaus/opt/miniconda3/envs/scoary
