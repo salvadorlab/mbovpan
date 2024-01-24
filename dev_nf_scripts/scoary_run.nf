@@ -41,5 +41,5 @@ process scoary {
 }
 
 workflow {
-  scoary_run(Channel.fromPath( "${input}" ), Channel.fromPath( "${meta}" ))
+  scoary(Channel.fromPath( "${input}" ), Channel.fromPath( "${meta}" ))
 }
