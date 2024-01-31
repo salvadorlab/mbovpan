@@ -17,8 +17,6 @@ if(params.meta != null){
 println "${input}"
 println "${meta}"
 
-//file with the virulence genes 
-vir_genes = "$workflow.projectDir/../ref/M_bovis_virulence_genes.csv"
 
 process gene_prab {
     publishDir = "./"
@@ -40,8 +38,7 @@ process gene_prab {
     script:
     """
     sed 's/.annot//g' $x > prab.csv
-    python $workflow.projectDir/../scripts/mbov_virulence.py prab.csv ${vir_genes}
-    Rscript $workflow.projectDir/../scripts/gene_prab.R $y
+    Rscript $workflow.projectDir/../scripts/gene_prab.R prab.csv $y
     """
 }
 

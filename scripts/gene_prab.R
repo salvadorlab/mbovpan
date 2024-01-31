@@ -10,11 +10,11 @@ library(ggnewscale)
 
 # load in the general metadata
 args = commandArgs(trailingOnly=TRUE)
-gene_pres_abs <- read.csv("mbov_virulent_prab.csv", header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+gene_pres_abs <- read.csv(args[1], header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
 print("the prab was read in successfully")
 # load in the gene presence absence data, keep only accessory
 # we should already have access to this in our directory
-accessory_pa <- gene_pres_abs %>% select(14:(ncol(gene_pres_abs)))
+accessory_pa <- gene_pres_abs %>% select(3:(ncol(gene_pres_abs)))
 
 
 accessory_pa[!(accessory_pa=="")] <- 1
@@ -59,7 +59,7 @@ ad_gg[["data"]]$label <- gsub(".annot","",ad_gg$data$label)
 
 pdf("gene_prab_figures.pdf")
 
- isolate_dat <- read.csv(args[1], stringsAsFactors = FALSE, check.names = FALSE)
+ isolate_dat <- read.csv(args[2], stringsAsFactors = FALSE, check.names = FALSE)
  ad_gg <- ad_gg %<+% isolate_dat +
         ggtree::vexpand(.1, -1)
 
@@ -76,13 +76,6 @@ pdf("gene_prab_figures.pdf")
       mytree_onlytip <- as.data.frame(subset(mytree[["data"]], isTip == TRUE)[,metadata])
       rownames(mytree_onlytip) <- row_id
 
-      #
-      print(row_id)
-      print(nrow(mytree_onlytip))
-      
-      #check number of unique values
-      print(length(unique(mytree_onlytip[,metadata])))
-
 
       t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(mytree_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
@@ -96,32 +89,6 @@ pdf("gene_prab_figures.pdf")
       return(t2)
       
       }
-
-
-
-
- 
-  # this works out 
-  #head(isolate_dat)
-  print(colnames(isolate_dat))
-  for(i in 1:length(colnames(isolate_dat))){
-    print(colnames(isolate_dat)[i])
-    if(colnames(isolate_dat)[i] == "Name"){ 
-      print("skipping the Name column")
-      next
-    }
-
-    else if(length(unique(isolate_dat[,i])) < 2){
-      print("not unique metadata")
-      next
-    }
-    else{
-      
-      print(mbov_tree(ad_gg,colnames(isolate_dat)[i]))
-    
-  
-} 
-  }
 
 dev.off()
 
