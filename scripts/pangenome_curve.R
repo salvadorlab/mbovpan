@@ -1,67 +1,74 @@
-# Author: Noah Legall
-# Purpose: Creation of Pangenome curve figure for mbovpan 
+#install.packages("ggplot2")
+#install.packages("dplyr")
+
 library(ggplot2)
+library(dplyr)
 
-no_genes_pangen <- read.table("number_of_genes_in_pan_genome.Rtab")
-boxplot(no_genes_pangen, data=no_genes_pangen, main="No. of genes in the pan-genome",
-        xlab="No. of genomes", ylab="No. of genes",varwidth=TRUE, ylim=c(0,max(no_genes_pangen)), outline=FALSE)
-no_conserved_genes <- read.table("number_of_conserved_genes.Rtab")
-boxplot(no_conserved_genes, data=no_conserved_genes, main="Number of conserved genes",
-        xlab="No. of genomes", ylab="No. of genes",varwidth=TRUE, ylim=c(0,max(no_conserved_genes)), outline=FALSE)
-no_genes_pangen$Type <- "total genes"
-no_conserved_genes$Type <- "core genes"
-pangene_curve <- rbind(no_genes_pangen,no_conserved_genes)
-pangene_curve$id <- rownames(pangene_curve)
-pangene_curve <- reshape(data=pangene_curve, idvar="id",
-                         varying = colnames(pangene_curve)[!(colnames(pangene_curve) %in% c("id","Type"))],
-                         v.name=c("value"), times=colnames(pangene_curve)[!(colnames(pangene_curve) %in% c("id","Type"))], direction="long")
+args = commandArgs(trailingOnly=TRUE)
 
+gene_pres_abs <- read.csv(args[1], header = TRUE, stringsAsFactors = FALSE, row.names = "Gene")
+genes <- rownames(gene_pres_abs)
+accessory_pa <- gene_pres_abs %>% select(3:(ncol(gene_pres_abs)))
 
-# White Background
-# Lines on left and bottom border
-# Change legend title
-pan_gg <- ggplot(pangene_curve, aes(x=time, y=value,color=Type)) + 
-  geom_boxplot(position=position_dodge(0),alpha = 0.8) +
-  scale_x_discrete(breaks=NULL) +
-  labs(x="Number of Genomes",
-       y="Number of Genes") +
-  theme(axis.title = element_text(size = 12),
-        panel.background = element_rect(fill = 'white'),
-        panel.border = element_blank(), 
-        axis.line = element_line(size = 1.5),
-        legend.title = element_text(size = 12),
-        legend.background = element_blank())
-ggsave("pangenome_curve.png",plot = pan_gg,device="png")# Author: Noah Legall
-# Purpose: Creation of Pangenome curve figure for mbovpan 
-library(ggplot2)
+accessory_pa[!(accessory_pa=="")] <- 1
+accessory_pa[accessory_pa==""] <- 0 
 
-no_genes_pangen <- read.table("number_of_genes_in_pan_genome.Rtab")
-boxplot(no_genes_pangen, data=no_genes_pangen, main="No. of genes in the pan-genome",
-        xlab="No. of genomes", ylab="No. of genes",varwidth=TRUE, ylim=c(0,max(no_genes_pangen)), outline=FALSE)
-no_conserved_genes <- read.table("number_of_conserved_genes.Rtab")
-boxplot(no_conserved_genes, data=no_conserved_genes, main="Number of conserved genes",
-        xlab="No. of genomes", ylab="No. of genes",varwidth=TRUE, ylim=c(0,max(no_conserved_genes)), outline=FALSE)
-no_genes_pangen$Type <- "total genes"
-no_conserved_genes$Type <- "core genes"
-pangene_curve <- rbind(no_genes_pangen,no_conserved_genes)
-pangene_curve$id <- rownames(pangene_curve)
-pangene_curve <- reshape(data=pangene_curve, idvar="id",
-                         varying = colnames(pangene_curve)[!(colnames(pangene_curve) %in% c("id","Type"))],
-                         v.name=c("value"), times=colnames(pangene_curve)[!(colnames(pangene_curve) %in% c("id","Type"))], direction="long")
+task <- function(x){sum(as.numeric(as.character(x)))}
+
+#compute number of conserved genes
+genome_num <- c()
+total_gene_num <- c()
+conserved_gene_num <- c()
+
+num_iter = 100
+
+if(ncol(accessory_pa) < 100){
+  num_iter = ncol(accessory_pa)
+}
 
 
-# White Background
-# Lines on left and bottom border
-# Change legend title
-pan_gg <- ggplot(pangene_curve, aes(x=time, y=value,color=Type)) + 
-  geom_boxplot(position=position_dodge(0),alpha = 0.8) +
-  scale_x_discrete(breaks=NULL) +
-  labs(x="Number of Genomes",
-       y="Number of Genes") +
-  theme(axis.title = element_text(size = 12),
-        panel.background = element_rect(fill = 'white'),
-        panel.border = element_blank(), 
-        axis.line = element_line(size = 1.5),
-        legend.title = element_text(size = 12),
-        legend.background = element_blank())
-ggsave("pangenome_curve.png",plot = pan_gg,device="png")
+
+#outer loop is for changing the genome size
+for(i in 2:100){
+  genome_num <- append(genome_num,i)
+  conserved_gene_avg = 0
+  total_gene_avg = 0
+  
+  #inner loop is for going through ten iterations to ultimately average the results
+  for(j in 1:5){
+    rand_columns <- sample(colnames(accessory_pa))[1:i]
+    prab_subset <- accessory_pa %>% select(all_of(rand_columns))
+    prab_subset$presence_num <- apply(prab_subset,1,task)
+    conserved_gene_avg = conserved_gene_avg + nrow(prab_subset %>% filter(presence_num == i))
+    total_gene_avg = total_gene_avg + nrow(prab_subset %>% filter(presence_num > 0))
+  }
+  
+  total_gene_num <- append(total_gene_num, total_gene_avg/5)
+  conserved_gene_num <- append(conserved_gene_num, conserved_gene_avg/5)
+  
+}
+
+plot_data <- data.frame(genome = genome_num, conserved = conserved_gene_num, total = total_gene_num)
+
+type_vector <- append(rep("Conserved genes",99),rep("Total genes",99))
+data_vector <- append(plot_data$conserved,plot_data$total)
+genome_num_vector <- append(plot_data$genome,plot_data$genome)
+
+plot_data <- data.frame(genome = genome_num_vector, group = type_vector, value = data_vector)
+
+pdf("pangenome_curve.pdf")
+
+ggplot(data=plot_data, aes(x=genome, y=value, group=group)) +
+  geom_line(aes(color=group))+
+  geom_point(aes(color=group)) +
+  xlab("No. of genomes") +
+  ylab("No. of genes") +
+  theme_minimal() + 
+  theme(
+    axis.text = element_text(size = 13),
+    axis.title = element_text(size = 15),
+    axis.line = element_line(color = "black")
+  ) +
+  scale_color_discrete(name = "Key")
+
+dev.off()
