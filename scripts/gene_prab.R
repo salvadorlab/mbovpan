@@ -84,8 +84,7 @@ pdf("gene_prab_figures.pdf")
       t1_scaled <- t1 + new_scale_fill()
       t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames_angle=45,hjust = 1,colnames_offset_y = -2.5,font.size = 3) +  
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
-      Sys.sleep(1) #gives program the time to make the figure
-      print(t2[["data"]])
+      Sys.sleep(10) #gives program the time to make the figure
       return(t2)
       
       }
