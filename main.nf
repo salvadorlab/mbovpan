@@ -34,7 +34,7 @@ params.help = false
 if(params.help){
     println(
 """
-    M B O V P A N (v0.1)    
+    M B O V P A N (v1)    
 =============================
 A pangenomic pipeline for the analysis of
 Mycobacterium bovis isolates 

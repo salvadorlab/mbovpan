@@ -20,6 +20,9 @@ accessory_pa <- gene_pres_abs %>% select(3:(ncol(gene_pres_abs)))
 accessory_pa[!(accessory_pa=="")] <- 1
 accessory_pa[accessory_pa==""] <- 0
 
+print("The dimensions of accessory_pa")
+print(ncol(accessory_pa))
+print(nrow(accessory_pa))
 
 num_col <- ncol(accessory_pa)
 
@@ -30,6 +33,8 @@ accessory_pa$perc_pr <- accessory_pa$pr/num_col
 accessory_pa <- accessory_pa %>% filter(perc_pr >= 0.15 & perc_pr <= 0.99) %>% select(-c("pr","perc_pr"))
 
 print("percentages are calculated")
+head(accessory_pa)
+nrow(accessory_pa)
 
 accessory_pa$gene_id = rownames(accessory_pa)
 
@@ -72,6 +77,7 @@ pdf("gene_prab_figures.pdf")
       rownames(mytree_onlytip) <- row_id
 
 
+
       t1 <- gheatmap(mytree, mytree_onlytip, width = 0.3, colnames = FALSE) +
         scale_fill_manual(values = hcl.colors(length(unique(mytree_onlytip[,metadata])),palette = "Zissou 1"), name = metadata)
       
@@ -79,10 +85,37 @@ pdf("gene_prab_figures.pdf")
       t1_scaled <- t1 + new_scale_fill()
       t2 <- gheatmap(t1_scaled,accessory_transpose, offset = 3, colnames_angle=45,hjust = 1,colnames_offset_y = -2.5,font.size = 3) +  
         scale_fill_manual(values = c("gray75","darkblue"), name = "Presence/Absence")
-      Sys.sleep(20) #gives program the time to make the figure
+      Sys.sleep(1) #gives program the time to make the figure
+      print(t2[["data"]])
       return(t2)
       
       }
+
+
+
+
+ 
+  # this works out 
+  #head(isolate_dat)
+  print(colnames(isolate_dat))
+  for(i in 1:length(colnames(isolate_dat))){
+    print(colnames(isolate_dat)[i])
+    if(colnames(isolate_dat)[i] == "Name"){ 
+      print("skipping the Name column")
+      next
+    }
+
+    else if(length(unique(isolate_dat[,i])) < 2){
+      print("not unique metadata")
+      next
+    }
+    else{
+      
+      print(mbov_tree(ad_gg,colnames(isolate_dat)[i]))
+    
+  
+} 
+  }
 
 dev.off()
 
