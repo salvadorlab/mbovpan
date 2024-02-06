@@ -48,7 +48,7 @@ output:
     script:
       """
       sed 's/.annot//g' $x > prab.csv
-      Rscript $workflow.projectDir/../scripts/pangenome_curve.R prab.csv
+      Rscript $workflow.projectDir/scripts/pangenome_curve.R prab.csv
       """
 }
 

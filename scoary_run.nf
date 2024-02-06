@@ -46,7 +46,7 @@ println "${meta}"
 process scoary {
     publishDir = "./"
     
-    conda "$workflow.projectDir/../envs/scoary.yaml"
+    conda "$workflow.projectDir/envs/scoary.yaml"
 
 
     debug 'true'

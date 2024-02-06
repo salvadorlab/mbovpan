@@ -44,7 +44,7 @@ println "${meta}"
 process gene_prab {
     publishDir = "./"
     
-    conda "$workflow.projectDir/../envs/gene_prab.yaml"
+    conda "$workflow.projectDir/envs/gene_prab.yaml"
 
     //errorStrategy 'ignore'
 
@@ -61,7 +61,7 @@ process gene_prab {
     script:
     """
     sed 's/.annot//g' $x > prab.csv
-    Rscript $workflow.projectDir/../scripts/gene_prab.R prab.csv $y
+    Rscript $workflow.projectDir/scripts/gene_prab.R prab.csv $y
     """
 }
 

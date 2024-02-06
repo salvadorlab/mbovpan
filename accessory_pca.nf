@@ -57,7 +57,7 @@ process accessory_pca {
     script:
       """
       sed 's/.annot//g' $x > prab.csv
-      Rscript $workflow.projectDir/../scripts/accessory_pca.R prab.csv $y
+      Rscript $workflow.projectDir/scripts/accessory_pca.R prab.csv $y
       """
 }
 
