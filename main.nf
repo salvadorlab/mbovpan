@@ -325,21 +325,21 @@ bam = Channel.create()
 if(run_mode == "snp" || run_mode == "all"){
 
     process read_map {
-    publishDir = "$output/mbovpan_results/readmapping" 
+    publishDir = output 
 
     cpus threads
     
-    conda "$workflow.projectDir/envs/samtools.yaml"
+    conda "samtools bioconda::bowtie2"
    
     input:
     tuple file(trim1), file (trim2) from fastp_reads2 
 
     output:
-    file("${trim1.baseName - ~/_trimmed_R1*/}.bam")  into map_ch 
+    file("${trim1.baseName - ~/_trimmed_R*/}.bam")  into map_ch 
 
     script:
-    """
-    bwa mem -t ${task.cpus}-M -R "@RG\\tID:${trim1.baseName - ~/_trimmed_R1*/}\\tSM:${trim1.baseName - ~/_trimmed_R1*/}\\tPL:ILLUMINA\\tPI:250" ${ref} ${trim1} ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R1*/}.bam
+    """    
+    bowtie2 --threads ${task.cpus} -x $workflow.projectDir/../ref/mbov_bowtie_index -1 ${trim1} -2 ${trim2} | samtools view -Sb | samtools sort -o ${trim1.baseName - ~/_trimmed_R*/}.bam
     """
     }
 
@@ -489,27 +489,29 @@ assembly = Channel.create()
 if(run_mode == "pan" || run_mode == "all"){
     
     process assembly {
-    publishDir = "$output/mbovpan_results/assembly"
+    publishDir = output 
     
-    conda "$workflow.projectDir/envs/megahit.yaml"
+    conda "bioconda::spades"
     
     errorStrategy "ignore"
 
-    cpus threads/2
+    cpus threads
 
     input:
     tuple file(trim1), file(trim2) from fastp_reads3
 
     output:
-    file("${trim1.baseName - ~/_trimmed_R1/}.scaffold.fasta") into shortassembly_ch
+    file("${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta") into shortassembly_ch
 
     script:
     """
-    megahit -t ${task.cpus} -1 ${trim1} -2 ${trim2} -o ${trim1.baseName}
+    mkdir ${trim1.baseName}
+    spades.py -1 ${trim1} -2 ${trim2} --careful -o ${trim1.baseName} -t ${task.cpus} --only-assembler
     cd ${trim1.baseName}
-    mv final.contigs.fa  ../${trim1.baseName - ~/_trimmed_R1/}.scaffold.fasta
+    mv scaffolds.fasta  ../${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta
     """
 }
+
 assembly_ch = shortassembly_ch
 
 assembly_ch.into {

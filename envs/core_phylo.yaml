@@ -1,0 +1,10 @@
+name: core_phylo
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bioconductor-ggtree
+  - r-ggnewscale
+  - blast
+prefix: /Users/noahaus/opt/miniconda3/envs/gene_prab
