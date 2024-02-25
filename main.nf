@@ -329,7 +329,7 @@ if(run_mode == "snp" || run_mode == "all"){
 
     cpus threads
     
-    conda "samtools bioconda::bowtie2"
+    conda "samtools bioconda::bowtie2=2.4.2"
    
     input:
     tuple file(trim1), file (trim2) from fastp_reads2 
