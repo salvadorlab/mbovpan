@@ -254,7 +254,7 @@ spoligo_ch.into {
 
     publishDir = "$output/mbovpan_results/read_trimming"
 
-    cpus threads/2
+    cpus threads
 
     input:
     tuple file(read_one), file(read_two) from spoligo_process
@@ -375,7 +375,7 @@ if(run_mode == "snp" || run_mode == "all"){
     process freebayes {
     publishDir = "$output/mbovpan_results/variant_calling" 
 
-    cpus threads/2
+    cpus threads
 
     conda "$workflow.projectDir/envs/freebayes.yaml"
 
@@ -524,7 +524,7 @@ process quast {
 
     conda "$workflow.projectDir/envs/quast.yaml"
     
-    cpus threads/2
+    cpus threads
 
     input:
     file(assemblies) from assembly_ch1.collect()
@@ -542,7 +542,7 @@ process quast {
 process annotate {
     publishDir = "$output/mbovpan_results/annotations"
     
-    cpus threads/2
+    cpus threads
 
     conda "$workflow.projectDir/envs/prokka.yaml"
     //conda "/scratch/noahaus/aim_1/prokka"
