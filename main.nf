@@ -103,7 +103,7 @@ if(params.scoary_meta){
 
 // record the path for the M. bovis reference genome
 ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
-range = "$workflow.projectDir/auxilary/chrom_ranges.txt" 
+range = "$workflow.projectDir/chrom_ranges.txt" 
 spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py"
 check = "$workflow.projectDir/scripts/lineage_check.py"
 lineage_table = "$workflow.projectDir/scripts/lineage_table.py"
