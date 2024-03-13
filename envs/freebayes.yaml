@@ -4,5 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - freebayes=1.3.7
+  - freebayes=1.3.5
+  - vcflib=1.0.3 
+  - tabixpp=1.1.0
 prefix: /home/noahaus/.conda/envs/freebayes
