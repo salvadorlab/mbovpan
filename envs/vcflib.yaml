@@ -3,6 +3,6 @@ channels:
   - defaults
   - bioconda
 dependencies:
-  - vcflib
-  - bedtools
+  - vcflib=1.0.1
+  - bedtools=2.25.0
 prefix: /home/noahaus/.conda/envs/vcflib_test

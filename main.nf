@@ -400,6 +400,8 @@ if(run_mode == "snp" || run_mode == "all"){
 
     conda "$workflow.projectDir/envs/vcflib.yaml"
 
+    debug true
+
     input:
     file(vcf) from freebayes_ch
 

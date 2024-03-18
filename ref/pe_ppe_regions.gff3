@@ -163,4 +163,3 @@ LT708304.1	EMBL	gene	4291477	4291773	.	+	.	ID=gene-BQ2027_MB3902;Name=PE35;gbkey
 LT708304.1	EMBL	gene	4291807	4292913	.	+	.	ID=gene-BQ2027_MB3903;Name=PPE68;gbkey=Gene;gene=PPE68;gene_biotype=protein_coding;locus_tag=BQ2027_MB3903
 LT708304.1	EMBL	gene	4312853	4314052	.	-	.	ID=gene-BQ2027_MB3921C;Name=PPE69;gbkey=Gene;gene=PPE69;gene_biotype=protein_coding;locus_tag=BQ2027_MB3921C
 LT708304.1	EMBL	gene	4314131	4314364	.	-	.	ID=gene-BQ2027_MB3922C;Name=PE36;gbkey=Gene;gene=PE36;gene_biotype=protein_coding;locus_tag=BQ2027_MB3922C
-
