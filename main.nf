@@ -73,11 +73,11 @@ params.threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
 reads = ""
 
-params.qual = 150
+params.qual = 20
 
-params.depth = 10 
+params.depth = 25 
 
-params.mapq = 55
+params.mapq = 40
 
 
 
