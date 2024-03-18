@@ -420,24 +420,6 @@ if(run_mode == "snp" || run_mode == "all"){
 
     stats_ch = fastp_reads4.merge(nodup2_ch).merge(filter2_ch)
 
-    process stats {
-        publishDir = "$output/mbovpan_results/statistics"
-
-        conda "$workflow.projectDir/envs/statistics.yaml"
-
-        input:
-        file(nec_files) from stats_ch
-
-        output:
-        file("${nec_files[0].baseName}.stats") into output_stat_ch
-
-
-        script:
-        """
-        python $workflow.projectDir/scripts/statistics.py ${nec_files[0]} ${nec_files[1]} ${nec_files[2]} ${nec_files[3]} > ${nec_files[0].baseName}.stats
-        """
-
-    }
 
     process psuedo_assembly {
         publishDir = "$output/mbovpan_results/assemblies"
@@ -473,6 +455,7 @@ if(run_mode == "snp" || run_mode == "all"){
         
         output:
         file("*") into phylo_ch 
+        file("phylo_out.txt") into statistics_ch
         
         script:
         """
@@ -480,7 +463,28 @@ if(run_mode == "snp" || run_mode == "all"){
         cat $workflow.projectDir/ref/mbov_reference.fasta >> mbovpan_align.fasta
         snp-sites -o mbovpan_align.snp_only.fasta mbovpan_align.fasta
         iqtree -s mbovpan_align.snp_only.fasta -m MFP -nt ${task.cpus} -bb 1000 -pre mbovpan_align -o "LT708304.1"
+        echo "file created to make statistics file build conda env last" > phylo_out.txt
         """
+    }
+
+    process stats {
+        publishDir = "$output/mbovpan_results/statistics"
+
+        conda "$workflow.projectDir/envs/statistics.yaml"
+
+        input:
+        file(nec_files) from stats_ch
+        file(dummy_variable) from statistics_ch
+
+        output:
+        file("${nec_files[0].baseName}.stats") into output_stat_ch
+
+
+        script:
+        """
+        python $workflow.projectDir/scripts/statistics.py ${nec_files[0]} ${nec_files[1]} ${nec_files[2]} ${nec_files[3]} > ${nec_files[0].baseName}.stats
+        """
+
     }
 }
 
