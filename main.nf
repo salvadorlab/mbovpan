@@ -438,8 +438,11 @@ if(run_mode == "snp" || run_mode == "all"){
         """
         bgzip ${vcf} 
         bcftools index ${vcf}.gz
-        cat ${ref} | vcf-consensus ${vcf.baseName}.vcf.gz > ${vcf.baseName - ~/.filtered/}.dummy.fasta
-        sed 's|LT708304.1 Mycobacterium bovis AF2122/97 genome assembly, chromosome: Mycobacterium_bovis_AF212297|${vcf.baseName - ~/.filtered/}}|g' ${vcf.baseName - ~/.filtered/}.dummy.fasta > ${vcf.baseName - ~/.filtered/}.consensus.fasta
+        bcftools norm --check-ref s --fasta-ref $ref -Ov ${vcf}.gz > ${vcf.baseName}.norm.vcf
+        bgzip ${vcf.baseName}.norm.vcf
+        bcftools index ${vcf.baseName}.norm.vcf.gz
+        cat ${ref} | vcf-consensus ${vcf.baseName}.norm.vcf.gz > ${vcf.baseName - ~/.filtered/}.dummy.fasta
+        sed 's|LT708304.1|${vcf.baseName - ~/.filtered/}}|g' ${vcf.baseName - ~/.filtered/}.dummy.fasta > ${vcf.baseName - ~/.filtered/}.consensus.fasta
         """
     }
     
