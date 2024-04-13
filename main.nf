@@ -519,7 +519,7 @@ if(run_mode == "pan" || run_mode == "all"){
     spades.py -1 ${trim1} -2 ${trim2} --careful -o ${trim1.baseName} -t ${task.cpus} --only-assembler
     cd ${trim1.baseName}
     mv scaffolds.fasta  ../${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta
-    echo \"dummy file\" > dummy.txt
+    touch dummy.txt
     """
 }
 
