@@ -511,7 +511,6 @@ if(run_mode == "pan" || run_mode == "all"){
 
     output:
     file("${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta") into assembly_ch
-    file("dummy.txt") into quast_input_ch
 
     script:
     """
@@ -519,7 +518,6 @@ if(run_mode == "pan" || run_mode == "all"){
     spades.py -1 ${trim1} -2 ${trim2} --careful -o ${trim1.baseName} -t ${task.cpus} --only-assembler
     cd ${trim1.baseName}
     mv scaffolds.fasta  ../${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta
-    touch dummy.txt
     """
 }
 
