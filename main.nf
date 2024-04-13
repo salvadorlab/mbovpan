@@ -510,7 +510,8 @@ if(run_mode == "pan" || run_mode == "all"){
     tuple file(trim1), file(trim2) from fastp_reads3
 
     output:
-    file("${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta") into shortassembly_ch
+    file("${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta") into assembly_ch
+    file("dummy.txt") into quast_input_ch
 
     script:
     """
@@ -518,10 +519,11 @@ if(run_mode == "pan" || run_mode == "all"){
     spades.py -1 ${trim1} -2 ${trim2} --careful -o ${trim1.baseName} -t ${task.cpus} --only-assembler
     cd ${trim1.baseName}
     mv scaffolds.fasta  ../${trim1.baseName - ~/_trimmed_R*/}.scaffold.fasta
+    echo "dummy file" > dummy.txt
     """
 }
 
-assembly_ch = shortassembly_ch
+assembly_ch = assembly_ch
 
 assembly_ch.into {
     assembly_ch1
@@ -537,6 +539,7 @@ process quast {
 
     input:
     file(assemblies) from assembly_ch1.collect()
+    file(dummy) from quast_input_ch
     
     output:
     file("*") into quast_ch
@@ -554,8 +557,6 @@ process annotate {
     cpus threads
 
     conda "$workflow.projectDir/envs/prokka.yaml"
-    //conda "/scratch/noahaus/aim_1/prokka"
-    //conda = 'bioconda::prokka, bioconda::blast'
 
     input:
     file(assembly) from assembly_ch2
@@ -622,31 +623,6 @@ process iqtree_core {
         iqtree -s mbovpan_align.snp_only.fasta -m MFP -nt ${task.cpus} -bb 1000 -pre mbovis_core 
         """
     }
-
-// Rscript to generate a heatmap of the pangenome
-// this can be changed into the virulence gene presence absence matrix given a list from Hind
-
-if(scoary_meta != 0){
-process scoary {
-    publishDir = "$output/mbovpan_results/pan_gwas"
-    
-    conda "$workflow.projectDir/envs/scoary.yaml"
-
-    errorStrategy 'ignore'
-    
-    input:
-    file("gene_presence_absence_roary.csv") from roary_ch5
-    
-    output:
-    file("*.csv") into scoary_ch
-    
-    script:
-    """
-    sed 's/.annot//g' gene_presence_absence_roary.csv > prab.csv
-    scoary -t ${scoary_meta} -g prab.csv
-    """
-}
-}
 
 }
 
