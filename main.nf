@@ -537,7 +537,6 @@ process quast {
 
     input:
     file(assemblies) from assembly_ch1.collect()
-    file(dummy) from quast_input_ch
     
     output:
     file("*") into quast_ch
