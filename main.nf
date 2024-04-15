@@ -555,6 +555,8 @@ process annotate {
 
     conda "$workflow.projectDir/envs/prokka.yaml"
 
+    errorStrategy "ignore"
+
     input:
     file(assembly) from assembly_ch2
 
@@ -602,8 +604,6 @@ process iqtree_core {
         conda "$workflow.projectDir/envs/iqtree.yaml"
         
         cpus threads 
-
-        memory '2 GB'
         
         errorStrategy 'ignore'
         
