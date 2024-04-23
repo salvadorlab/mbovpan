@@ -34,7 +34,7 @@ usage: nextflow run mbovpan/dev_nf_scripts [options] --input ./path/to/input --m
 }
 
 //verify that it worked out 
-println "${prab_input}"
+println "${pangenome_ref_input}"
 
 
 process filter_pan {
