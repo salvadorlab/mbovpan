@@ -624,6 +624,16 @@ process iqtree_core {
         """
     }
 
+
+/*
+process filter_pan {
+    
+
+    //WILL ADD TO THIS LATER
+}
+
+*/
+
 }
 
 process multiqc {
