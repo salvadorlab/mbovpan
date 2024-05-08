@@ -55,7 +55,10 @@ process filter_pan {
     
     script:
     """
-    blastn -query $x -max_target_seqs 1 -db $workflow.projectDir/ref/mbovis_reference -out mb.out -outfmt "6 qseqid sseqid length qstart qend sstart send qlen slen"
+    # first determine the genes that are present and use blast to find their true annotation
+    blastn -query $x -max_target_seqs 1 -db $workflow.projectDir/ref/mbovis_reference -out mb.out -outfmt "6 qseqid sseqid length qstart qend sstart send qlen slen delim=,"
+    
+    # once mb.out is created, we can use R to 
     """
 }
 
