@@ -24,40 +24,42 @@ export PATH=$PATH:/path/to/mbovpan
 export PATH=$PATH:$(pwd)
 ```  
 
-After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. The user can install by using a provided script in 'scripts/install_mbovpan.sh'. This should take a few minutes. 
+After downloading, the user will need to create the mbovpan environment that will make it possible to run the pipeline. 
+
 
 ```
 #create the environment with mamba as the first package, then activate
-$conda create -n mbovpan -c conda-forge mamba
-$conda activate mbovpan
-
-#install the necessary packages with mamba - a very fast package solver
-(mbovpan)$mamba install -c bioconda -c conda-forge nextflow=22.10.6 pandas panaroo
+$conda create -p </path/to/>mbovpan 
+$conda activate </path/to/>mbovpan
+(</path/to/>mbovpan)$conda install -c conda-forge mamba
+(</path/to/>mbovpan)$conda install -c bioconda -c conda-forge nextflow=22.10.6
+(</path/to/>mbovpan)$conda install -c bioconda -c conda-forge pandas
+(</path/to/>mbovpan)$conda install -c bioconda -c conda-forge panaroo
 
 #now test that everything downloaded appropriately with a simple help command
-(mbovpan)$ nextflow run mbovpan --help 
+(</path/to/>mbovpan)$ nextflow run mbovpan --help 
 ```
 
 ### Quickstart  
 #### Downloading example sequence data 
 ```
 #create a new directory that will house NGS files, navigate to the newly created file
-(mbovpan)$mkdir mbovis_input
-(mbovpan)$cd mbovis_input
+(</path/to/>mbovpan)$mkdir mbovis_input
+(</path/to/>mbovpan)$cd mbovis_input
 
 #using sratoolkit download 5 M. bovis sequences extracted from United Kingdom badgers
-(mbovpan)$fasterq-dump --verbose --split-3 SRR10482974
-(mbovpan)$fasterq-dump --verbose --split-3 SRR10482944
-(mbovpan)$fasterq-dump --verbose --split-3 ERR11893527
-(mbovpan)$fasterq-dump --verbose --split-3 SRR23174187
-(mbovpan)$fasterq-dump --verbose --split-3 SRR23174144
+(</path/to/>mbovpan)$fasterq-dump --verbose --split-3 SRR10482974
+(</path/to/>mbovpan)$fasterq-dump --verbose --split-3 SRR10482944
+(</path/to/>mbovpan)$fasterq-dump --verbose --split-3 ERR11893527
+(</path/to/>mbovpan)$fasterq-dump --verbose --split-3 SRR23174187
+(</path/to/>mbovpan)$fasterq-dump --verbose --split-3 SRR23174144
 
 #once the downloads are complete, exit into the previous directory
-(mbovpan)$cd ../
+(</path/to/>mbovpan)$cd ../
 ```
 #### Example run
 ```
-(mbovpan)$nextflow run mbovpan --input ./mbovis_input/ --run snp --output ./ 
+(</path/to/>mbovpan)$nextflow run mbovpan --input ./mbovis_input/ --run snp --output ./ 
 ```
 In this command, **'nextflow run'** is the command used to look at and execute the pipeline instructions in **'mbovpan'**. This looks into the mbovpan directory and runs the workflow instructions that are  contained in 'main.nf'
 
@@ -71,13 +73,13 @@ With the test data already downloaded, the parameter **'--input ./mbovis_input/'
 
 ```
 # boost the number of threads utilized
-(mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --threads 16
+(</path/to/>mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --threads 16
 
 # modulate the minimum quality and maximum SNP depth required
-(mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --qual 20 --depth 20
+(</path/to/>mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --qual 20 --depth 20
 
 # Using most of the parameters that mbovpan has to offer to decipher the pangenome
-(mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --qual 100 --depth 5 --mapq 50 --threads 30 --run pan
+(</path/to/>mbovpan)$nextflow run mbovpan/mbovpan.nf --input ./mbovpan/seqs/ --run snp --output ./ --qual 100 --depth 5 --mapq 50 --threads 30 --run pan
 ```
 
 ### Inputs
@@ -119,11 +121,11 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
     --run [all|snp|pan]: 
         Specifies in what mode to run mbovpan in [DEFAULT:all]
     --qual [INT]:
-        The minimum QUAL score for a SNP to be considered [DEFAULT:150]
+        The minimum QUAL score for a SNP to be considered [DEFAULT:20]
     --depth [INT]:
-        The minimum DP score for a SNP to be considered [DEFAULT:10]
+        The minimum DP score for a SNP to be considered [DEFAULT:25]
     --mapq [INT]:
-        The minimum MQ score for a SNP to be considered [DEFAULT:55]
+        The minimum MQ score for a SNP to be considered [DEFAULT:40]
     --threads [INT]:
         How many threads to use for the programs [DEFAULT:(number of avail. threads)/2]
     --help
@@ -134,9 +136,9 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
 ```
 
 ### Authors
-mbovpan is software initiated and maintained by Noah Legall, PhD under the supervision of Liliana C. M. Salvador, PhD.
-
-### Citation 
-The mbovpan manuscript is currently in preparation. 
+Noah Legall, Ph. D. (conceptualization)
+Bella Arenas (maintaince) 
+Liliana C. M. Salvador, Ph. D. (supervisor)
+ 
 
 

@@ -26,14 +26,11 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
     --run [all|snp|pan]: 
         Specifies in what mode to run mbovpan in [DEFAULT:all]
     --qual [INT]:
-        The minimum QUAL score for a SNP to be considered [DEFAULT:150]
+        The minimum QUAL score for a SNP to be considered [DEFAULT:20]
     --depth [INT]:
-        The minimum DP score for a SNP to be considered [DEFAULT:10]
+        The minimum DP score for a SNP to be considered [DEFAULT:25]
     --mapq [INT]:
-        The minimum MQ score for a SNP to be considered [DEFAULT:55]
-    --scoary_meta [STR]:
-        Provide path to a metadata file in the style of the Scoary style. 
-        Runs a Scoary analysis on genome pres/abs. data.
+        The minimum MQ score for a SNP to be considered [DEFAULT:40]
     --threads [INT]:
         How many threads to use for the programs [DEFAULT:(number of avail. threads)/2]
     --help
@@ -143,7 +140,6 @@ Manifest's pipeline version: $workflow.manifest.version
 
 Summary of pipeline run
 
-mode: $mode
 run type: $run_mode
 reference location: $ref
 input: $input
@@ -152,7 +148,6 @@ no. of threads: $threads
 QUAL: $qual
 MAPQ: $mapq
 DEPTH: $depth
-trait file for running scoary: $scoary_meta
 =====================================
 """)
 
