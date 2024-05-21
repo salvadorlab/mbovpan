@@ -60,8 +60,7 @@ process scoary {
     
     script:
     """
-    sed 's/.annot//g' $x > prab.csv
-    head -n 10 prab.csv
+    sed 's/1.annot//g' $x > prab.csv
     scoary -t $y -g prab.csv
     """
 }

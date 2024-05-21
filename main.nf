@@ -1,30 +1,8 @@
-//test to see if 'dev' successful
-
 // Author: Noah Austin Legall
-// Note to self: do NOT run this program within the github folder
-// test outside of the github folder. we do not want to make the github too full with run information 
 
-
-//test
-
-//Token: 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
-
-/*
-Finish the pipeline
-Extend Figure 2 with runtime reports
-Testing in sapelo2!!!
-*/
-
-// Where are we grabbing our sequence data from?     
+     
 input = ""
-
-// Where should results be published to?
 output = ""
-
-// Are these paired-end short reads or longreads?
-mode = "short"
-
-// Are we computing SNPs or computing the pangenome? 
 run_mode = "snp"
 
 params.version = false 
@@ -69,20 +47,19 @@ usage: nextflow run mbovpan/mbovpan.nf [options] --input ./path/to/input --outpu
     exit(0)
 }
 
-// How many threads will be available to run the pipeline. 
 // Automatically uses all the cpus that are available 
 // If not specified, use 50% of available resources 
 params.threads = Math.floor(Runtime.getRuntime().availableProcessors()/2)
 
 reads = ""
 
+// inital values based on previous benchmark work from dissertation
+// can be changed by user
 params.qual = 20
 
 params.depth = 25 
 
 params.mapq = 40
-
-
 
 
 if(params.qual){
@@ -95,20 +72,12 @@ if(params.mapq){
     mapq = params.mapq as Integer
     }
 
-params.scoary_meta = "true"
-if(params.scoary_meta){
-    scoary_meta = params.scoary_meta
-} else {
-    scoary_meta = 0
-}
 
-
-
-// record the path for the M. bovis reference genome
-ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta"
-range = "$workflow.projectDir/chrom_ranges.txt" 
-spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py"
-check = "$workflow.projectDir/scripts/lineage_check.py"
+// record the path for key files in the repo
+ref = "$workflow.projectDir/ref/mbovAF212297_reference.fasta" // reference genome
+range = "$workflow.projectDir/chrom_ranges.txt" // for freebayes-parallel
+spotyping = "$workflow.projectDir/scripts/SpoTyping/SpoTyping.py" //spoligotyping
+check = "$workflow.projectDir/scripts/lineage_check.py" 
 lineage_table = "$workflow.projectDir/scripts/lineage_table.py"
 
 // are default parameters included?
@@ -122,11 +91,6 @@ else {
     input = params.input
     output = params.output
 }
-
-// record the mode the program should be ran in
-
-    println "mbovpan will run in ${mode} read mode"
-
 
 // what part of the pipeline should be ran?
 if(params.run == "all" ){
@@ -159,12 +123,10 @@ else{
     println "mbovpan will run using ${threads} threads by default"
 }
 
-println " $input "
 
-// no need to check the file pairs if this command just naturally takes care of it!
+// finding the reads from the input file location 
 reads = Channel.fromFilePairs("$input*{1,2}*.f*q*").ifEmpty { error "Cannot find the read files" }
 
- // PART 1: Processing 
 
 println(""" 
     M B O V P A N (v1.0.0)    
@@ -194,7 +156,7 @@ trait file for running scoary: $scoary_meta
 =====================================
 """)
 
-// MODE 0: M. bovis classification 
+// Start of the nextflow processes
 
 process spotyping {
 
@@ -250,7 +212,6 @@ spoligo_ch.into {
     }
 
 
-//change this around to get rid of the weird naming
     process fastp {
 
     conda 'bioconda::fastp'
@@ -321,8 +282,6 @@ spoligo_ch.into {
 
     }
 
-// MODE 1: Variant Calling 
-// just made the output names consistent
 bam = Channel.create()
 
 if(run_mode == "snp" || run_mode == "all"){
@@ -348,9 +307,6 @@ if(run_mode == "snp" || run_mode == "all"){
 
     bam = map_ch
 
-  
-
-// Important to have 'USE_JDK_DEFLATER=true USE_JDK_INFLATER=true'
     process mark_dups {
     publishDir = "$output/mbovpan_results/readmapping" 
 
@@ -384,7 +340,6 @@ if(run_mode == "snp" || run_mode == "all"){
 
     input:
     file(bam) from nodup1_ch
-    //file(range) from chrom_range
     path(reference) from ref
 
     output:
@@ -397,7 +352,6 @@ if(run_mode == "snp" || run_mode == "all"){
     """
     }
 
-//Start with a basic QUAL > 150, later add a parameter for changing this
     process vcf_filter {
     publishDir = "$output/mbovpan_results/variant_calling" 
 
@@ -496,7 +450,6 @@ if(run_mode == "snp" || run_mode == "all"){
     }
 }
 
-// PART 3: Pangenome 
 assembly = Channel.create()
 if(run_mode == "pan" || run_mode == "all"){
     
@@ -576,8 +529,6 @@ process annotate {
 process panaroo {
     publishDir = "$output/mbovpan_results/pangenome"
 
-    //conda "$workflow.projectDir/envs/panaroo.yaml"
-
     cpus threads
 
     input:
@@ -600,7 +551,6 @@ roary_ch.into{
 }
 
 
-// This will make the tree for core gene alignment
 process iqtree_core {
         publishDir = "$output/mbovpan_results/phylogeny"
         
@@ -644,8 +594,7 @@ process multiqc {
     input:
     file(pre) from fastqc_ch1.collect().ifEmpty([])
     file(post) from fastqc_ch2.collect().ifEmpty([])
-    //if( run_mode != "snp"){ file(quast) from quast_ch.collect().ifEmpty([]) }
-
+    
     output:
     file("mbovpan_report*")
 
@@ -657,8 +606,6 @@ process multiqc {
 
 process mbovis_verification {
     publishDir = "$output/mbovpan_results/lineage_info"
-
-    //conda "$workflow.projectDir/envs/pandas.yaml"
 
     input:
     file(spoligotype_info) from spoligo_multi.collect().ifEmpty([])
@@ -672,6 +619,3 @@ process mbovis_verification {
     python ${lineage_table} > mbovpan_lineage_info.csv
     """
 }
-
-
-/// Adding in the analysis files for data vis
