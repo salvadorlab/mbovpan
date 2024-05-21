@@ -543,6 +543,7 @@ roary_ch.into{
     roary_ch3
     roary_ch4
     roary_ch5
+    roary_ch_filter
 }
 
 
@@ -570,14 +571,31 @@ process iqtree_core {
     }
 
 
-/*
 process filter_pan {
+    publishDir = "./"
     
+    conda "bioconda::blast=2.9.0 pandas"
 
-    //WILL ADD TO THIS LATER
+    debug 'true'
+    
+    input:
+    file("*") from roary_ch_filter.collect()
+
+    output:
+    file('mbovis_filtered_cogs.csv')
+    
+    
+    script:
+    """
+    # first determine the genes that are present and use blast to find their true annotation
+    blastn -query pan_genome_reference.fa -max_target_seqs 1 -db $workflow.projectDir/ref/mbovis_reference -out mb.out -outfmt "6 delim=, qseqid sseqid length qstart qend sstart send qlen slen"
+    echo "qseqid,sseqid,length,qstart,qend,sstart,send,qlen,slen" > heading.txt 
+    cat heading.txt mb.out >> mb.out.csv
+
+    # once mb.out is created, we can use python to 1) create length %, 2) filter by 75% or higher, and 3) reduce repetitive blast results
+    python $workflow.projectDir/scripts/blast_result_filter.py gene_presence_absence.csv
+    """
 }
-
-*/
 
 }
 
